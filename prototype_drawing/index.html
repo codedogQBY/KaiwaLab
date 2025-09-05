@@ -1,0 +1,2784 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会話Lab - 日语会话实验室</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB', // 科技蓝 - 主色调
+                        secondary: '#F97316', // 活力橙 - 辅助色
+                        accent: '#10B981', // 实验绿 - 成功/完成状态
+                        neutral: '#1F2937', // 深灰 - 文本
+                        'lab-gray': '#F3F4F6', // 实验室灰白 - 背景
+                        'lab-light': '#EFF6FF', // 淡蓝背景 - 强调区域
+                        'lab-border': '#DBEAFE', // 边框色
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'lab': '0 4px 20px rgba(37, 99, 235, 0.1)',
+                        'flask': '0 2px 10px rgba(249, 115, 22, 0.15)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .app-container {
+                width: 280px;
+                height: 600px;
+                border-radius: 36px;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+            .app-status-bar {
+                height: 30px;
+                background-color: white;
+                padding: 0 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 12px;
+            }
+            .app-nav {
+                height: 60px;
+                background-color: white;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                border-top: 1px solid #DBEAFE;
+            }
+            .nav-icon {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                font-size: 10px;
+                color: #9CA3AF;
+            }
+            .nav-icon.active {
+                color: #2563EB;
+            }
+            .nav-icon i {
+                font-size: 20px;
+                margin-bottom: 4px;
+            }
+            .chat-bubble-left {
+                border-radius: 18px 18px 18px 0;
+                background-color: #F3F4F6;
+                align-self: flex-start;
+            }
+            .chat-bubble-right {
+                border-radius: 18px 18px 0 18px;
+                background-color: #2563EB;
+                color: white;
+                align-self: flex-end;
+            }
+            .flask-progress {
+                position: relative;
+                height: 120px;
+                width: 60px;
+                margin: 0 auto;
+            }
+            .flask-shape {
+                position: absolute;
+                bottom: 0;
+                width: 40px;
+                height: 100px;
+                border: 3px solid #2563EB;
+                border-radius: 10px 10px 20px 20px;
+                overflow: hidden;
+            }
+            .flask-liquid {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+                transition: height 1s ease-out;
+            }
+            .pill-button {
+                border-radius: 20px;
+                padding: 6px 16px;
+                font-size: 14px;
+                transition: all 0.2s ease;
+            }
+            .test-tube {
+                width: 16px;
+                height: 40px;
+                border: 2px solid #2563EB;
+                border-radius: 2px 2px 8px 8px;
+                position: relative;
+                overflow: hidden;
+            }
+            .test-tube-fill {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                transition: height 0.5s ease;
+            }
+            .copy-toast {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+            .copy-toast.show {
+                opacity: 1;
+            }
+            .japanese-word {
+                position: relative;
+                cursor: pointer;
+                padding: 0 2px;
+                border-bottom: 1px dotted rgba(37, 99, 235, 0.5);
+            }
+            .japanese-word:hover {
+                background-color: rgba(37, 99, 235, 0.1);
+            }
+            .word-popup {
+                position: absolute;
+                z-index: 100;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                padding: 12px;
+                min-width: 200px;
+                max-width: 280px;
+                font-size: 14px;
+            }
+            .popup-arrow {
+                position: absolute;
+                width: 0;
+                height: 0;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+            }
+            .popup-arrow.top {
+                bottom: -6px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-top: 6px solid white;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8 font-sans">
+    <header class="text-center mb-8">
+        <div class="flex items-center justify-center mb-4">
+            <img src="kaiwalablogo.png" alt="会話Lab Logo" class="w-12 h-12 rounded-full object-cover mr-3">
+            <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral">会話Lab</h1>
+        </div>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-2">大胆说，放心错，你的日语会话实验室</p>
+        <p class="text-gray-500 italic">Experiment with confidence. Master Japanese conversation.</p>
+    </header>
+
+    <!-- 复制提示框 -->
+    <div class="copy-toast" id="copyToast">已复制到剪贴板</div>
+
+    <!-- 单词释义弹窗 -->
+    <div id="wordPopup" class="word-popup hidden">
+        <div class="word-popup-title" id="popupWord"></div>
+        <div class="word-popup-reading" id="popupReading"></div>
+        <div class="word-popup-definition" id="popupDefinition"></div>
+        <div class="popup-arrow top" id="popupArrow"></div>
+    </div>
+
+    <!-- 原型界面网格容器 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        
+        <!-- 1. 欢迎/登录界面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>9:41</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-b from-primary/5 to-white"></div>
+                <!-- 实验室装饰元素 -->
+                <div class="absolute top-10 left-5 w-10 h-10 opacity-20">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-secondary" style="height: 70%"></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-20 right-8 w-8 h-8 opacity-20">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-accent" style="height: 50%"></div>
+                    </div>
+                </div>
+                
+                <div class="relative h-full flex flex-col items-center justify-center p-6 text-center">
+                    <img src="kaiwalablogo.png" alt="会話Lab Logo" class="w-24 h-24 rounded-full object-cover mb-6 shadow-lg">
+                    <h2 class="text-2xl font-bold text-neutral mb-2">会話Lab</h2>
+                    <p class="text-gray-500 mb-2">会話の実験を、はじめよう。</p>
+                    <p class="text-gray-500 mb-8">大胆说，放心错</p>
+                    
+                    <button class="w-full py-3 bg-primary text-white rounded-full font-medium mb-4 shadow-md hover:bg-primary/90 transition">
+                        开始实验
+                    </button>
+                    <button class="w-full py-3 bg-white text-primary border border-primary rounded-full font-medium hover:bg-primary/5 transition">
+                        登录 / 注册
+                    </button>
+                    
+                    <p class="text-xs text-gray-400 mt-8">
+                        继续使用即表示您同意我们的<br>服务条款和隐私政策
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 首页 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>9:42</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 用户信息栏 -->
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-gray-500 text-sm">こんにちは、</h3>
+                            <h2 class="text-xl font-bold text-neutral">田中さん</h2>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <i class="fa fa-user text-primary"></i>
+                        </div>
+                    </div>
+
+                    <!-- 学习进度卡片 - 实验烧瓶样式 -->
+                    <div class="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-5 text-white mb-6 relative overflow-hidden">
+                        <!-- 装饰元素 -->
+                        <div class="absolute top-3 right-3 w-8 h-8 opacity-20">
+                            <div class="test-tube">
+                                <div class="test-tube-fill bg-white" style="height: 60%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="font-medium">本周实验进度</h3>
+                                <p class="text-2xl font-bold mt-1">4/7 天</p>
+                            </div>
+                            <div class="flask-progress">
+                                <div class="flask-shape">
+                                    <div class="flask-liquid" style="height: 57%"></div>
+                                </div>
+                                <span class="absolute inset-0 flex items-center justify-center text-xs font-bold mt-10 mr-5">57%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full bg-white/20 rounded-full h-2">
+                            <div class="bg-white h-2 rounded-full" style="width: 57%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 每日签到提示 -->
+                    <div class="bg-accent/5 border border-accent/20 rounded-xl p-4 mb-4 cursor-pointer hover:bg-accent/10 transition">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+                                    <i class="fa fa-calendar-check-o text-accent"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-neutral">今日实验签到</h4>
+                                    <p class="text-xs text-gray-500">连续第5天 • 获得15经验值</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-xs bg-primary text-white px-3 py-1 rounded-full flex items-center">
+                                    <i class="fa fa-check mr-1 text-xs"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 功能分类 - 实验台和试剂概念 -->
+                    <h3 class="text-sm font-semibold text-gray-500 mb-3">实验模式</h3>
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-lab-light rounded-xl p-4 flex flex-col items-center text-center cursor-pointer hover:shadow-lab transition">
+                            <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                                <i class="fa fa-flask text-primary"></i>
+                            </div>
+                            <span class="text-sm font-medium">AI实验台</span>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 flex flex-col items-center text-center cursor-pointer hover:shadow-lab transition">
+                            <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center mb-2">
+                                <i class="fa fa-vial text-secondary"></i>
+                            </div>
+                            <span class="text-sm font-medium">场景试剂</span>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 flex flex-col items-center text-center cursor-pointer hover:shadow-lab transition">
+                            <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center mb-2">
+                                <i class="fa fa-book text-accent"></i>
+                            </div>
+                            <span class="text-sm font-medium">学习库</span>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 flex flex-col items-center text-center cursor-pointer hover:shadow-lab transition">
+                            <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mb-2">
+                                <i class="fa fa-trophy text-orange-600"></i>
+                            </div>
+                            <span class="text-sm font-medium">排行榜</span>
+                        </div>
+                    </div>
+
+                    
+
+                    <!-- 会员提示 -->
+                    <div class="bg-secondary/5 border border-secondary/20 rounded-xl p-4 mb-6">
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                                <i class="fa fa-star text-secondary"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">升级至会员</h4>
+                                <p class="text-xs text-gray-500 mt-1">解锁全部实验场景和高级分析功能</p>
+                                <button class="mt-2 text-sm text-secondary font-medium hover:underline">
+                                    了解会员权益 →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推荐实验 -->
+                    <h3 class="text-sm font-semibold text-gray-500 mb-3">推荐实验</h3>
+                    <div class="space-y-3">
+                        <div class="border border-lab-border rounded-xl p-4 shadow-flask cursor-pointer hover:shadow-md transition">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full">初级实验</span>
+                                    <h4 class="font-medium mt-2">便利店购物对话</h4>
+                                    <p class="text-xs text-gray-500 mt-1">5个场景 · 10分钟</p>
+                                </div>
+                                <i class="fa fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                        <div class="border border-lab-border rounded-xl p-4 shadow-flask cursor-pointer hover:shadow-md transition">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">中级实验</span>
+                                    <h4 class="font-medium mt-2">餐厅点餐进阶</h4>
+                                    <p class="text-xs text-gray-500 mt-1">8个场景 · 15分钟</p>
+                                </div>
+                                <i class="fa fa-chevron-right text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon active">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. AI实验台（自由对话） -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>9:45</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-hidden flex flex-col">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center">
+                    <h2 class="font-bold text-neutral">AI实验台</h2>
+                    <div class="flex space-x-3">
+                        <button class="text-gray-500 hover:text-primary transition">
+                            <i class="fa fa-history"></i>
+                        </button>
+                        <button class="text-gray-500 hover:text-primary transition">
+                            <i class="fa fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 对话区域 -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                    <div class="flex flex-col space-y-4">
+                        <!-- 系统提示 -->
+                        <div class="bg-lab-light rounded-xl p-3 text-sm text-gray-600 italic">
+                            在这里与AI进行自由对话实验，尝试各种日语表达
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2 flex-shrink-0">
+                                <i class="fa fa-robot text-white text-xs"></i>
+                            </div>
+                            <div class="chat-bubble-left px-4 py-3 max-w-[70%] relative group">
+                                <p class="japanese-word">こんにちは！今日はどんな話をしましょうか？</p>
+                                <div class="chat-actions absolute top-2 right-2 flex space-x-1">
+                                    <button class="copy-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="こんにちは！今日はどんな話をしましょうか？">
+                                        <i class="fa fa-copy"></i>
+                                    </button>
+                                    <button class="speak-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="こんにちは！今日はどんな話をしましょうか？">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-end">
+                            <div class="chat-bubble-right px-4 py-3 max-w-[70%] relative group">
+                                <p class="japanese-word">日本へ旅行に行きたいので、観光について話したいです。</p>
+                                <div class="chat-actions absolute top-2 right-2 flex space-x-1">
+                                    <button class="copy-btn w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-white hover:bg-white/50 transition text-xs" data-text="日本へ旅行に行きたいので、観光について話したいです。">
+                                        <i class="fa fa-copy"></i>
+                                    </button>
+                                    <button class="speak-btn w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-white hover:bg-white/50 transition text-xs" data-text="日本へ旅行に行きたいので、観光について話したいです。">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2 flex-shrink-0">
+                                <i class="fa fa-robot text-white text-xs"></i>
+                            </div>
+                            <div class="chat-bubble-left px-4 py-3 max-w-[70%] relative group">
+                                <p class="japanese-word">それはいいですね！どの都市に行きたいですか？東京？京都？それとも大阪？</p>
+                                <div class="chat-actions absolute top-2 right-2 flex space-x-1">
+                                    <button class="copy-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="それはいいですね！どの都市に行きたいですか？東京？京都？それとも大阪？">
+                                        <i class="fa fa-copy"></i>
+                                    </button>
+                                    <button class="speak-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="それはいいですね！どの都市に行きたいですか？東京？京都？それとも大阪？">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start justify-end">
+                            <div class="chat-bubble-right px-4 py-3 max-w-[70%] relative group">
+                                <p class="japanese-word">京都に行きたいです。有名な観光地を教えてください。</p>
+                                <div class="chat-actions absolute top-2 right-2 flex space-x-1">
+                                    <button class="copy-btn w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-white hover:bg-white/50 transition text-xs" data-text="京都に行きたいです。有名な観光地を教えてください。">
+                                        <i class="fa fa-copy"></i>
+                                    </button>
+                                    <button class="speak-btn w-6 h-6 rounded-full bg-white/30 flex items-center justify-center text-white hover:bg-white/50 transition text-xs" data-text="京都に行きたいです。有名な観光地を教えてください。">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-2 flex-shrink-0">
+                                <i class="fa fa-robot text-white text-xs"></i>
+                            </div>
+                            <div class="chat-bubble-left px-4 py-3 max-w-[70%] relative group">
+                                <p class="japanese-word">京都はとても美しい都市ですね。清水寺、金閣寺、伏見稲荷大社が有名です。特に清水寺は夜景がすばらしいです。</p>
+                                <div class="chat-actions absolute top-2 right-2 flex space-x-1">
+                                    <button class="copy-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="京都はとても美しい都市ですね。清水寺、金閣寺、伏見稲荷大社が有名です。特に清水寺は夜景がすばらしいです。">
+                                        <i class="fa fa-copy"></i>
+                                    </button>
+                                    <button class="speak-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="京都はとても美しい都市ですね。清水寺、金閣寺、伏見稲荷大社が有名です。特に清水寺は夜景がすばらしいです。">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 输入区域 -->
+                <div class="p-3 border-t border-lab-border">
+                    <div class="flex items-center bg-lab-light rounded-full px-3 py-2">
+                        <button class="text-gray-500 p-1 hover:text-primary transition">
+                            <i class="fa fa-keyboard-o"></i>
+                        </button>
+                        <input type="text" placeholder="输入日语或点击麦克风说话..." class="bg-transparent border-none outline-none flex-1 mx-2 text-sm">
+                        <button class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition">
+                            <i class="fa fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. 场景试剂库（情景练习） -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>9:50</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">场景试剂库</h2>
+                    <div class="w-6"></div> <!-- 占位元素，保持标题居中 -->
+                </div>
+
+                <!-- 场景分类 -->
+                <div class="p-4">
+                    <div class="flex space-x-2 overflow-x-auto pb-2 mb-6">
+                        <button class="whitespace-nowrap px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">
+                            全部试剂
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            日常问候
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            购物
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            餐厅
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            交通
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            旅游
+                        </button>
+                    </div>
+
+                    <!-- 会员提示 -->
+                    <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-6 flex items-center">
+                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-3 flex-shrink-0">
+                            <i class="fa fa-lock text-primary"></i>
+                        </div>
+                        <div class="flex-1 mr-3">
+                            <p class="text-sm font-medium text-neutral">升级会员解锁全部24种场景试剂</p>
+                            <p class="text-xs text-gray-500">包含商务日语和高级会话场景</p>
+                        </div>
+                        <button class="pill-button bg-primary text-white text-xs">
+                            升级
+                        </button>
+                    </div>
+
+                    <!-- 场景列表 -->
+                    <div class="space-y-4">
+                        <div class="border border-lab-border rounded-xl overflow-hidden shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="h-36 bg-gray-200 relative">
+                                <img src="https://picsum.photos/400/200?random=1" alt="餐厅点餐场景图片" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 bg-secondary text-white text-xs px-2 py-1 rounded-full">
+                                    中级试剂
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-neutral">餐厅点餐</h3>
+                                <p class="text-sm text-gray-500 mt-1">学习如何在日本餐厅点餐、询问菜品和结账</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <div class="flex items-center text-xs text-gray-500">
+                                        <i class="fa fa-clock-o mr-1"></i>
+                                        <span>15分钟</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fa fa-flask mr-1"></i>
+                                        <span>8个实验</span>
+                                    </div>
+                                    <button class="text-primary text-sm font-medium">
+                                        开始 <i class="fa fa-arrow-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-lab-border rounded-xl overflow-hidden shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="h-36 bg-gray-200 relative">
+                                <img src="https://picsum.photos/400/200?random=2" alt="便利店购物场景图片" class="w-full h-full object-cover">
+                                <div class="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                                    初级试剂
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-neutral">便利店购物</h3>
+                                <p class="text-sm text-gray-500 mt-1">学习在便利店购买商品的基础日语表达</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <div class="flex items-center text-xs text-gray-500">
+                                        <i class="fa fa-clock-o mr-1"></i>
+                                        <span>10分钟</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fa fa-flask mr-1"></i>
+                                        <span>5个实验</span>
+                                    </div>
+                                    <button class="text-primary text-sm font-medium">
+                                        开始 <i class="fa fa-arrow-right ml-1"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border border-lab-border rounded-xl overflow-hidden shadow-flask opacity-70">
+                            <div class="h-36 bg-gray-200 relative">
+                                <img src="https://picsum.photos/400/200?random=3" alt="商务会谈场景图片" class="w-full h-full object-cover filter grayscale">
+                                <div class="absolute top-2 right-2 bg-purple-500 text-white text-xs px-2 py-1 rounded-full">
+                                    高级试剂
+                                </div>
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <i class="fa fa-lock text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-bold text-neutral">商务会谈</h3>
+                                <p class="text-sm text-gray-500 mt-1">学习商务场合的日语礼仪和专业表达</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <div class="flex items-center text-xs text-gray-500">
+                                        <i class="fa fa-clock-o mr-1"></i>
+                                        <span>25分钟</span>
+                                        <span class="mx-2">•</span>
+                                        <i class="fa fa-flask mr-1"></i>
+                                        <span>12个实验</span>
+                                    </div>
+                                    <button class="text-gray-400 text-sm font-medium cursor-not-allowed">
+                                        会员专享
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 实验报告（学习报告） -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:00</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">实验报告</h2>
+                    <div class="w-6"></div> <!-- 占位元素，保持标题居中 -->
+                </div>
+
+                <!-- 学习统计 -->
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-bold text-neutral">本周实验数据</h3>
+                        <button class="text-primary text-sm">
+                            查看完整报告 <i class="fa fa-chevron-right text-xs ml-1"></i>
+                        </button>
+                    </div>
+
+                    <!-- 统计卡片 -->
+                    <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="bg-lab-light rounded-xl p-4 text-center">
+                            <p class="text-gray-500 text-sm">总实验时间</p>
+                            <p class="text-2xl font-bold text-neutral mt-1">2小时15分</p>
+                            <p class="text-xs text-green-500 mt-1 flex items-center justify-center">
+                                <i class="fa fa-arrow-up mr-1"></i> 较上周 +15%
+                            </p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 text-center">
+                            <p class="text-gray-500 text-sm">实验次数</p>
+                            <p class="text-2xl font-bold text-neutral mt-1">18次</p>
+                            <p class="text-xs text-green-500 mt-1 flex items-center justify-center">
+                                <i class="fa fa-arrow-up mr-1"></i> 较上周 +8%
+                            </p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 text-center">
+                            <p class="text-gray-500 text-sm">平均发音评分</p>
+                            <p class="text-2xl font-bold text-neutral mt-1">82分</p>
+                            <p class="text-xs text-red-500 mt-1 flex items-center justify-center">
+                                <i class="fa fa-arrow-down mr-1"></i> 较上周 -3%
+                            </p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-4 text-center">
+                            <p class="text-gray-500 text-sm">掌握句型</p>
+                            <p class="text-2xl font-bold text-neutral mt-1">36个</p>
+                            <p class="text-xs text-green-500 mt-1 flex items-center justify-center">
+                                <i class="fa fa-arrow-up mr-1"></i> 较上周 +5个
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 学习趋势图 -->
+                    <div class="mb-8">
+                        <h3 class="font-bold text-neutral mb-4">每日实验时间 (分钟)</h3>
+                        <div class="bg-white border border-lab-border rounded-xl p-4">
+                            <div class="flex justify-between items-end h-40">
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary/20 rounded-t-md" style="height: 30%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周一</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary/20 rounded-t-md" style="height: 45%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周二</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary rounded-t-md" style="height: 80%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周三</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary/20 rounded-t-md" style="height: 60%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周四</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary/20 rounded-t-md" style="height: 20%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周五</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-primary/20 rounded-t-md" style="height: 50%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周六</span>
+                                </div>
+                                <div class="flex flex-col items-center w-1/7">
+                                    <div class="w-6 bg-gray-200 rounded-t-md" style="height: 10%"></div>
+                                    <span class="text-xs text-gray-500 mt-2">周日</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 发现瞬间（成就） -->
+                    <div>
+                        <h3 class="font-bold text-neutral mb-4">本周发现瞬间</h3>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                    <i class="fa fa-fire text-green-600"></i>
+                                </div>
+                                <p class="text-xs font-medium">连续3天实验</p>
+                            </div>
+                            <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                    <i class="fa fa-comment text-blue-600"></i>
+                                </div>
+                                <p class="text-xs font-medium">10次对话达成</p>
+                            </div>
+                            <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                                <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                    <i class="fa fa-star text-purple-600"></i>
+                                </div>
+                                <p class="text-xs font-medium">发音90+分</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon active">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. 会员订阅页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:15</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">会話Lab 会员</h2>
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-info-circle"></i>
+                    </button>
+                </div>
+
+                <!-- 会员介绍 -->
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa fa-star text-secondary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral mb-2">解锁全部实验功能</h3>
+                    <p class="text-gray-500 text-sm mb-6">成为会员，获取完整的日语会话实验体验</p>
+                </div>
+
+                <!-- 会员套餐 -->
+                <div class="px-6 space-y-4 mb-6">
+                    <!-- 月付套餐 -->
+                    <div class="border-2 border-primary rounded-2xl p-5 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-primary text-white text-xs px-3 py-1">
+                            推荐
+                        </div>
+                        <h4 class="font-bold text-lg text-neutral mb-1">月度会员</h4>
+                        <div class="flex items-baseline mb-4">
+                            <span class="text-3xl font-bold text-neutral">¥28</span>
+                            <span class="text-gray-500 ml-1">/月</span>
+                        </div>
+                        <ul class="space-y-2 mb-5">
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>解锁全部24种场景试剂</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>高级发音分析功能</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>无限制AI对话实验</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>个性化学习计划</span>
+                            </li>
+                        </ul>
+                        <button class="w-full py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition">
+                            选择月度会员
+                        </button>
+                    </div>
+
+                    <!-- 年付套餐 -->
+                    <div class="border border-lab-border rounded-2xl p-5 relative">
+                        <div class="absolute top-0 right-0 bg-accent text-white text-xs px-3 py-1">
+                            最优惠
+                        </div>
+                        <h4 class="font-bold text-lg text-neutral mb-1">年度会员</h4>
+                        <div class="flex items-baseline mb-4">
+                            <span class="text-3xl font-bold text-neutral">¥198</span>
+                            <span class="text-gray-500 ml-1">/年</span>
+                            <span class="ml-2 text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">
+                                省¥138
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">平均每月仅¥16.5</p>
+                        <ul class="space-y-2 mb-5">
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>包含月度会员全部功能</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>专属学习顾问</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>季度学习报告分析</span>
+                            </li>
+                            <li class="flex items-start text-sm">
+                                <i class="fa fa-check text-accent mt-1 mr-2"></i>
+                                <span>优先体验新功能</span>
+                            </li>
+                        </ul>
+                        <button class="w-full py-3 bg-white border border-primary text-primary rounded-full font-medium hover:bg-primary/5 transition">
+                            选择年度会员
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 兑换码 -->
+                <div class="px-6 mb-8">
+                    <div class="bg-lab-light border border-lab-border rounded-xl p-5 relative overflow-hidden">
+                        <!-- 装饰元素 -->
+                        <div class="absolute top-2 right-2 w-6 h-6 opacity-10">
+                            <div class="test-tube">
+                                <div class="test-tube-fill bg-primary" style="height: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                <i class="fa fa-gift text-primary"></i>
+                            </div>
+                            <h4 class="font-medium text-neutral">有兑换码？</h4>
+                        </div>
+                        <div class="flex">
+                            <input type="text" placeholder="输入兑换码" class="flex-1 bg-white border border-lab-border rounded-l-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                            <button class="bg-primary text-white px-6 rounded-r-xl hover:bg-primary/90 transition font-medium">
+                                兑换
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 会员权益 -->
+                <div class="px-6 mb-6">
+                    <h4 class="font-medium text-neutral mb-3">会员专属权益</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-lab-light rounded-xl p-3 text-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-vial text-primary"></i>
+                            </div>
+                            <p class="text-xs">全部场景试剂</p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-3 text-center">
+                            <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-microscope text-secondary"></i>
+                            </div>
+                            <p class="text-xs">高级发音分析</p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-3 text-center">
+                            <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-robot text-accent"></i>
+                            </div>
+                            <p class="text-xs">AI深度对话</p>
+                        </div>
+                        <div class="bg-lab-light rounded-xl p-3 text-center">
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-file-text-o text-purple-600"></i>
+                            </div>
+                            <p class="text-xs">详细实验报告</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xs text-gray-400 text-center mb-8 px-6">
+                    订阅将自动续费，您可以在设置中随时取消。<br>
+                    查看<a href="#" class="text-primary">服务条款</a>和<a href="#" class="text-primary">隐私政策</a>
+                </p>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon active">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. 兑换码成功页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:20</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto flex flex-col items-center justify-center p-6 text-center">
+                <!-- 成功图标 -->
+                <div class="w-24 h-24 rounded-full bg-accent/10 flex items-center justify-center mb-6">
+                    <i class="fa fa-flask text-accent text-4xl"></i>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-neutral mb-2">兑换成功！</h2>
+                <p class="text-gray-500 mb-6">您的会员权益已激活</p>
+                
+                <!-- 会员信息 -->
+                <div class="bg-lab-light rounded-2xl p-5 w-full mb-8">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-gray-500">会员类型</span>
+                        <span class="font-medium">年度会员</span>
+                    </div>
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-gray-500">激活日期</span>
+                        <span>2023-06-15</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-500">到期日期</span>
+                        <span>2024-06-15</span>
+                    </div>
+                </div>
+                
+                <p class="text-gray-500 mb-8">
+                    您已成功解锁全部实验功能<br>
+                    开始您的日语会话实验吧！
+                </p>
+                
+                <button class="w-full py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition mb-3">
+                    探索全部功能
+                </button>
+                
+                <button class="w-full py-3 bg-white border border-gray-200 text-gray-600 rounded-full font-medium hover:bg-gray-50 transition">
+                    查看会员权益
+                </button>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon active">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. 发音分析界面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:30</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">发音分析</h2>
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-download"></i>
+                    </button>
+                </div>
+
+                <!-- 分析内容 -->
+                <div class="p-6">
+                    <div class="bg-lab-light rounded-xl p-4 mb-6 text-center">
+                        <p class="text-lg font-medium text-neutral">日本の観光地はとても美しいです。</p>
+                        <p class="text-sm text-gray-500 mt-1">日本的观光地非常美丽。</p>
+                    </div>
+
+                    <!-- 发音评分 -->
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                            <span class="text-3xl font-bold text-green-600">88</span>
+                        </div>
+                        <h3 class="font-medium text-neutral">优秀的发音！</h3>
+                        <p class="text-sm text-gray-500 mt-1">您的发音准确度超过85%的学习者</p>
+                    </div>
+
+                    <!-- 发音波形对比 -->
+                    <div class="mb-8">
+                        <h4 class="font-medium text-neutral mb-3 text-left">波形对比分析</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">标准发音</span>
+                                    <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition text-xs">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                                <div class="h-16 bg-lab-light rounded-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 flex items-center justify-around">
+                                        <div class="w-1 h-12 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-8 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-10 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-6 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-12 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-4 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-8 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-10 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-6 bg-primary/30 rounded-full"></div>
+                                        <div class="w-1 h-12 bg-primary/30 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm text-gray-600">您的发音</span>
+                                    <button class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary hover:bg-secondary/20 transition text-xs">
+                                        <i class="fa fa-volume-up"></i>
+                                    </button>
+                                </div>
+                                <div class="h-16 bg-lab-light rounded-lg relative overflow-hidden">
+                                    <div class="absolute inset-0 flex items-center justify-around">
+                                        <div class="w-1 h-10 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-7 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-9 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-7 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-11 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-5 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-9 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-8 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-7 bg-secondary/30 rounded-full"></div>
+                                        <div class="w-1 h-10 bg-secondary/30 rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 音节分析 -->
+                    <div class="mb-8">
+                        <h4 class="font-medium text-neutral mb-3 text-left">音节分析</h4>
+                        <div class="bg-white border border-lab-border rounded-xl p-4">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="pill-button bg-primary/10 text-primary">に</span>
+                                <span class="pill-button bg-primary/10 text-primary">ほん</span>
+                                <span class="pill-button bg-primary/10 text-primary">の</span>
+                                <span class="pill-button bg-primary/10 text-primary">かん</span>
+                                <span class="pill-button bg-primary/10 text-primary">こう</span>
+                                <span class="pill-button bg-secondary/20 text-secondary">ち</span>
+                                <span class="pill-button bg-primary/10 text-primary">は</span>
+                                <span class="pill-button bg-primary/10 text-primary">と</span>
+                                <span class="pill-button bg-primary/10 text-primary">て</span>
+                                <span class="pill-button bg-primary/10 text-primary">も</span>
+                                <span class="pill-button bg-primary/10 text-primary">う</span>
+                                <span class="pill-button bg-primary/10 text-primary">つ</span>
+                                <span class="pill-button bg-primary/10 text-primary">く</span>
+                                <span class="pill-button bg-primary/10 text-primary">し</span>
+                                <span class="pill-button bg-primary/10 text-primary">い</span>
+                                <span class="pill-button bg-primary/10 text-primary">で</span>
+                                <span class="pill-button bg-primary/10 text-primary">す</span>
+                            </div>
+                            
+                            <div class="bg-yellow-50 p-3 rounded-lg">
+                                <h5 class="font-medium text-yellow-700 text-sm mb-2">改进建议</h5>
+                                <p class="text-xs text-yellow-600">
+                                    "ち" 音节发音稍弱，建议加强舌尖接触上颚的力度，发音会更清晰。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="py-3 bg-white border border-primary text-primary rounded-full font-medium hover:bg-primary/5 transition">
+                            重新录制
+                        </button>
+                        <button class="py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition">
+                            保存分析报告
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. 发现瞬间（成就）页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:35</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">发现瞬间</h2>
+                    <div class="w-6"></div> <!-- 占位元素，保持标题居中 -->
+                </div>
+
+                <!-- 等级进度 -->
+                <div class="p-6 text-center bg-gradient-to-b from-primary/5 to-white">
+                    <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-3">
+                        <span class="text-2xl font-bold text-primary">Lv.5</span>
+                    </div>
+                    <h3 class="font-bold text-neutral">探索者</h3>
+                    <p class="text-sm text-gray-500 mt-1">距离下一级还需 45 经验值</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mt-3 mb-2">
+                        <div class="bg-primary h-2 rounded-full" style="width: 55%"></div>
+                    </div>
+                    <p class="text-xs text-gray-500">55/100 经验值</p>
+                </div>
+
+                <!-- 成就列表 -->
+                <div class="p-4">
+                    <h3 class="font-medium text-neutral mb-4">已发现 (8/24)</h3>
+                    <div class="grid grid-cols-2 gap-4 mb-6">
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-calendar-check-o text-green-600"></i>
+                            </div>
+                            <h4 class="text-xs font-medium">连续实验3天</h4>
+                            <p class="text-xs text-gray-500 mt-1">获得10经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-comments text-blue-600"></i>
+                            </div>
+                            <h4 class="text-xs font-medium">完成10次对话</h4>
+                            <p class="text-xs text-gray-500 mt-1">获得15经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                            <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-microphone text-purple-600"></i>
+                            </div>
+                            <h4 class="text-xs font-medium">发音90分以上</h4>
+                            <p class="text-xs text-gray-500 mt-1">获得20经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask">
+                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-vial text-yellow-600"></i>
+                            </div>
+                            <h4 class="text-xs font-medium">尝试5种场景</h4>
+                            <p class="text-xs text-gray-500 mt-1">获得25经验值</p>
+                        </div>
+                    </div>
+
+                    <h3 class="font-medium text-neutral mb-4">待发现</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask opacity-70">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-calendar-check-o text-gray-500"></i>
+                            </div>
+                            <h4 class="text-xs font-medium text-gray-500">连续实验7天</h4>
+                            <p class="text-xs text-gray-400 mt-1">获得30经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask opacity-70">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-star text-gray-500"></i>
+                            </div>
+                            <h4 class="text-xs font-medium text-gray-500">收藏50个单词</h4>
+                            <p class="text-xs text-gray-400 mt-1">获得25经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask opacity-70">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-trophy text-gray-500"></i>
+                            </div>
+                            <h4 class="text-xs font-medium text-gray-500">完成所有初级场景</h4>
+                            <p class="text-xs text-gray-400 mt-1">获得50经验值</p>
+                        </div>
+                        <div class="bg-white border border-lab-border rounded-xl p-3 text-center shadow-flask opacity-70">
+                            <div class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-2">
+                                <i class="fa fa-clock-o text-gray-500"></i>
+                            </div>
+                            <h4 class="text-xs font-medium text-gray-500">累计实验10小时</h4>
+                            <p class="text-xs text-gray-400 mt-1">获得40经验值</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon active">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. 注册页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:40</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-y-auto">
+                <!-- 装饰背景 -->
+                <div class="absolute inset-0 bg-gradient-to-br from-primary/5 via-white to-secondary/5"></div>
+                <div class="absolute top-8 left-4 w-6 h-6 opacity-10">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-primary" style="height: 60%"></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-24 right-6 w-8 h-8 opacity-10">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-secondary" style="height: 40%"></div>
+                    </div>
+                </div>
+                
+                <div class="relative p-6 h-full flex flex-col">
+                    <!-- 头部 -->
+                    <div class="flex justify-between items-center mb-8">
+                        <button class="text-gray-500 hover:text-primary transition">
+                            <i class="fa fa-arrow-left text-lg"></i>
+                        </button>
+                        <h2 class="font-bold text-neutral">创建账户</h2>
+                        <div class="w-6"></div>
+                    </div>
+
+                    <!-- Logo区域 -->
+                    <div class="text-center mb-8">
+                        <img src="kaiwalablogo.png" alt="会話Lab Logo" class="w-16 h-16 rounded-full object-cover mx-auto mb-4 shadow-md">
+                        <h3 class="text-lg font-bold text-neutral mb-2">加入会話Lab</h3>
+                        <p class="text-gray-500 text-sm">开始您的日语学习实验之旅</p>
+                    </div>
+
+                    <!-- 注册表单 -->
+                    <div class="flex-1">
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">用户名</label>
+                                <input type="text" placeholder="请输入用户名" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">邮箱</label>
+                                <input type="email" placeholder="请输入邮箱地址" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                                <div class="relative">
+                                    <input type="password" placeholder="请输入密码" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">确认密码</label>
+                                <div class="relative">
+                                    <input type="password" placeholder="请再次输入密码" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                                    <!-- 协议同意 -->
+                            <div class="flex items-start mt-4">
+                                <input type="checkbox" id="agree" class="mt-1 mr-3 w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                <label for="agree" class="text-xs text-gray-600">
+                                    我已阅读并同意 <a href="#" class="text-primary">服务条款</a> 和 <a href="#" class="text-primary">隐私政策</a>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 注册按钮 -->
+                    <div class="mt-8 space-y-4">
+                        <button class="w-full py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition">
+                            开始实验
+                        </button>
+                        
+                        <!-- 分割线 -->
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div class="relative flex justify-center text-xs">
+                                <span class="bg-white px-3 text-gray-500">或使用以下方式注册</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 第三方注册 -->
+                        <div class="space-y-3">
+                            <button class="w-full py-3 bg-green-500 text-white rounded-full font-medium hover:bg-green-600 transition flex items-center justify-center">
+                                <i class="fa fa-wechat mr-2"></i>
+                                微信注册
+                            </button>
+                            <button class="w-full py-3 bg-lab-light text-gray-600 rounded-full font-medium hover:bg-gray-200 transition flex items-center justify-center">
+                                <i class="fa fa-mobile mr-2"></i>
+                                手机验证码注册
+                            </button>
+                        </div>
+                        
+                        <p class="text-center text-xs text-gray-500 mt-6">
+                            已有账户？<a href="#" class="text-primary font-medium">立即登录</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 11. 登录页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:45</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-y-auto">
+                <!-- 装饰背景 -->
+                <div class="absolute inset-0 bg-gradient-to-br from-secondary/5 via-white to-primary/5"></div>
+                <div class="absolute top-12 right-4 w-8 h-8 opacity-10">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-accent" style="height: 70%"></div>
+                    </div>
+                </div>
+                
+                <div class="relative p-6 h-full flex flex-col">
+                    <!-- 头部 -->
+                    <div class="flex justify-between items-center mb-12">
+                        <button class="text-gray-500 hover:text-primary transition">
+                            <i class="fa fa-arrow-left text-lg"></i>
+                        </button>
+                        <h2 class="font-bold text-neutral">登录</h2>
+                        <div class="w-6"></div>
+                    </div>
+
+                    <!-- Logo区域 -->
+                    <div class="text-center mb-12">
+                        <img src="kaiwalablogo.png" alt="会話Lab Logo" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 shadow-md">
+                        <h3 class="text-xl font-bold text-neutral mb-2">欢迎回来</h3>
+                        <p class="text-gray-500 text-sm">继续您的日语学习实验</p>
+                    </div>
+
+                    <!-- 登录表单 -->
+                    <div class="flex-1">
+                        <form class="space-y-5">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">邮箱或用户名</label>
+                                <input type="text" placeholder="请输入邮箱或用户名" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">密码</label>
+                                <div class="relative">
+                                    <input type="password" placeholder="请输入密码" class="w-full bg-lab-light border-none rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                    <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 记住我和忘记密码 -->
+                            <div class="flex justify-between items-center">
+                                <label class="flex items-center">
+                                    <input type="checkbox" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
+                                    <span class="ml-2 text-sm text-gray-600">记住我</span>
+                                </label>
+                                <a href="#" class="text-sm text-primary hover:underline">忘记密码？</a>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 登录按钮 -->
+                    <div class="mt-8 space-y-4">
+                        <button class="w-full py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition">
+                            开始实验
+                        </button>
+                        
+                        <!-- 分割线 -->
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-200"></div>
+                            </div>
+                            <div class="relative flex justify-center text-xs">
+                                <span class="bg-white px-3 text-gray-500">或</span>
+                            </div>
+                        </div>
+                        
+                        <!-- 第三方登录 -->
+                        <div class="space-y-3">
+                            <button class="w-full py-3 bg-green-500 text-white rounded-full font-medium hover:bg-green-600 transition flex items-center justify-center">
+                                <i class="fa fa-wechat mr-2"></i>
+                                微信登录
+                            </button>
+                            <button class="w-full py-3 bg-lab-light text-gray-600 rounded-full font-medium hover:bg-gray-200 transition flex items-center justify-center">
+                                <i class="fa fa-mobile mr-2"></i>
+                                手机验证码登录
+                            </button>
+                        </div>
+                        
+                        <p class="text-center text-xs text-gray-500 mt-6">
+                            还没有账户？<a href="#" class="text-primary font-medium">立即注册</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. 具体场景练习页面（餐厅点餐） -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>10:50</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-hidden flex flex-col">
+                <!-- 场景背景 -->
+                <div class="h-32 bg-gradient-to-r from-orange-400 to-red-400 relative overflow-hidden">
+                    <img src="https://picsum.photos/300/150?random=restaurant" alt="餐厅背景" class="w-full h-full object-cover opacity-80">
+                    <div class="absolute inset-0 bg-black/20"></div>
+                    
+                    <!-- 头部导航 -->
+                    <div class="absolute top-4 left-4 right-4 flex justify-between items-center">
+                        <button class="text-white hover:text-gray-200 transition">
+                            <i class="fa fa-arrow-left text-lg"></i>
+                        </button>
+                        <div class="text-center">
+                            <h2 class="text-white font-bold">餐厅点餐</h2>
+                            <p class="text-white/80 text-xs">场景 3/8</p>
+                        </div>
+                        <button class="text-white hover:text-gray-200 transition">
+                            <i class="fa fa-question-circle text-lg"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 进度条 -->
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <div class="w-full bg-white/30 rounded-full h-2">
+                            <div class="bg-white h-2 rounded-full" style="width: 37.5%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 角色信息 -->
+                <div class="p-4 bg-lab-light border-b border-lab-border">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                            <i class="fa fa-user-tie text-orange-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-medium text-neutral">服务员田中</h3>
+                            <p class="text-xs text-gray-500">为您介绍今日推荐菜品</p>
+                        </div>
+                        <div class="ml-auto">
+                            <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">AI角色</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 对话区域 -->
+                <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center mr-2 flex-shrink-0">
+                            <i class="fa fa-user-tie text-white text-xs"></i>
+                        </div>
+                        <div class="chat-bubble-left px-4 py-3 max-w-[75%] relative group">
+                            <p class="japanese-word">いらっしゃいませ！今日のおすすめは新鮮な刺身と寿司です。何かご質問はありますか？</p>
+                            <p class="text-xs text-gray-500 mt-1">欢迎光临！今天推荐新鲜的生鱼片和寿司。有什么问题吗？</p>
+                            <div class="chat-actions absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition">
+                                <button class="copy-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="いらっしゃいませ！今日のおすすめは新鮮な刺身と寿司です。何かご質問はありますか？">
+                                    <i class="fa fa-copy"></i>
+                                </button>
+                                <button class="speak-btn w-6 h-6 rounded-full bg-white/70 flex items-center justify-center text-gray-600 hover:bg-white transition text-xs" data-text="いらっしゃいませ！今日のおすすめは新鮮な刺身と寿司です。何かご質問はありますか？">
+                                    <i class="fa fa-volume-up"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 提示选项 -->
+                    <div class="bg-blue-50 rounded-xl p-3">
+                        <p class="text-sm font-medium text-blue-700 mb-2">选择您的回应：</p>
+                        <div class="space-y-2">
+                            <button class="w-full text-left p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition">
+                                <p class="font-medium text-sm">刺身はどのくらいの値段ですか？</p>
+                                <p class="text-xs text-gray-500">生鱼片多少钱？</p>
+                            </button>
+                            <button class="w-full text-left p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition">
+                                <p class="font-medium text-sm">寿司のセットはありますか？</p>
+                                <p class="text-xs text-gray-500">有寿司套餐吗？</p>
+                            </button>
+                            <button class="w-full text-left p-3 bg-white rounded-lg border border-blue-200 hover:border-blue-300 transition">
+                                <p class="font-medium text-sm">メニューを見せてください。</p>
+                                <p class="text-xs text-gray-500">请给我看看菜单。</p>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部工具栏 -->
+                <div class="p-3 border-t border-lab-border bg-white">
+                    <div class="flex items-center space-x-3">
+                        <button class="flex-1 py-2 bg-lab-light rounded-full text-sm text-gray-600 hover:bg-gray-200 transition flex items-center justify-center">
+                            <i class="fa fa-keyboard-o mr-2"></i>
+                            自由输入
+                        </button>
+                        <button class="w-12 h-10 rounded-full bg-primary flex items-center justify-center text-white hover:bg-primary/90 transition">
+                            <i class="fa fa-microphone"></i>
+                        </button>
+                        <button class="w-12 h-10 rounded-full bg-secondary flex items-center justify-center text-white hover:bg-secondary/90 transition">
+                            <i class="fa fa-lightbulb-o"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 13. 单词本页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>11:00</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">我的单词本</h2>
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+
+                <!-- 统计信息 -->
+                <div class="p-4 bg-gradient-to-r from-primary/5 to-secondary/5">
+                    <div class="flex justify-between items-center mb-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-neutral">收藏单词</h3>
+                            <p class="text-sm text-gray-500">共 24 个单词</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm text-gray-500">今日复习</p>
+                            <p class="text-lg font-bold text-primary">8/12</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 复习进度 -->
+                    <div class="w-full bg-white/50 rounded-full h-2">
+                        <div class="bg-primary h-2 rounded-full" style="width: 67%"></div>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">复习进度 67%</p>
+                </div>
+
+                <!-- 分类标签 -->
+                <div class="p-4">
+                    <div class="flex space-x-2 overflow-x-auto pb-2 mb-4">
+                        <button class="whitespace-nowrap px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">
+                            全部
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            餐厅用语
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            购物
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            旅游
+                        </button>
+                        <button class="whitespace-nowrap px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            待复习
+                        </button>
+                    </div>
+
+                    <!-- 单词卡片列表 -->
+                    <div class="space-y-3">
+                        <div class="bg-white border border-lab-border rounded-xl p-4 shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-neutral mb-1">刺身</h4>
+                                    <p class="text-sm text-gray-500 mb-2">さしみ (sashimi)</p>
+                                    <p class="text-sm text-gray-700">生鱼片</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full mr-2">餐厅用语</span>
+                                        <span class="text-xs text-gray-500">2天前添加</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center ml-4">
+                                    <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition mb-2">
+                                        <i class="fa fa-volume-up text-sm"></i>
+                                    </button>
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500 mt-1">熟练度</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-lab-border rounded-xl p-4 shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-neutral mb-1">寿司</h4>
+                                    <p class="text-sm text-gray-500 mb-2">すし (sushi)</p>
+                                    <p class="text-sm text-gray-700">寿司</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full mr-2">餐厅用语</span>
+                                        <span class="text-xs text-gray-500">3天前添加</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center ml-4">
+                                    <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition mb-2">
+                                        <i class="fa fa-volume-up text-sm"></i>
+                                    </button>
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500 mt-1">熟练度</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-neutral mb-1">お願いします</h4>
+                                    <p class="text-sm text-gray-500 mb-2">おねがいします (onegaishimasu)</p>
+                                    <p class="text-sm text-gray-700">请，拜托</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded-full mr-2">待复习</span>
+                                        <span class="text-xs text-gray-500">1天前添加</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center ml-4">
+                                    <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition mb-2">
+                                        <i class="fa fa-volume-up text-sm"></i>
+                                    </button>
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                        <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500 mt-1">熟练度</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white border border-lab-border rounded-xl p-4 shadow-flask hover:shadow-md transition cursor-pointer">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h4 class="text-lg font-bold text-neutral mb-1">新鮮</h4>
+                                    <p class="text-sm text-gray-500 mb-2">しんせん (shinsen)</p>
+                                    <p class="text-sm text-gray-700">新鲜</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded-full mr-2">购物</span>
+                                        <span class="text-xs text-gray-500">5天前添加</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center ml-4">
+                                    <button class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition mb-2">
+                                        <i class="fa fa-volume-up text-sm"></i>
+                                    </button>
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                        <div class="w-2 h-2 rounded-full bg-accent"></div>
+                                    </div>
+                                    <span class="text-xs text-gray-500 mt-1">熟练度</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 14. 设置中心页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>11:10</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">设置</h2>
+                    <div class="w-6"></div>
+                </div>
+
+                <!-- 用户信息卡片 -->
+                <div class="p-4">
+                    <div class="bg-gradient-to-r from-primary to-primary/80 rounded-2xl p-5 text-white mb-6 relative overflow-hidden">
+                        <div class="absolute top-3 right-3 w-6 h-6 opacity-20">
+                            <div class="test-tube">
+                                <div class="test-tube-fill bg-white" style="height: 80%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mr-4">
+                                <i class="fa fa-user text-white text-2xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">田中さん</h3>
+                                <p class="text-white/80 text-sm">Lv.5 探索者</p>
+                                <p class="text-white/80 text-xs">会员至 2024-06-15</p>
+                            </div>
+                            <button class="text-white/80 hover:text-white transition">
+                                <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 设置分组 -->
+                    <div class="space-y-6">
+                        <!-- 学习设置 -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 mb-3">学习设置</h3>
+                            <div class="bg-white border border-lab-border rounded-xl overflow-hidden">
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                                            <i class="fa fa-clock-o text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">学习提醒</h4>
+                                            <p class="text-xs text-gray-500">每日 20:00 提醒</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mr-3">
+                                            <i class="fa fa-volume-up text-secondary"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">语音播放</h4>
+                                            <p class="text-xs text-gray-500">自动播放日语发音</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                    </label>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+                                            <i class="fa fa-microphone text-accent"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">发音评估</h4>
+                                            <p class="text-xs text-gray-500">实时发音纠正</p>
+                                        </div>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 应用设置 -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 mb-3">应用设置</h3>
+                            <div class="bg-white border border-lab-border rounded-xl overflow-hidden">
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-palette text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">主题设置</h4>
+                                            <p class="text-xs text-gray-500">浅色模式</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-language text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">界面语言</h4>
+                                            <p class="text-xs text-gray-500">简体中文</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-download text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">离线下载</h4>
+                                            <p class="text-xs text-gray-500">管理离线内容</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 学习与成长 -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 mb-3">学习与成长</h3>
+                            <div class="bg-white border border-lab-border rounded-xl overflow-hidden">
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-trophy text-orange-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">学习排行榜</h4>
+                                            <p class="text-xs text-gray-500">查看实验室排名</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-trophy text-purple-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">发现瞬间</h4>
+                                            <p class="text-xs text-gray-500">成就系统和等级</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-file-text-o text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">实验报告</h4>
+                                            <p class="text-xs text-gray-500">学习数据分析</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+                                            <i class="fa fa-calendar-check-o text-accent"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">每日签到</h4>
+                                            <p class="text-xs text-gray-500">签到记录和奖励</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 账户与隐私 -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 mb-3">账户与隐私</h3>
+                            <div class="bg-white border border-lab-border rounded-xl overflow-hidden">
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-star text-yellow-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">会员中心</h4>
+                                            <p class="text-xs text-gray-500">管理订阅和权益</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-shield text-red-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">隐私设置</h4>
+                                            <p class="text-xs text-gray-500">数据使用与隐私</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-sign-out text-gray-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">退出登录</h4>
+                                            <p class="text-xs text-gray-500">安全退出当前账户</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 帮助与反馈 -->
+                        <div>
+                            <h3 class="text-sm font-semibold text-gray-500 mb-3">帮助与反馈</h3>
+                            <div class="bg-white border border-lab-border rounded-xl overflow-hidden">
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-question-circle text-blue-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">帮助中心</h4>
+                                            <p class="text-xs text-gray-500">使用指南和FAQ</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 border-b border-lab-border">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-comment text-orange-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">意见反馈</h4>
+                                            <p class="text-xs text-gray-500">告诉我们您的建议</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                            <i class="fa fa-info-circle text-green-600"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium text-neutral">关于会話Lab</h4>
+                                            <p class="text-xs text-gray-500">版本 2.1.0</p>
+                                        </div>
+                                    </div>
+                                    <i class="fa fa-chevron-right text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 15. 学习排行榜页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>11:15</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-90px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center sticky top-0 bg-white z-10">
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">实验室排行榜</h2>
+                    <button class="text-gray-500 hover:text-primary transition">
+                        <i class="fa fa-trophy"></i>
+                    </button>
+                </div>
+
+                <!-- 时间范围选择 -->
+                <div class="p-4 border-b border-lab-border">
+                    <div class="flex space-x-2">
+                        <button class="px-4 py-2 bg-primary text-white rounded-full text-sm font-medium">
+                            本周
+                        </button>
+                        <button class="px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            本月
+                        </button>
+                        <button class="px-4 py-2 bg-lab-light text-gray-600 rounded-full text-sm font-medium hover:bg-primary/5 transition">
+                            总榜
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 我的排名 -->
+                <div class="p-4">
+                    <div class="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-4 mb-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mr-3">
+                                <span class="text-primary font-bold">#8</span>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="font-bold text-neutral">田中さん (您)</h3>
+                                <p class="text-sm text-gray-600">本周实验 2小时15分</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-primary">135</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 前三名展示 -->
+                    <div class="mb-6">
+                        <h3 class="font-medium text-neutral mb-4">本周实验达人</h3>
+                        <div class="flex justify-center items-end space-x-4 mb-6">
+                            <!-- 第二名 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-2 relative">
+                                    <i class="fa fa-user text-gray-500 text-xl"></i>
+                                    <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center">
+                                        <span class="text-white text-xs font-bold">2</span>
+                                    </div>
+                                </div>
+                                <h4 class="font-medium text-sm">佐藤</h4>
+                                <p class="text-xs text-gray-500">248 经验</p>
+                                <div class="w-12 h-20 bg-gray-300 rounded-t-lg mt-2"></div>
+                            </div>
+                            
+                            <!-- 第一名 -->
+                            <div class="text-center">
+                                <div class="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center mb-2 relative">
+                                    <i class="fa fa-user text-yellow-600 text-2xl"></i>
+                                    <div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center">
+                                        <i class="fa fa-crown text-white text-sm"></i>
+                                    </div>
+                                </div>
+                                <h4 class="font-bold text-sm">山田</h4>
+                                <p class="text-xs text-gray-500">312 经验</p>
+                                <div class="w-16 h-24 bg-yellow-400 rounded-t-lg mt-2"></div>
+                            </div>
+                            
+                            <!-- 第三名 -->
+                            <div class="text-center">
+                                <div class="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mb-2 relative">
+                                    <i class="fa fa-user text-orange-600 text-xl"></i>
+                                    <div class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                                        <span class="text-white text-xs font-bold">3</span>
+                                    </div>
+                                </div>
+                                <h4 class="font-medium text-sm">鈴木</h4>
+                                <p class="text-xs text-gray-500">201 经验</p>
+                                <div class="w-12 h-16 bg-orange-400 rounded-t-lg mt-2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 排行榜列表 -->
+                    <div class="space-y-3">
+                        <div class="flex items-center p-3 bg-white border border-lab-border rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <span class="text-blue-600 font-bold text-sm">4</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <i class="fa fa-user text-blue-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">高橋</h4>
+                                <p class="text-xs text-gray-500">连续学习 5 天</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-neutral">189</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-3 bg-white border border-lab-border rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                <span class="text-purple-600 font-bold text-sm">5</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                <i class="fa fa-user text-purple-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">中村</h4>
+                                <p class="text-xs text-gray-500">完成 12 个场景</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-neutral">176</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-3 bg-white border border-lab-border rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <span class="text-green-600 font-bold text-sm">6</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <i class="fa fa-user text-green-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">小林</h4>
+                                <p class="text-xs text-gray-500">发音评分 92 分</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-neutral">158</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-3 bg-white border border-lab-border rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <span class="text-red-600 font-bold text-sm">7</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <i class="fa fa-user text-red-600"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">吉田</h4>
+                                <p class="text-xs text-gray-500">学习时长 3 小时</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-neutral">142</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+
+                        <!-- 当前用户排名 -->
+                        <div class="flex items-center p-3 bg-primary/5 border-2 border-primary/20 rounded-xl">
+                            <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center mr-3">
+                                <span class="text-white font-bold text-sm">8</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center mr-3">
+                                <i class="fa fa-user text-white"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-neutral">田中さん (您)</h4>
+                                <p class="text-xs text-gray-500">实验时长 2小时15分</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-primary">135</p>
+                                <p class="text-xs text-gray-500">经验值</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 激励信息 -->
+                    <div class="mt-6 p-4 bg-accent/5 border border-accent/20 rounded-xl text-center">
+                        <i class="fa fa-trophy text-accent text-2xl mb-2"></i>
+                        <h4 class="font-medium text-neutral mb-1">再接再厉！</h4>
+                        <p class="text-xs text-gray-600">再获得 7 经验值即可超越吉田，冲进前7名！</p>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部导航 -->
+            <div class="app-nav">
+                <div class="nav-icon">
+                    <i class="fa fa-home"></i>
+                    <span>首页</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-flask"></i>
+                    <span>实验台</span>
+                </div>
+                <div class="nav-icon">
+                    <i class="fa fa-book"></i>
+                    <span>学习库</span>
+                </div>
+                <div class="nav-icon active">
+                    <i class="fa fa-user"></i>
+                    <span>我的</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16. 每日签到页面 -->
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>11:20</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-y-auto">
+                <!-- 装饰背景 -->
+                <div class="absolute inset-0 bg-gradient-to-b from-accent/10 via-white to-primary/5"></div>
+                <div class="absolute top-8 left-4 w-6 h-6 opacity-10">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-accent" style="height: 90%"></div>
+                    </div>
+                </div>
+                <div class="absolute bottom-20 right-6 w-8 h-8 opacity-10">
+                    <div class="test-tube">
+                        <div class="test-tube-fill bg-primary" style="height: 60%"></div>
+                    </div>
+                </div>
+                
+                <div class="relative p-6 h-full flex flex-col">
+                    <!-- 头部 -->
+                    <div class="flex justify-between items-center mb-8">
+                        <button class="text-gray-500 hover:text-primary transition">
+                            <i class="fa fa-arrow-left text-lg"></i>
+                        </button>
+                        <h2 class="font-bold text-neutral">每日实验签到</h2>
+                        <div class="w-6"></div>
+                    </div>
+
+                    <!-- 签到成功动画区域 -->
+                    <div class="text-center mb-8">
+                        <div class="w-24 h-24 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4 animate-pulse">
+                            <i class="fa fa-check-circle text-accent text-4xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-neutral mb-2">签到成功！</h3>
+                        <p class="text-gray-500 text-sm">连续实验第 5 天</p>
+                    </div>
+
+                    <!-- 本周签到记录 -->
+                    <div class="mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-medium text-neutral">本周实验记录</h4>
+                            <div class="flex items-center space-x-2 text-xs text-gray-500">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 rounded-full bg-accent mr-1"></div>
+                                    <span>已完成</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 rounded-full border border-gray-300 mr-1"></div>
+                                    <span>待完成</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-7 gap-2">
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周一</p>
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center mx-auto">
+                                    <i class="fa fa-check text-white text-sm"></i>
+                                </div>
+                                <p class="text-xs text-accent mt-1">+10</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周二</p>
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center mx-auto">
+                                    <i class="fa fa-check text-white text-sm"></i>
+                                </div>
+                                <p class="text-xs text-accent mt-1">+10</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周三</p>
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center mx-auto">
+                                    <i class="fa fa-check text-white text-sm"></i>
+                                </div>
+                                <p class="text-xs text-accent mt-1">+10</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周四</p>
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center mx-auto">
+                                    <i class="fa fa-check text-white text-sm"></i>
+                                </div>
+                                <p class="text-xs text-accent mt-1">+10</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周五</p>
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center mx-auto relative">
+                                    <i class="fa fa-check text-white text-sm"></i>
+                                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full flex items-center justify-center">
+                                        <i class="fa fa-star text-white text-xs"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-accent mt-1">+15</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周六</p>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center mx-auto">
+                                    <i class="fa fa-calendar text-gray-400 text-sm"></i>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">+20</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-xs text-gray-500 mb-2">周日</p>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-200 bg-gray-50 flex items-center justify-center mx-auto">
+                                    <i class="fa fa-calendar text-gray-400 text-sm"></i>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">+25</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 奖励信息 -->
+                    <div class="mb-8">
+                        <h4 class="font-medium text-neutral mb-4">今日奖励</h4>
+                        <div class="bg-white border border-lab-border rounded-xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-gift text-secondary"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-neutral">基础奖励</h5>
+                                        <p class="text-xs text-gray-500">每日签到奖励</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-bold text-secondary">+15</span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center mr-3">
+                                        <i class="fa fa-fire text-accent"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="font-medium text-neutral">连续奖励</h5>
+                                        <p class="text-xs text-gray-500">连续5天额外奖励</p>
+                                    </div>
+                                </div>
+                                <span class="text-lg font-bold text-accent">+5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 连续签到进度 -->
+                    <div class="mb-8">
+                        <h4 class="font-medium text-neutral mb-4">连续实验进度</h4>
+                        <div class="bg-gradient-to-r from-accent/10 to-primary/10 rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-sm font-medium">连续 5 天</span>
+                                <span class="text-sm text-gray-500">距离下一奖励还需 2 天</span>
+                            </div>
+                            <div class="w-full bg-white/50 rounded-full h-2">
+                                <div class="bg-accent h-2 rounded-full" style="width: 71%"></div>
+                            </div>
+                            <div class="flex justify-between mt-2">
+                                <span class="text-xs text-gray-500">第5天</span>
+                                <span class="text-xs text-primary font-medium">第7天解锁特殊奖励</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下次奖励预览 -->
+                    <div class="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
+                        <h4 class="font-medium text-neutral mb-2">明日奖励预览</h4>
+                        <div class="flex justify-center items-center space-x-4">
+                            <div class="text-center">
+                                <div class="w-8 h-8 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-gift text-secondary text-sm"></i>
+                                </div>
+                                <span class="text-xs text-gray-600">+20 经验</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-1">
+                                    <i class="fa fa-flask text-primary text-sm"></i>
+                                </div>
+                                <span class="text-xs text-gray-600">解锁场景</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部按钮 -->
+                    <div class="mt-auto pt-6">
+                        <button class="w-full py-3 bg-primary text-white rounded-full font-medium hover:bg-primary/90 transition">
+                            开始今日实验
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 复制功能
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.getAttribute('data-text');
+                navigator.clipboard.writeText(text).then(() => {
+                    const toast = document.getElementById('copyToast');
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        toast.classList.remove('show');
+                    }, 2000);
+                });
+            });
+        });
+
+        // 发音功能模拟
+        document.querySelectorAll('.speak-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const text = this.getAttribute('data-text');
+                // 这里实际项目中会调用语音合成API
+                console.log(`播放语音: ${text}`);
+                
+                // 简单的视觉反馈
+                this.innerHTML = '<i class="fa fa-volume-down"></i>';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fa fa-volume-up"></i>';
+                }, 1500);
+            });
+        });
+
+        // 单词释义弹窗功能
+        const wordPopup = document.getElementById('wordPopup');
+        const popupWord = document.getElementById('popupWord');
+        const popupReading = document.getElementById('popupReading');
+        const popupDefinition = document.getElementById('popupDefinition');
+        const popupArrow = document.getElementById('popupArrow');
+
+        // 单词数据（实际项目中会从数据库获取）
+        const wordData = {
+            'こんにちは': {
+                reading: 'こんにちは (konnichiwa)',
+                definition: '你好，下午好'
+            },
+            '日本': {
+                reading: 'にほん (nihon)',
+                definition: '日本'
+            },
+            '旅行': {
+                reading: 'りょこう (ryokou)',
+                definition: '旅行'
+            },
+            '観光': {
+                reading: 'かんこう (kankou)',
+                definition: '观光，旅游'
+            },
+            '京都': {
+                reading: 'きょうと (kyouto)',
+                definition: '京都'
+            },
+            '有名': {
+                reading: 'ゆうめい (yuumei)',
+                definition: '有名，著名'
+            },
+            '刺身': {
+                reading: 'さしみ (sashimi)',
+                definition: '生鱼片'
+            },
+            '寿司': {
+                reading: 'すし (sushi)',
+                definition: '寿司'
+            },
+            'お願いします': {
+                reading: 'おねがいします (onegaishimasu)',
+                definition: '请，拜托'
+            },
+            '新鮮': {
+                reading: 'しんせん (shinsen)',
+                definition: '新鲜'
+            }
+        };
+
+        // 为日语单词添加点击事件
+        document.querySelectorAll('.japanese-word').forEach(wordElement => {
+            wordElement.addEventListener('click', function(e) {
+                const word = this.textContent.trim();
+                const data = wordData[word];
+                
+                if (data) {
+                    popupWord.textContent = word;
+                    popupReading.textContent = data.reading;
+                    popupDefinition.textContent = data.definition;
+                    
+                    // 定位弹窗
+                    const rect = this.getBoundingClientRect();
+                    const appRect = document.querySelector('.app-container').getBoundingClientRect();
+                    
+                    wordPopup.style.top = `${rect.top - appRect.top - 10 - wordPopup.offsetHeight}px`;
+                    wordPopup.style.left = `${rect.left - appRect.left + rect.width / 2 - wordPopup.offsetWidth / 2}px`;
+                    
+                    // 确保弹窗在可视区域内
+                    if (wordPopup.offsetLeft < 10) {
+                        wordPopup.style.left = '10px';
+                    } else if (wordPopup.offsetLeft + wordPopup.offsetWidth > appRect.width - 10) {
+                        wordPopup.style.left = `${appRect.width - wordPopup.offsetWidth - 10}px`;
+                    }
+                    
+                    // 如果顶部空间不足，显示在下方
+                    if (wordPopup.style.top < '10px') {
+                        wordPopup.style.top = `${rect.bottom - appRect.top + 10}px`;
+                        popupArrow.classList.remove('top');
+                        popupArrow.classList.add('bottom');
+                    } else {
+                        popupArrow.classList.remove('bottom');
+                        popupArrow.classList.add('top');
+                    }
+                    
+                    wordPopup.classList.remove('hidden');
+                    e.stopPropagation();
+                }
+            });
+        });
+
+        // 点击其他区域关闭弹窗
+        document.addEventListener('click', () => {
+            wordPopup.classList.add('hidden');
+        });
+
+        // 阻止弹窗内部点击事件冒泡
+        wordPopup.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html>
