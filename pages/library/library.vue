@@ -242,13 +242,13 @@ export default {
 	right: 0;
 	z-index: 100;
 	background: white;
-	border-bottom: 1px solid #E5E7EB;
+	border-bottom: 2rpx solid #E5E7EB;
 }
 
 /* 内容区域 */
 .content-wrapper {
-	margin-top: 60px; /* 为固定顶部栏留出空间 */
-	padding-bottom: calc(80px + env(safe-area-inset-bottom)); /* 为底部导航栏留出空间 */
+	margin-top: 120rpx; /* 为固定顶部栏留出空间 */
+	padding-bottom: calc(160rpx + env(safe-area-inset-bottom)); /* 为底部导航栏留出空间 */
 	overflow-y: auto;
 }
 
@@ -257,13 +257,13 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding: 16px;
+	padding: 32rpx;
 	background: white;
 	
 	.header-left,
 	.header-right {
-		width: 24px;
-		height: 24px;
+		width: 48rpx;
+		height: 48rpx;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -272,7 +272,7 @@ export default {
 	.back-btn,
 	.search-btn {
 		color: #6B7280;
-		font-size: 16px;
+		font-size: 32rpx;
 		cursor: pointer;
 		transition: color 0.2s;
 		
@@ -282,7 +282,7 @@ export default {
 	}
 	
 	.header-title {
-		font-size: 16px;
+		font-size: 32rpx;
 		font-weight: 600;
 		color: #1F2937;
 	}
@@ -290,26 +290,26 @@ export default {
 
 /* 统计信息 */
 .stats-section {
-	padding: 16px;
+	padding: 32rpx;
 	background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(88, 86, 214, 0.05) 100%);
 	
 	.stats-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 16px;
+		margin-bottom: 32rpx;
 		
 		.stats-left {
 			.stats-title {
-				font-size: 18px;
+				font-size: 36rpx;
 				font-weight: 600;
 				color: #1F2937;
 				display: block;
-				margin-bottom: 4px;
+				margin-bottom: 8rpx;
 			}
 			
 			.stats-count {
-				font-size: 14px;
+				font-size: 28rpx;
 				color: #6B7280;
 				display: block;
 			}
@@ -319,14 +319,14 @@ export default {
 			text-align: right;
 			
 			.review-label {
-				font-size: 14px;
+				font-size: 28rpx;
 				color: #6B7280;
 				display: block;
-				margin-bottom: 4px;
+				margin-bottom: 8rpx;
 			}
 			
 			.review-count {
-				font-size: 18px;
+				font-size: 36rpx;
 				font-weight: 600;
 				color: #007AFF;
 				display: block;
@@ -337,22 +337,22 @@ export default {
 	.progress-container {
 		.progress-bar {
 			width: 100%;
-			height: 8px;
+			height: 16rpx;
 			background: rgba(255, 255, 255, 0.5);
-			border-radius: 4px;
+			border-radius: 8rpx;
 			overflow: hidden;
-			margin-bottom: 4px;
+			margin-bottom: 8rpx;
 			
 			.progress-fill {
 				height: 100%;
 				width: 67%;
 				background: #007AFF;
-				border-radius: 4px;
+				border-radius: 8rpx;
 			}
 		}
 		
 		.progress-text {
-			font-size: 12px;
+			font-size: 24rpx;
 			color: #6B7280;
 		}
 	}
@@ -360,10 +360,10 @@ export default {
 
 /* 分类标签 */
 .categories {
-	padding: 8px 0;
+	padding: 16rpx 0;
 	background: white;
-	border-bottom: 1px solid #E5E7EB;
-	margin-bottom: 16px;
+	border-bottom: 2rpx solid #E5E7EB;
+	margin-bottom: 32rpx;
 	
 	.categories-scroll {
 		white-space: nowrap;
@@ -379,17 +379,17 @@ export default {
 	
 	.categories-wrapper {
 		display: inline-flex;
-		gap: 12px;
-		padding: 0 8px;
+		gap: 24rpx;
+		padding: 0 16rpx;
 		min-width: 100%;
 	}
 	
 	.category-tag {
-		padding: 8px 16px;
-		border-radius: 20px;
+		padding: 16rpx 32rpx;
+		border-radius: 40rpx;
 		background: #F3F4F6;
 		color: #6B7280;
-		font-size: 14px;
+		font-size: 28rpx;
 		font-weight: 500;
 		white-space: nowrap;
 		cursor: pointer;
@@ -414,18 +414,18 @@ export default {
 
 /* 单词卡片列表 */
 .word-list {
-	padding: 0 16px;
+	padding: 0 32rpx;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 24rpx;
 }
 
 .word-card {
 	background: white;
-	border: 1px solid #E5E7EB;
-	border-radius: 12px;
-	padding: 16px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	border: 2rpx solid #E5E7EB;
+	border-radius: 24rpx;
+	padding: 32rpx;
+	box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
 	cursor: pointer;
 	transition: all 0.2s;
 	display: flex;
@@ -438,43 +438,43 @@ export default {
 	}
 	
 	&:hover {
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+		box-shadow: 0 8rpx 12rpx rgba(0, 0, 0, 0.1);
 	}
 	
 	.word-content {
 		flex: 1;
 		
 		.word-title {
-			font-size: 18px;
+			font-size: 36rpx;
 			font-weight: 600;
 			color: #1F2937;
 			display: block;
-			margin-bottom: 4px;
+			margin-bottom: 8rpx;
 		}
 		
 		.word-pronunciation {
-			font-size: 14px;
+			font-size: 28rpx;
 			color: #6B7280;
 			display: block;
-			margin-bottom: 8px;
+			margin-bottom: 16rpx;
 		}
 		
 		.word-meaning {
-			font-size: 14px;
+			font-size: 28rpx;
 			color: #374151;
 			display: block;
-			margin-bottom: 8px;
+			margin-bottom: 16rpx;
 		}
 		
 		.word-meta {
 			display: flex;
 			align-items: center;
-			gap: 8px;
+			gap: 16rpx;
 			
 			.word-tag {
-				padding: 2px 8px;
-				border-radius: 12px;
-				font-size: 12px;
+				padding: 4rpx 16rpx;
+				border-radius: 24rpx;
+				font-size: 24rpx;
 				
 				&.restaurant {
 					background: #FED7AA;
@@ -498,7 +498,7 @@ export default {
 			}
 			
 			.word-date {
-				font-size: 12px;
+				font-size: 24rpx;
 				color: #6B7280;
 			}
 		}
@@ -508,12 +508,12 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 8px;
-		margin-left: 16px;
+		gap: 16rpx;
+		margin-left: 32rpx;
 		
 		.play-btn {
-			width: 32px;
-			height: 32px;
+			width: 64rpx;
+			height: 64rpx;
 			border-radius: 50%;
 			background: rgba(0, 122, 255, 0.1);
 			display: flex;
@@ -533,12 +533,12 @@ export default {
 			
 			.proficiency-dots {
 				display: flex;
-				gap: 2px;
-				margin-bottom: 4px;
+				gap: 4rpx;
+				margin-bottom: 8rpx;
 				
 				.dot {
-					width: 8px;
-					height: 8px;
+					width: 16rpx;
+					height: 16rpx;
 					border-radius: 50%;
 					background: #E5E7EB;
 					
@@ -549,7 +549,7 @@ export default {
 			}
 			
 			.proficiency-label {
-				font-size: 12px;
+				font-size: 24rpx;
 				color: #6B7280;
 			}
 		}

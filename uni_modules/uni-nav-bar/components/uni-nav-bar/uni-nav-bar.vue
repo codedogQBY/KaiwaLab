@@ -13,7 +13,7 @@
 						</view>
 						<view :class="{ 'uni-navbar-btn-icon-left': !leftIcon.length > 0 }" class="uni-navbar-btn-text"
 							v-if="leftText.length">
-							<text :style="{ color: themeColor, fontSize: '12px' }">{{ leftText }}</text>
+							<text :style="{ color: themeColor, fontSize: '24rpx' }">{{ leftText }}</text>
 						</view>
 					</slot>
 				</view>
@@ -198,7 +198,7 @@
 </script>
 
 <style lang="scss" scoped>
-	$nav-height: 44px;
+	$nav-height: 88rpx;
 
 	.uni-nvue-fixed {
 		/* #ifdef APP-NVUE */
@@ -214,12 +214,12 @@
 		font-size: 34rpx;
 		/* #endif */
 		/* #ifndef APP-PLUS */
-		font-size: 14px;
+		font-size: 28rpx;
 		/* #endif */
 	}
 
 	.uni-nav-bar-right-text {
-		font-size: 12px;
+		font-size: 24rpx;
 	}
 
 	.uni-navbar__content {
@@ -240,17 +240,17 @@
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: center;
-		line-height: 12px;
+		line-height: 24rpx;
 	}
 
 	.uni-navbar__header {
 		/* #ifndef APP-NVUE */
 		display: flex;
 		/* #endif */
-		padding: 0 10px;
+		padding: 0 20rpx;
 		flex-direction: row;
 		height: $nav-height;
-		font-size: 12px;
+		font-size: 24rpx;
 	}
 
 	.uni-navbar__header-btns {
@@ -294,7 +294,7 @@
 		display: flex;
 		/* #endif */
 		flex: 1;
-		padding: 0 10px;
+		padding: 0 20rpx;
 		overflow: hidden;
 	}
 
@@ -306,7 +306,7 @@
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		font-size: 12px;
+		font-size: 24rpx;
 		overflow: hidden;
 		// box-sizing: border-box;
 	}
@@ -331,7 +331,7 @@
 	}
 
 	.uni-navbar--shadow {
-		box-shadow: 0 1px 6px #ccc;
+		box-shadow: 0 2rpx 12rpx #ccc;
 	}
 
 	.uni-navbar--border {

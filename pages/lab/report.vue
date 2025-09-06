@@ -88,19 +88,12 @@
 				</view>
 			</view>
 		</scroll-view>
-		
-		<BottomTabBar />
 	</view>
 </template>
 
 <script>
-import BottomTabBar from '@/components/BottomTabBar/BottomTabBar.vue'
-
 export default {
 	name: 'Report',
-	components: {
-		BottomTabBar
-	},
 	data() {
 		return {
 			statusBarHeight: 0,
@@ -214,7 +207,6 @@ export default {
 /* 报告内容 */
 .report-content {
 	flex: 1;
-	padding-bottom: 140rpx;
 	overflow-y: auto;
 	background: #f8f9fa;
 }
@@ -456,8 +448,7 @@ export default {
 /* 报告内容 */
 .report-content {
 	flex: 1;
-	padding-top: 140rpx;
-	padding-bottom: 140rpx;
+	padding-top: 120rpx;
 	overflow-y: auto;
 }
 

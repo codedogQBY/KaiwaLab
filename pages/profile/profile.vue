@@ -330,7 +330,7 @@ export default {
 	background: #ffffff;
 	height: 100%;
 	position: relative;
-	padding-top: 16px;
+	padding-top: 32rpx;
 }
 
 
@@ -338,28 +338,28 @@ export default {
 /* 用户信息卡片 */
 .user-card {
 	background: linear-gradient(135deg, #2563EB 0%, rgba(37, 99, 235, 0.8) 100%);
-	border-radius: 16px;
-	padding: 20px;
-	margin:0 16px 16px 16px;
+	border-radius: 32rpx;
+	padding: 40rpx;
+	margin:0 32rpx 32rpx 32rpx;
 	position: relative;
 	overflow: hidden;
 }
 
 .test-tube-decoration {
 	position: absolute;
-	top: 24px;
-	right: 56px;
-	width: 24px;
-	height: 24px;
+	top: 48rpx;
+	right: 112rpx;
+	width: 48rpx;
+	height: 48rpx;
 	opacity: 0.2;
 	transform: rotate(24deg);
 }
 
 .test-tube {
-	width: 8px;
-	height: 36px;
-	border: 2px solid white;
-	border-radius: 2px 2px 8px 8px;
+	width: 16rpx;
+	height: 72rpx;
+	border: 4rpx solid white;
+	border-radius: 4rpx 4rpx 16rpx 16rpx;
 	position: relative;
 	overflow: hidden;
 }
@@ -378,18 +378,18 @@ export default {
 }
 
 .avatar-container {
-	width: 64px;
-	height: 64px;
+	width: 128rpx;
+	height: 128rpx;
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.2);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-right: 16px;
+	margin-right: 32rpx;
 }
 
 .avatar-container .iconfont {
-	font-size: 32px;
+	font-size: 64rpx;
 	color: white;
 }
 
@@ -398,22 +398,22 @@ export default {
 }
 
 .username {
-	font-size: 18px;
+	font-size: 36rpx;
 	font-weight: bold;
 	color: white;
-	margin-bottom: 4px;
+	margin-bottom: 8rpx;
 	display: block;
 }
 
 .user-level {
-	font-size: 14px;
+	font-size: 28rpx;
 	color: rgba(255, 255, 255, 0.8);
-	margin-bottom: 2px;
+	margin-bottom: 4rpx;
 	display: block;
 }
 
 .member-status {
-	font-size: 12px;
+	font-size: 24rpx;
 	color: rgba(255, 255, 255, 0.8);
 	display: block;
 }
@@ -424,39 +424,39 @@ export default {
 }
 
 .edit-btn .iconfont {
-	font-size: 16px;
+	font-size: 32rpx;
 	color: rgba(255, 255, 255, 0.8);
 }
 
 /* 设置容器 */
 .settings-container {
-	padding: 0 16px calc(24px + 60px + env(safe-area-inset-bottom));
+	padding: 0 32rpx calc(48rpx + 120rpx + env(safe-area-inset-bottom));
 }
 
 .menu-group {
-	margin-bottom: 24px;
+	margin-bottom: 48rpx;
 }
 
 .group-title {
-	font-size: 14px;
+	font-size: 28rpx;
 	font-weight: 600;
 	color: #8E8E93;
-	margin-bottom: 12px;
+	margin-bottom: 24rpx;
 	display: block;
 }
 
 .menu-card {
 	background: white;
-	border: 1px solid #DBEAFE;
-	border-radius: 12px;
+	border: 2rpx solid #DBEAFE;
+	border-radius: 24rpx;
 	overflow: hidden;
 }
 
 .menu-item {
 	display: flex;
 	align-items: center;
-	padding: 16px;
-	border-bottom: 1px solid #DBEAFE;
+	padding: 32rpx;
+	border-bottom: 2rpx solid #DBEAFE;
 }
 
 .menu-item.last {
@@ -464,13 +464,13 @@ export default {
 }
 
 .icon-container {
-	width: 40px;
-	height: 40px;
+	width: 80rpx;
+	height: 80rpx;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-right: 12px;
+	margin-right: 24rpx;
 }
 
 /* 学习设置图标颜色 */
@@ -562,29 +562,29 @@ export default {
 }
 
 .menu-title {
-	font-size: 16px;
+	font-size: 32rpx;
 	font-weight: 500;
 	color: #1F2937;
-	margin-bottom: 2px;
+	margin-bottom: 4rpx;
 	display: block;
 }
 
 .menu-subtitle {
-	font-size: 12px;
+	font-size: 24rpx;
 	color: #8E8E93;
 	display: block;
 }
 
 .menu-arrow {
-	font-size: 14px;
+	font-size: 28rpx;
 	color: #8E8E93;
 }
 
 .toggle-switch {
-	width: 44px;
-	height: 24px;
+	width: 88rpx;
+	height: 48rpx;
 	background: #C6C6C8;
-	border-radius: 12px;
+	border-radius: 24rpx;
 	position: relative;
 	transition: background-color 0.3s ease;
 }
@@ -594,18 +594,18 @@ export default {
 }
 
 .toggle-thumb {
-	width: 20px;
-	height: 20px;
+	width: 40rpx;
+	height: 40rpx;
 	background: white;
 	border-radius: 50%;
 	position: absolute;
-	top: 2px;
-	left: 2px;
+	top: 4rpx;
+	left: 4rpx;
 	transition: transform 0.3s ease;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
 .toggle-switch.active .toggle-thumb {
-	transform: translateX(20px);
+	transform: translateX(40rpx);
 }
 </style>

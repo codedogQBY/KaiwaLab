@@ -14,8 +14,8 @@
 			// #ifdef H5
 			console.log(
 				`%c hello uniapp %c v${version} `,
-				'background:#35495e ; padding: 1px; border-radius: 3px 0 0 3px;  color: #fff',
-				'background:#007aff ;padding: 1px; border-radius: 0 3px 3px 0;  color: #fff; font-weight: bold;'
+				'background:#35495e ; padding: 2rpx; border-radius: 6rpx 0 0 6rpx;  color: #fff',
+				'background:#007aff ;padding: 2rpx; border-radius: 0 6rpx 6rpx 0;  color: #fff; font-weight: bold;'
 			)
 			// #endif
 			// 线上示例使用
@@ -105,7 +105,7 @@
 	}
 
 	.fix-pc-padding {
-		padding: 0 50px;
+		padding: 0 100rpx;
 	}
 
 	.uni-header-logo {
@@ -117,8 +117,8 @@
 	}
 
 	.uni-header-image {
-		width: 100px;
-		height: 100px;
+		width: 200rpx;
+		height: 200rpx;
 	}
 
 	.uni-hello-text {
@@ -130,7 +130,7 @@
 		line-height: 300rpx;
 		background: #FFF;
 		padding: 50rpx;
-		margin-top: 10px;
+		margin-top: 20rpx;
 		font-size: 38rpx;
 		color: #808080;
 	}

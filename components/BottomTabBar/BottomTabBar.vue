@@ -84,7 +84,7 @@ export default {
     // 图标大小
     iconSize: {
       type: String,
-      default: '16px'
+      default: '32rpx'
     }
   },
   data() {
@@ -165,16 +165,16 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 60px;
+  height: 120rpx;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border-top: 1px solid;
+  border-top: 2rpx solid;
   z-index: 998;
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(20rpx);
+  -webkit-backdrop-filter: blur(20rpx);
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
   /* #ifdef H5 */
   padding-bottom: env(safe-area-inset-bottom);
   /* #endif */
@@ -191,7 +191,7 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 4px 0;
+  padding: 8rpx 0;
   transition: all 0.3s ease;
   cursor: pointer;
   
@@ -201,7 +201,7 @@ export default {
 }
 
 .tab-item-active {
-  transform: translateY(-2px);
+  transform: translateY(-4rpx);
   
   .tab-icon,
   .tab-icon-image {
@@ -218,11 +218,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 2px;
+  margin-bottom: 4rpx;
 }
 
 .tab-icon {
-  font-size: 22px;
+  font-size: 44rpx;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -230,13 +230,13 @@ export default {
 }
 
 .tab-icon-image {
-  width: 22px;
-  height: 22px;
+  width: 44rpx;
+  height: 44rpx;
   transition: all 0.3s ease;
 }
 
 .tab-text {
-  font-size: 10px;
+  font-size: 20rpx;
   font-weight: 500;
   line-height: 1.2;
   transition: all 0.3s ease;
@@ -246,34 +246,34 @@ export default {
 /* 红点提示 */
 .tab-badge-dot {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
+  top: -4rpx;
+  right: -4rpx;
+  width: 16rpx;
+  height: 16rpx;
   background-color: #EF4444;
   border-radius: 50%;
-  border: 2px solid #FFFFFF;
+  border: 4rpx solid #FFFFFF;
 }
 
 /* 数字提示 */
 .tab-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -12rpx;
+  right: -12rpx;
   background: linear-gradient(135deg, #EF4444, #DC2626);
-  border-radius: 10px;
-  min-width: 16px;
-  height: 16px;
+  border-radius: 20rpx;
+  min-width: 32rpx;
+  height: 32rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #FFFFFF;
-  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+  border: 4rpx solid #FFFFFF;
+  box-shadow: 0 4rpx 8rpx rgba(239, 68, 68, 0.3);
 }
 
 .badge-text {
   color: #FFFFFF;
-  font-size: 9px;
+  font-size: 18rpx;
   font-weight: 600;
   line-height: 1;
 }
@@ -289,7 +289,7 @@ export default {
 /* 适配安全区域 */
 @supports (bottom: env(safe-area-inset-bottom)) {
   .bottom-tab-bar {
-    height: calc(60px + env(safe-area-inset-bottom));
+    height: calc(120rpx + env(safe-area-inset-bottom));
   }
 }
 

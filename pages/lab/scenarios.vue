@@ -266,12 +266,12 @@ export default {
 	left: 0;
 	right: 0;
 	padding: 32rpx;
-	border-bottom: 1px solid #DBEAFE;
+	border-bottom: 2rpx solid #DBEAFE;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	background: rgba(255, 255, 255, 0.95);
-	backdrop-filter: blur(10px);
+	backdrop-filter: blur(20rpx);
 	z-index: 100;
 }
 
@@ -343,7 +343,7 @@ export default {
 /* 会员提示 */
 .member-tip {
 	background: rgba(37, 99, 235, 0.05);
-	border: 1px solid rgba(37, 99, 235, 0.2);
+	border: 2rpx solid rgba(37, 99, 235, 0.2);
 	border-radius: 24rpx;
 	padding: 32rpx;
 	margin-bottom: 48rpx;

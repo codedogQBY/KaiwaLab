@@ -240,7 +240,7 @@ export default {
 }
 
 .content-padding {
-	padding: 0 48rpx calc(48rpx + 60px + env(safe-area-inset-bottom));
+	padding: 0 48rpx calc(48rpx + 120rpx + env(safe-area-inset-bottom));
 }
 
 /* 用户信息栏 */

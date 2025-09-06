@@ -125,15 +125,15 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 44px;
-  padding: 0 16px;
+  height: 88rpx;
+  padding: 0 32rpx;
   position: relative;
 }
 
 .nav-left {
   display: flex;
   align-items: center;
-  min-width: 60px;
+  min-width: 120rpx;
   justify-content: flex-start;
 }
 
@@ -141,14 +141,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 64rpx;
+  height: 64rpx;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-icon {
-  font-size: 18px;
+  font-size: 36rpx;
   color: #FFFFFF;
 }
 
@@ -163,9 +163,9 @@ export default {
 }
 
 .title-text {
-  font-size: 18px;
+  font-size: 36rpx;
   font-weight: 600;
-  max-width: 200px;
+  max-width: 400rpx;
   text-align: center;
   /* #ifndef APP-NVUE */
   overflow: hidden;
@@ -177,7 +177,7 @@ export default {
 .nav-right {
   display: flex;
   align-items: center;
-  min-width: 60px;
+  min-width: 120rpx;
   justify-content: flex-end;
 }
 </style>

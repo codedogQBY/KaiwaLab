@@ -24,7 +24,7 @@
 <style lang="scss" >
 	.uni-status-bar {
 		// width: 750rpx;
-		height: 20px;
+		height: 40rpx;
 		// height: var(--status-bar-height);
 	}
 </style>

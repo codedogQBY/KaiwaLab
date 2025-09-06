@@ -291,7 +291,7 @@ export default {
 .main-content {
 	flex: 1;
 	padding-top: 16rpx;
-	padding-bottom: calc(120rpx + 60px + env(safe-area-inset-bottom));
+	padding-bottom: calc(120rpx + 120rpx + env(safe-area-inset-bottom));
 	position: relative;
 }
 
