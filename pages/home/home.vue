@@ -459,9 +459,9 @@ export default {
 
 .checkin-status {
 	width: 60rpx;
-	height: 48rpx;
+	height: 60rpx;
 	background-color: #2563EB;
-	border-radius: 24rpx;
+	border-radius: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
