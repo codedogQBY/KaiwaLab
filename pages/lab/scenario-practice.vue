@@ -45,36 +45,15 @@
 		<scroll-view class="chat-area" scroll-y="true" :scroll-top="scrollTop">
 			<view class="chat-content">
 				<!-- 对话消息 -->
-				<view 
+				<ChatBubble 
 					v-for="(message, index) in messages" 
 					:key="index"
-					class="message-item"
-				>
-					<view v-if="message.type === 'ai'" class="ai-message">
-						<view class="ai-avatar">
-							<text class="fas fa-user-tie"></text>
-						</view>
-						<view class="message-bubble ai-bubble">
-							<text class="japanese-text">{{ message.content }}</text>
-							<text class="translation-text">{{ message.translation }}</text>
-							<view class="message-actions">
-								<view class="action-btn" @click="copyText(message.content)">
-									<text class="fas fa-copy"></text>
-								</view>
-								<view class="action-btn" @click="speakText(message.content)">
-									<text class="fas fa-volume-up"></text>
-								</view>
-							</view>
-						</view>
-					</view>
-					
-					<view v-else class="user-message">
-						<view class="message-bubble user-bubble">
-							<text class="japanese-text">{{ message.content }}</text>
-							<text class="translation-text">{{ message.translation }}</text>
-						</view>
-					</view>
-				</view>
+					:type="message.type"
+					:content="message.content"
+					:translation="message.translation"
+					@copy="copyText"
+					@speak="speakText"
+				/>
 				
 				<!-- 选择题区域 -->
 				<view v-if="showChoices" class="choices-section">
@@ -117,8 +96,13 @@
 </template>
 
 <script>
+import ChatBubble from '@/components/ChatBubble/ChatBubble.vue'
+
 export default {
 	name: 'ScenarioPractice',
+	components: {
+		ChatBubble
+	},
 	data() {
 		return {
 			statusBarHeight: 0,
@@ -175,6 +159,60 @@ export default {
 						{ japanese: '刺身をお願いします。', chinese: '请给我生鱼片。', correct: true },
 						{ japanese: '寿司セットにします。', chinese: '我要寿司套餐。', correct: true },
 						{ japanese: 'もう少し考えます。', chinese: '我再想想。', correct: false }
+					]
+				},
+				{
+					ai: 'かしこまりました。お飲み物はいかがですか？',
+					aiTranslation: '好的。饮料怎么样？',
+					choices: [
+						{ japanese: '緑茶をお願いします。', chinese: '请给我绿茶。', correct: true },
+						{ japanese: 'ビールはありますか？', chinese: '有啤酒吗？', correct: true },
+						{ japanese: '水で結構です。', chinese: '水就可以了。', correct: true }
+					]
+				},
+				{
+					ai: 'はい、緑茶ですね。少々お待ちください。',
+					aiTranslation: '好的，绿茶。请稍等。',
+					choices: [
+						{ japanese: 'ありがとうございます。', chinese: '谢谢。', correct: true },
+						{ japanese: 'お忙しい中すみません。', chinese: '百忙中打扰了。', correct: true },
+						{ japanese: 'よろしくお願いします。', chinese: '拜托了。', correct: true }
+					]
+				},
+				{
+					ai: 'お待たせしました。こちら刺身と緑茶です。ごゆっくりどうぞ。',
+					aiTranslation: '让您久等了。这是生鱼片和绿茶。请慢用。',
+					choices: [
+						{ japanese: 'いただきます。', chinese: '我开动了。', correct: true },
+						{ japanese: 'おいしそうですね。', chinese: '看起来很好吃。', correct: true },
+						{ japanese: 'ありがとうございます。', chinese: '谢谢。', correct: true }
+					]
+				},
+				{
+					ai: 'お食事はいかがでしたか？',
+					aiTranslation: '用餐怎么样？',
+					choices: [
+						{ japanese: 'とてもおいしかったです。', chinese: '非常好吃。', correct: true },
+						{ japanese: '新鮮で美味しかったです。', chinese: '很新鲜很好吃。', correct: true },
+						{ japanese: 'ごちそうさまでした。', chinese: '我吃饱了。', correct: true }
+					]
+				},
+				{
+					ai: 'ありがとうございます。お会計は2500円になります。',
+					aiTranslation: '谢谢。账单是2500日元。',
+					choices: [
+						{ japanese: 'カードで支払えますか？', chinese: '可以用卡支付吗？', correct: true },
+						{ japanese: '現金で払います。', chinese: '我用现金付。', correct: true },
+						{ japanese: 'レシートをお願いします。', chinese: '请给我收据。', correct: true }
+					]
+				},
+				{
+					ai: 'はい、カードでお支払いいただけます。ありがとうございました。',
+					aiTranslation: '好的，可以用卡支付。谢谢您。',
+					choices: [
+						{ japanese: 'ありがとうございました。', chinese: '谢谢。', correct: true },
+						{ japanese: 'また来ます。', chinese: '我还会再来的。', correct: true },
+						{ japanese: 'お疲れさまでした。', chinese: '辛苦了。', correct: true }
 					]
 				}
 			]
@@ -562,111 +600,7 @@ export default {
 	gap: 32rpx;
 }
 
-.message-item {
-	display: flex;
-	flex-direction: column;
-}
-
-.ai-message {
-	display: flex;
-	align-items: flex-start;
-	gap: 16rpx;
-	margin-bottom: 32rpx;
-}
-
-.user-message {
-	display: flex;
-	justify-content: flex-end;
-	margin-bottom: 32rpx;
-}
-
-.ai-avatar {
-	width: 64rpx;
-	height: 64rpx;
-	border-radius: 50%;
-	background: #F97316;
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-
-	text {
-		font-size: 24rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
-	}
-}
-
-.message-bubble {
-	position: relative;
-	padding: 24rpx 32rpx;
-	border-radius: 36rpx;
-	max-width: 75%;
-}
-
-.ai-bubble {
-	background: #F3F4F6;
-	border-radius: 36rpx 36rpx 36rpx 8rpx;
-	color: #1F2937;
-}
-
-.user-bubble {
-	background: #2563EB;
-	border-radius: 36rpx 36rpx 8rpx 36rpx;
-	color: white;
-}
-
-.japanese-text {
-	font-size: 30rpx;
-	line-height: 1.5;
-	display: block;
-	margin-bottom: 8rpx;
-	font-weight: 500;
-}
-
-.translation-text {
-	font-size: 26rpx;
-	opacity: 0.7;
-	font-style: italic;
-	display: block;
-}
-
-.message-actions {
-	position: absolute;
-	top: 16rpx;
-	right: 16rpx;
-	display: flex;
-	gap: 8rpx;
-	opacity: 0;
-	transition: opacity 0.2s;
-}
-
-.ai-bubble:hover .message-actions {
-	opacity: 1;
-}
-
-.action-btn {
-	width: 48rpx;
-	height: 48rpx;
-	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.7);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #6B7280;
-	transition: all 0.2s;
-
-	&:active {
-		background: white;
-	}
-
-	text {
-		font-size: 20rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
-	}
-}
+/* 消息样式已移至ChatBubble组件 */
 
 /* 选择题区域 */
 .choices-section {

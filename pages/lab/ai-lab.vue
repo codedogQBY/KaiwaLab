@@ -28,44 +28,15 @@
 				
 				<!-- 对话消息列表 -->
 				<view class="message-list">
-					<view class="message-item" v-for="(message, index) in messages" :key="index">
-						<!-- AI消息 -->
-						<view v-if="message.type === 'ai'" class="message ai-message">
-							<view class="avatar ai-avatar">
-								<text class="fas fa-robot"></text>
-							</view>
-							<view class="message-content">
-								<view class="bubble ai-bubble">
-									<text class="message-text">{{ message.content }}</text>
-								</view>
-								<view class="chat-actions">
-									<view class="action-btn-small" @click="copyText(message.content)">
-										<text class="fas fa-copy"></text>
-									</view>
-									<view class="action-btn-small" @click="speakText(message.content)">
-										<text class="fas fa-volume-up"></text>
-									</view>
-								</view>
-							</view>
-						</view>
-						
-						<!-- 用户消息 -->
-						<view v-else class="message user-message">
-							<view class="message-content user-content">
-								<view class="bubble user-bubble">
-									<text class="message-text">{{ message.content }}</text>
-								</view>
-								<view class="chat-actions user-actions">
-									<view class="action-btn-small user-action" @click="copyText(message.content)">
-										<text class="fas fa-copy"></text>
-									</view>
-									<view class="action-btn-small user-action" @click="speakText(message.content)">
-										<text class="fas fa-volume-up"></text>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
+					<ChatBubble 
+						v-for="(message, index) in messages" 
+						:key="index"
+						:type="message.type"
+						:content="message.content"
+						:translation="message.translation"
+						@copy="copyText"
+						@speak="speakText"
+					/>
 				</view>
 			</view>
 		</scroll-view>
@@ -91,8 +62,13 @@
 </template>
 
 <script>
+import ChatBubble from '@/components/ChatBubble/ChatBubble.vue'
+
 export default {
 	name: 'Lab',
+	components: {
+		ChatBubble
+	},
 	data() {
 		return {
 			inputText: '',
@@ -101,23 +77,28 @@ export default {
 			messages: [
 				{
 					type: 'ai',
-					content: 'こんにちは！今日はどんな話をしましょうか？'
+					content: 'こんにちは！今日はどんな話をしましょうか？',
+					translation: '你好！今天我们聊什么呢？'
 				},
 				{
 					type: 'user',
-					content: '日本へ旅行に行きたいので、観光について話したいです。'
+					content: '日本へ旅行に行きたいので、観光について話したいです。',
+					translation: '我想去日本旅行，所以想聊聊观光的事情。'
 				},
 				{
 					type: 'ai',
-					content: 'それはいいですね！どの都市に行きたいですか？東京？京都？それとも大阪？'
+					content: 'それはいいですね！どの都市に行きたいですか？東京？京都？それとも大阪？',
+					translation: '那很好呢！你想去哪个城市？东京？京都？还是大阪？'
 				},
 				{
 					type: 'user',
-					content: '京都に行きたいです。有名な観光地を教えてください。'
+					content: '京都に行きたいです。有名な観光地を教えてください。',
+					translation: '我想去京都。请告诉我有名的观光地。'
 				},
 				{
 					type: 'ai',
-					content: '京都はとても美しい都市ですね。清水寺、金閣寺、伏見稲荷大社が有名です。特に清水寺は夜景がすばらしいです。'
+					content: '京都はとても美しい都市ですね。清水寺、金閣寺、伏見稲荷大社が有名です。特に清水寺は夜景がすばらしいです。',
+					translation: '京都是一个非常美丽的城市呢。清水寺、金阁寺、伏见稻荷大社很有名。特别是清水寺的夜景很棒。'
 				}
 			]
 		}
@@ -141,7 +122,8 @@ export default {
 				setTimeout(() => {
 					this.messages.push({
 						type: 'ai',
-						content: 'ありがとうございます。他に何か質問がありますか？'
+						content: 'ありがとうございます。他に何か質問がありますか？',
+						translation: '谢谢您。还有其他问题吗？'
 					})
 					this.scrollToBottom()
 				}, 1000)
@@ -325,123 +307,9 @@ export default {
 .message-list {
 	display: flex;
 	flex-direction: column;
-	gap: 32rpx;
 }
 
-.message-item {
-	display: flex;
-	flex-direction: column;
-}
-
-.message {
-	display: flex;
-	align-items: flex-start;
-	gap: 16rpx;
-}
-
-.ai-message {
-	justify-content: flex-start;
-}
-
-.user-message {
-	justify-content: flex-end;
-	padding-right: 32rpx;
-}
-
-.avatar {
-	width: 64rpx;
-	height: 64rpx;
-	border-radius: 50%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-}
-
-.ai-avatar {
-	background-color: #2563EB;
-	color: white;
-
-	text {
-		font-size: 24rpx;
-	}
-}
-
-.bubble {
-	padding: 24rpx 32rpx;
-	position: relative;
-	border-radius: 36rpx;
-}
-
-.ai-bubble {
-	background-color: #F3F4F6;
-	border-radius: 36rpx 36rpx 36rpx 0;
-	color: #1F2937;
-}
-
-.user-bubble {
-	background-color: #2563EB;
-	border-radius: 36rpx 36rpx 0 36rpx;
-	color: white;
-}
-
-.message-text {
-	font-size: 30rpx;
-	line-height: 1.5;
-}
-
-.message-content {
-	display: flex;
-	flex-direction: column;
-	gap: 8rpx;
-	max-width: 75%;
-}
-
-.user-content {
-	align-items: flex-end;
-}
-
-.chat-actions {
-	display: flex;
-	gap: 8rpx;
-	opacity: 0.7;
-	align-self: flex-start;
-}
-
-.user-actions {
-	align-self: flex-end;
-}
-
-.action-btn-small {
-	width: 48rpx;
-	height: 48rpx;
-	border-radius: 50%;
-	background-color: rgba(255, 255, 255, 0.7);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #6B7280;
-	transition: all 0.2s;
-
-	&:active {
-		background-color: white;
-	}
-
-	text {
-		font-size: 24rpx;
-	}
-}
-
-.user-action {
-	background-color: rgba(255, 255, 255, 0.8);
-	color: #2563EB;
-	border: 1rpx solid rgba(255, 255, 255, 0.9);
-
-	&:active {
-		background-color: white;
-		color: #1D4ED8;
-	}
-}
+/* 消息样式已移至ChatBubble组件 */
 
 /* 输入区域 */
 .input-area {

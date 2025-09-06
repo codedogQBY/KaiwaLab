@@ -307,6 +307,27 @@ export default {
 				url: '/pages/checkin/checkin'
 			})
 		},
+		goToReport() {
+			uni.navigateTo({
+				url: '/pages/lab/report'
+			})
+		},
+		goToMembership() {
+			uni.navigateTo({
+				url: '/pages/profile/membership'
+			})
+		},
+		goToRanking() {
+			uni.navigateTo({
+				url: '/pages/ranking/ranking'
+			})
+		},
+		goToAchievements() {
+			uni.showToast({
+				title: '成就系统开发中',
+				icon: 'none'
+			})
+		},
 		// 处理底部导航栏切换
 		switchTab(index) {
 			const tabPages = [
