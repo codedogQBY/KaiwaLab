@@ -84,6 +84,27 @@
 				"navigationBarTitleText": "实验室排行榜",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/settings/settings",
+			"style": {
+				"navigationBarTitleText": "设置",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/friends/add-friend",
+			"style": {
+				"navigationBarTitleText": "添加好友",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/friends/friend-list",
+			"style": {
+				"navigationBarTitleText": "好友列表",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

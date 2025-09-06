@@ -1,7 +1,12 @@
 <template>
 	<view class="scenario-container">
-		<!-- 场景背景 -->
-		<view class="scenario-header" :style="{ paddingTop: (statusBarHeight + 16) + 'px' }">
+		<!-- 状态栏占位 -->
+		<view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
+		
+
+		
+		<!-- 场景背景头部 -->
+		<view class="scenario-header">
 			<image class="bg-image" src="/static/images/restaurant.jpg" mode="aspectFill"></image>
 			<view class="bg-overlay"></view>
 			
@@ -27,19 +32,7 @@
 			</view>
 		</view>
 
-		<!-- 角色信息 -->
-		<view class="character-info">
-			<view class="character-avatar">
-				<text class="fas fa-user-tie"></text>
-			</view>
-			<view class="character-details">
-				<text class="character-name">{{ scenarioData.character.name }}</text>
-				<text class="character-role">{{ scenarioData.character.description }}</text>
-			</view>
-			<view class="character-badge">
-				<text class="badge-text">AI角色</text>
-			</view>
-		</view>
+
 
 		<!-- 对话区域 -->
 		<scroll-view class="chat-area" scroll-y="true" :scroll-top="scrollTop">
@@ -48,16 +41,18 @@
 				<ChatBubble 
 					v-for="(message, index) in messages" 
 					:key="index"
-					:type="message.type"
-					:content="message.content"
-					:translation="message.translation"
+					:message="message"
+					:showPronunciation="false"
 					@copy="copyText"
 					@speak="speakText"
 				/>
 				
 				<!-- 选择题区域 -->
 				<view v-if="showChoices" class="choices-section">
-					<text class="choices-title">选择您的回应：</text>
+					<view class="choices-header">
+						<text class="choices-icon fas fa-comments"></text>
+						<text class="choices-title">选择您的回应</text>
+					</view>
 					<view class="choices-list">
 						<view 
 							v-for="(choice, index) in currentChoices" 
@@ -65,8 +60,14 @@
 							class="choice-item"
 							@click="selectChoice(choice)"
 						>
-							<text class="choice-japanese">{{ choice.japanese }}</text>
-							<text class="choice-chinese">{{ choice.chinese }}</text>
+							<view class="choice-number">{{ index + 1 }}</view>
+							<view class="choice-content">
+								<text class="choice-japanese">{{ choice.japanese }}</text>
+								<text class="choice-chinese">{{ choice.chinese }}</text>
+							</view>
+							<view class="choice-indicator">
+								<text class="fas fa-chevron-right"></text>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -75,19 +76,52 @@
 
 		<!-- 底部工具栏 -->
 		<view class="bottom-toolbar">
-			<view class="toolbar-content">
+			<!-- 自由输入模式 -->
+			<view v-if="inputMode === 'free'" class="free-input-section">
 				<view class="input-container">
-				<input class="free-input" v-model="freeInputText" placeholder="输入您的日语回复..." @confirm="submitFreeInput" confirm-type="send" />
-				<view class="input-send-btn" @click="submitFreeInput" v-if="freeInputText.trim()">
-					<text class="fas fa-paper-plane"></text>
+					<textarea 
+						v-model="freeInputText" 
+						class="free-input" 
+						placeholder="输入您的日语回复..." 
+						@confirm="submitFreeInput" 
+						auto-height
+						:maxlength="200"
+					/>
+				</view>
+				<view class="input-actions">
+					<view class="mode-switch" @click="switchInputMode">
+						<text class="fas fa-list"></text>
+						<text class="switch-text">选择模式</text>
+					</view>
+					<view class="input-right-actions">
+						<view class="action-btn" @click="startRecording">
+							<text class="fas fa-microphone"></text>
+						</view>
+						<view class="send-btn" :class="{ 'active': freeInputText.trim() }" @click="submitFreeInput">
+							<text class="fas fa-paper-plane"></text>
+						</view>
+					</view>
 				</view>
 			</view>
-				<view class="action-buttons">
-					<view class="round-btn mic-btn" @click="startRecording">
-						<text class="fas fa-microphone"></text>
-					</view>
-					<view class="round-btn hint-btn" @click="showHint">
+			
+			<!-- 选择模式工具栏 -->
+			<view v-else class="choice-toolbar">
+				<view class="toolbar-actions">
+					<view class="tool-btn" @click="showHint">
 						<text class="fas fa-lightbulb"></text>
+						<text class="tool-text">提示</text>
+					</view>
+					<view class="tool-btn" @click="repeatQuestion">
+						<text class="fas fa-redo"></text>
+						<text class="tool-text">重听</text>
+					</view>
+					<view class="tool-btn" @click="skipStep">
+						<text class="fas fa-forward"></text>
+						<text class="tool-text">跳过</text>
+					</view>
+					<view class="mode-switch" @click="switchInputMode">
+						<text class="fas fa-keyboard"></text>
+						<text class="switch-text">自由输入</text>
 					</view>
 				</view>
 			</view>
@@ -111,20 +145,15 @@ export default {
 			totalSteps: 8,
 			showChoices: true,
 			freeInputText: '',
-			scenarioData: {
-				title: '餐厅点餐',
-				character: {
-					name: '服务员田中',
-					description: '为您介绍今日推荐菜品'
-				}
-			},
+			inputMode: 'choice',
 			messages: [
-				{
-					type: 'ai',
-					content: 'いらっしゃいませ！今日のおすすめは新鮮な刺身と寿司です。何かご質問はありますか？',
-					translation: '欢迎光临！今天推荐新鲜的生鱼片和寿司。有什么问题吗？'
-				}
-			],
+			{
+				type: 'ai',
+				content: 'いらっしゃいませ！今日のおすすめは新鮮な刺身と寿司です。何かご質問はありますか？',
+				translation: '欢迎光临！今天推荐新鲜的生鱼片和寿司。有什么问题吗？',
+				timestamp: new Date().toLocaleTimeString()
+			}
+		],
 			currentChoices: [
 				{
 					japanese: '刺身はどのくらいの値段ですか？',
@@ -220,7 +249,7 @@ export default {
 	},
 	computed: {
 		progressPercent() {
-			return (this.currentStep / this.totalSteps) * 100
+			return Math.round((this.currentStep / this.totalSteps) * 100)
 		}
 	},
 	onLoad(options) {
@@ -415,6 +444,85 @@ export default {
 			this.$nextTick(() => {
 				this.scrollTop = 999999
 			})
+		},
+		switchInputMode() {
+			this.inputMode = this.inputMode === 'choice' ? 'free' : 'choice'
+		},
+		repeatQuestion() {
+			uni.showToast({
+				title: '重听功能开发中',
+				icon: 'none'
+			})
+		},
+		skipStep() {
+			uni.showModal({
+				title: '确认跳过',
+				content: '确定要跳过当前步骤吗？',
+				success: (res) => {
+					if (res.confirm) {
+						this.nextStep()
+					}
+				}
+			})
+		},
+		nextStep() {
+			if (this.currentStep < this.totalSteps) {
+				this.currentStep++
+				// 模拟下一步对话
+				const nextDialogs = [
+					{
+						type: 'ai',
+						content: 'かしこまりました。お席にご案内いたします。',
+						translation: '好的，我来为您带路。',
+						timestamp: new Date().toLocaleTimeString()
+					},
+					{
+						type: 'ai',
+						content: 'お飲み物はいかがですか？',
+						translation: '请问要点什么饮料吗？',
+						timestamp: new Date().toLocaleTimeString()
+					}
+				]
+				
+				if (this.currentStep <= nextDialogs.length) {
+					this.messages.push(nextDialogs[this.currentStep - 2])
+					this.updateChoices()
+					this.scrollToBottom()
+				}
+			} else {
+				uni.showToast({
+					title: '练习完成！',
+					icon: 'success'
+				})
+			}
+		},
+		updateChoices() {
+			// 根据当前步骤更新选择项
+			const choicesByStep = {
+				2: [
+					{ japanese: 'お水をお願いします。', chinese: '请给我水。' },
+					{ japanese: 'ビールをお願いします。', chinese: '请给我啤酒。' },
+					{ japanese: 'お茶をお願いします。', chinese: '请给我茶。' }
+				],
+				3: [
+					{ japanese: 'メニューを見せてください。', chinese: '请给我看菜单。' },
+					{ japanese: 'おすすめは何ですか？', chinese: '有什么推荐的吗？' },
+					{ japanese: '少し考えます。', chinese: '我想一下。' }
+				]
+			}
+			
+			this.currentChoices = choicesByStep[this.currentStep] || []
+			this.showChoices = this.currentChoices.length > 0
+		},
+		goBack() {
+			uni.navigateBack()
+		},
+		showHelp() {
+			uni.showModal({
+				title: '使用帮助',
+				content: '在场景练习中，您可以选择预设回复或切换到自由输入模式。点击提示按钮获取帮助，点击重听按钮重复播放对话。',
+				showCancel: false
+			})
 		}
 	},
 	mounted() {
@@ -438,12 +546,17 @@ export default {
 	position: relative;
 	height: 256rpx;
 	overflow: hidden;
+	background: linear-gradient(135deg, #F97316, #DC2626);
 }
 
 .bg-image {
+	position: absolute;
+	top: 0;
+	left: 0;
 	width: 100%;
 	height: 100%;
 	opacity: 0.8;
+	z-index: 1;
 }
 
 .bg-overlay {
@@ -453,148 +566,98 @@ export default {
 	right: 0;
 	bottom: 0;
 	background: rgba(0, 0, 0, 0.2);
+	z-index: 2;
 }
 
-/* 头部导航 */
-.header-nav {
-	position: absolute;
-	top: 16rpx;
-	left: 32rpx;
-	right: 32rpx;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	z-index: 10;
-}
 
-.nav-btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: white;
-	transition: color 0.2s;
-	padding: 16rpx;
 
-	&:active {
-		color: rgba(255, 255, 255, 0.7);
+	/* 头部导航 */
+	.header-nav {
+		position: absolute;
+		top: 32rpx;
+		left: 32rpx;
+		right: 32rpx;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		z-index: 10;
 	}
 
-	text {
+	.nav-btn {
+		width: 64rpx;
+		height: 64rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.3s ease;
+	}
+
+	.nav-btn text {
+		color: white;
 		font-size: 32rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
 	}
-}
 
-.header-center {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
+	.nav-btn:hover {
+		transform: scale(1.1);
+		opacity: 0.8;
+	}
 
-.scenario-title {
-	font-size: 32rpx;
-	font-weight: bold;
-	color: white;
-	margin-bottom: 4rpx;
-}
+	.header-center {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 4rpx;
+	}
 
-.scenario-progress {
-	font-size: 22rpx;
-	color: rgba(255, 255, 255, 0.8);
-}
-
-/* 进度条 */
-.progress-container {
-	position: absolute;
-	bottom: 32rpx;
-	left: 32rpx;
-	right: 32rpx;
-	z-index: 10;
-}
-
-.progress-bar {
-	width: 100%;
-	height: 8rpx;
-	background: rgba(255, 255, 255, 0.3);
-	border-radius: 8rpx;
-	overflow: hidden;
-}
-
-.progress-fill {
-	height: 100%;
-	background: white;
-	border-radius: 8rpx;
-	transition: width 0.5s ease;
-}
-
-/* 角色信息 */
-.character-info {
-	padding: 32rpx;
-	background: #F8FAFC;
-	border-bottom: 1rpx solid #E2E8F0;
-	display: flex;
-	align-items: center;
-	gap: 24rpx;
-}
-
-.character-avatar {
-	width: 80rpx;
-	height: 80rpx;
-	border-radius: 50%;
-	background: linear-gradient(135deg, #F97316, #EA580C);
-	color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-shrink: 0;
-
-	text {
+	.scenario-title {
 		font-size: 36rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
+		font-weight: bold;
+		color: white;
 	}
-}
 
-.character-details {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	gap: 8rpx;
-}
+	.scenario-progress {
+		font-size: 24rpx;
+		color: rgba(255, 255, 255, 0.8);
+	}
 
-.character-name {
-	font-size: 32rpx;
-	font-weight: 600;
-	color: #1F2937;
-}
+	/* 进度条 */
+	.progress-container {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 8rpx;
+		z-index: 10;
+	}
 
-.character-role {
-	font-size: 24rpx;
-	color: #6B7280;
-}
+	.progress-bar {
+		width: 100%;
+		height: 100%;
+		background: rgba(255, 255, 255, 0.3);
+		overflow: hidden;
+	}
 
-.character-badge {
-	flex-shrink: 0;
-}
+	.progress-fill {
+		height: 100%;
+		background: #2563EB;
+		transition: width 0.3s ease;
+	}
 
-.badge-text {
-	font-size: 24rpx;
-	color: #F97316;
-	background: #FFF7ED;
-	padding: 8rpx 16rpx;
-	border-radius: 24rpx;
-	border: 1rpx solid #FDBA74;
-}
+
+
+
 
 /* 对话区域 */
 .chat-area {
 	flex: 1;
 	overflow-y: auto;
+	padding-bottom: env(safe-area-inset-bottom);
 }
 
 .chat-content {
 	padding: 32rpx;
+	padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 	display: flex;
 	flex-direction: column;
 	gap: 32rpx;
@@ -604,18 +667,30 @@ export default {
 
 /* 选择题区域 */
 .choices-section {
-	background: #EFF6FF;
-	border-radius: 24rpx;
-	padding: 32rpx;
-	margin-top: 32rpx;
+	padding: 32rpx 24rpx;
+	background: white;
+	margin: 20rpx;
+	border-radius: 20rpx;
+	box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+	border: 1rpx solid #F1F5F9;
+}
+
+.choices-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 24rpx;
+	gap: 12rpx;
+}
+
+.choices-icon {
+	font-size: 28rpx;
+	color: #F97316;
 }
 
 .choices-title {
-	font-size: 28rpx;
+	font-size: 30rpx;
 	font-weight: 600;
-	color: #1E40AF;
-	margin-bottom: 24rpx;
-	display: block;
+	color: #1E293B;
 }
 
 .choices-list {
@@ -626,135 +701,299 @@ export default {
 
 .choice-item {
 	padding: 24rpx;
-	background: white;
-	border: 2rpx solid #DBEAFE;
+	background: #F8FAFC;
 	border-radius: 16rpx;
-	transition: all 0.2s ease;
+	border: 2rpx solid #E2E8F0;
+	transition: all 0.3s ease;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 16rpx;
+	position: relative;
+	overflow: hidden;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 0;
+		background: linear-gradient(90deg, rgba(249, 115, 22, 0.1), transparent);
+		transition: width 0.3s ease;
+	}
+
+	&:hover {
+		background: #FFF7ED;
+		border-color: #F97316;
+		transform: translateY(-2rpx);
+		box-shadow: 0 4rpx 12rpx rgba(249, 115, 22, 0.15);
+	}
+
+	&:hover::before {
+		width: 100%;
+	}
 
 	&:active {
-		background: #F0F9FF;
-		border-color: #2563EB;
-		transform: translateY(2rpx);
+		transform: translateY(0);
 	}
 }
 
+.choice-number {
+	width: 48rpx;
+	height: 48rpx;
+	background: #F97316;
+	color: white;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 24rpx;
+	font-weight: 600;
+	flex-shrink: 0;
+	z-index: 1;
+}
+
+.choice-content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 8rpx;
+	z-index: 1;
+}
+
 .choice-japanese {
-	font-size: 30rpx;
-	color: #1F2937;
+	font-size: 32rpx;
 	font-weight: 500;
-	display: block;
-	margin-bottom: 8rpx;
+	color: #1E293B;
+	line-height: 1.4;
 }
 
 .choice-chinese {
 	font-size: 26rpx;
-	color: #6B7280;
-	font-style: italic;
-	display: block;
+	color: #64748B;
+	line-height: 1.3;
+}
+
+.choice-indicator {
+	width: 32rpx;
+	height: 32rpx;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #94A3B8;
+	font-size: 20rpx;
+	transition: all 0.3s ease;
+	z-index: 1;
+}
+
+.choice-item:hover .choice-indicator {
+	color: #F97316;
+	transform: translateX(4rpx);
 }
 
 /* 底部工具栏 */
 .bottom-toolbar {
-	padding: 24rpx 32rpx;
+	position: sticky;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	background: white;
-	border-top: 1rpx solid #E5E7EB;
+	padding: 16rpx 20rpx;
+	padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+	border-top: 1rpx solid #E2E8F0;
+	z-index: 1000;
+	box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.03);
+	min-height: auto;
 }
 
-.toolbar-content {
+/* 自由输入模式 */
+.free-input-section {
 	display: flex;
-	align-items: center;
-	gap: 24rpx;
+	flex-direction: column;
+	gap: 12rpx;
 }
 
 .input-container {
-	flex: 1;
-	height: 80rpx;
 	position: relative;
-	display: flex;
-	align-items: center;
+	background: #F8FAFC;
+	border-radius: 16rpx;
+	border: 2rpx solid #E2E8F0;
+	padding: 12rpx;
+	transition: all 0.3s ease;
+}
+
+.input-container:focus-within {
+	border-color: #2563EB;
+	box-shadow: 0 0 0 3rpx rgba(37, 99, 235, 0.1);
 }
 
 .free-input {
-	flex: 1;
-	height: 100%;
-	background: #EFF6FF;
+	width: 100%;
+	min-height: 60rpx;
+	max-height: 160rpx;
+	padding: 0;
 	border: none;
-	border-radius: 40rpx;
-	color: #374151;
+	background: transparent;
 	font-size: 28rpx;
-	padding: 0 24rpx;
-	padding-right: 60rpx;
-
-	&::placeholder {
-		color: #9CA3AF;
-	}
+	color: #1E293B;
+	line-height: 1.4;
+	resize: none;
 }
 
-.input-send-btn {
-	position: absolute;
-	right: 8rpx;
-	width: 64rpx;
-	height: 64rpx;
-	border-radius: 50%;
-	background: #2563EB;
-	color: white;
+.input-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8rpx;
+	margin-top: 8rpx;
+	padding-top: 8rpx;
+	border-top: 1rpx solid #E2E8F0;
+}
+
+.input-actions .mode-switch {
+	flex-shrink: 0;
+}
+
+.input-right-actions {
 	display: flex;
 	align-items: center;
-	justify-content: center;
-	transition: all 0.2s;
-
-	&:active {
-		background: #1D4ED8;
-		transform: scale(0.95);
-	}
-
-	text {
-		font-size: 24rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
-	}
+	gap: 8rpx;
 }
 
-.action-buttons {
-	display: flex;
-	gap: 24rpx;
-}
-
-.round-btn {
-	width: 80rpx;
-	height: 80rpx;
+.action-btn {
+	width: 56rpx;
+	height: 56rpx;
+	background: #F1F5F9;
 	border-radius: 50%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: white;
-	transition: all 0.2s;
-
-	&:active {
-		transform: scale(0.95);
-	}
-
-	text {
-		font-size: 32rpx;
-		font-family: 'Font Awesome 6 Free';
-		font-weight: 900;
-	}
+	cursor: pointer;
+	transition: all 0.3s ease;
+	border: 2rpx solid transparent;
 }
 
-.mic-btn {
+.action-btn:hover {
+	background: #E2E8F0;
+	transform: scale(1.05);
+}
+
+.action-btn:active {
+	transform: scale(0.95);
+}
+
+.action-btn text {
+	color: #64748B;
+	font-size: 28rpx;
+}
+
+.send-btn {
+	width: 56rpx;
+	height: 56rpx;
+	background: #E2E8F0;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	border: 2rpx solid transparent;
+}
+
+.send-btn.active {
 	background: #2563EB;
-
-	&:active {
-		background: #1D4ED8;
-	}
+	box-shadow: 0 3rpx 8rpx rgba(37, 99, 235, 0.3);
 }
 
-.hint-btn {
-	background: #F97316;
+.send-btn text {
+	color: #94A3B8;
+	font-size: 28rpx;
+	transition: color 0.3s ease;
+}
 
-	&:active {
-		background: #EA580C;
-	}
+.send-btn.active text {
+	color: white;
+}
+
+.send-btn:hover {
+	transform: scale(1.05);
+}
+
+.send-btn:active {
+	transform: scale(0.95);
+}
+
+/* 选择模式工具栏 */
+.choice-toolbar {
+	display: flex;
+	justify-content: center;
+}
+
+.toolbar-actions {
+	display: flex;
+	align-items: center;
+	gap: 16rpx;
+}
+
+.tool-btn {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 6rpx;
+	padding: 10rpx 16rpx;
+	border-radius: 12rpx;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	min-width: auto;
+}
+
+.tool-btn:hover {
+	background: #F1F5F9;
+	transform: translateY(-2rpx);
+}
+
+.tool-btn:active {
+	transform: translateY(0);
+}
+
+.tool-btn text:first-child {
+	font-size: 28rpx;
+	color: #2563EB;
+}
+
+.tool-text {
+	font-size: 20rpx;
+	color: #64748B;
+	font-weight: 500;
+}
+
+/* 模式切换按钮 */
+.mode-switch {
+	display: flex;
+	align-items: center;
+	gap: 6rpx;
+	padding: 10rpx 16rpx;
+	background: #F1F5F9;
+	border-radius: 20rpx;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	border: 2rpx solid transparent;
+}
+
+.mode-switch:hover {
+	background: #E2E8F0;
+	border-color: #CBD5E1;
+}
+
+.mode-switch text:first-child {
+	font-size: 22rpx;
+	color: #2563EB;
+}
+
+.switch-text {
+	font-size: 22rpx;
+	color: #64748B;
+	font-weight: 500;
 }
 </style>

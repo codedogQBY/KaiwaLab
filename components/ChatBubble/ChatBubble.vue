@@ -41,7 +41,7 @@
 					<text v-if="message.translation && showTranslation" class="translation-text">{{ message.translation }}</text>
 					
 					<!-- 发音评分 -->
-					<view v-if="message.pronunciationScore !== null" class="pronunciation-score" @click="$emit('pronunciation-analyze', message)">
+					<view v-if="showPronunciation && message.pronunciationScore !== null" class="pronunciation-score" @click="$emit('pronunciation-analyze', message)">
 						<view class="score-icon">
 							<text class="fas fa-microphone"></text>
 						</view>
@@ -73,7 +73,7 @@
 					<view v-if="message.translation" class="action-btn-small user-action" @click="toggleTranslation">
 						<text class="fas" :class="showTranslation ? 'fa-eye-slash' : 'fa-eye'"></text>
 					</view>
-					<view v-if="message.pronunciationScore !== null" class="action-btn-small user-action" @click="$emit('pronunciation-analyze', message)">
+					<view v-if="showPronunciation && message.pronunciationScore !== null" class="action-btn-small user-action" @click="$emit('pronunciation-analyze', message)">
 						<text class="fas fa-chart-line"></text>
 					</view>
 				</view>
@@ -96,6 +96,10 @@ export default {
 			}
 		},
 		showActions: {
+			type: Boolean,
+			default: true
+		},
+		showPronunciation: {
 			type: Boolean,
 			default: true
 		}

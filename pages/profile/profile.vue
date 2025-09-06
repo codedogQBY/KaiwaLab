@@ -1,6 +1,5 @@
 <template>
 	<view class="profile-container">
-		
 		<!-- 用户信息卡片 -->
 		<view class="user-card">
 			<view class="test-tube-decoration">
@@ -11,7 +10,7 @@
 			
 			<view class="user-info-row">
 				<view class="avatar-container">
-					<text class="iconfont icon-user"></text>
+					<text class="fa fa-user"></text>
 				</view>
 				<view class="user-info">
 					<text class="username">田中さん</text>
@@ -24,211 +23,94 @@
 			</view>
 		</view>
 
-		<!-- 设置容器 -->
-		<view class="settings-container">
-			<!-- 学习设置 -->
-			<view class="menu-group">
-				<text class="group-title">学习设置</text>
-				<view class="menu-card">
-					<view class="menu-item">
-						<view class="icon-container primary">
-							<text class="fa fa-clock"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">学习提醒</text>
-							<text class="menu-subtitle">每日 20:00 提醒</text>
-						</view>
-						<ToggleSwitch :value="settings.learningReminder" @change="(val) => toggleSetting('learningReminder', val)" />
+		<!-- 社交实验室 -->
+		<view class="social-section">
+			<text class="section-title">社交实验室</text>
+			<view class="social-grid">
+				<view class="social-item" @click="addFriend">
+					<view class="social-icon accent">
+						<text class="fa fa-user-plus"></text>
 					</view>
-					
-					<view class="menu-item">
-						<view class="icon-container secondary">
-							<text class="fa fa-volume-up"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">语音播放</text>
-							<text class="menu-subtitle">自动播放日语发音</text>
-						</view>
-						<ToggleSwitch :value="settings.voicePlay" @change="(val) => toggleSetting('voicePlay', val)" />
+					<text class="social-title">添加好友</text>
+					<text class="social-subtitle">扩展实验伙伴</text>
+				</view>
+				<view class="social-item" @click="friendList">
+					<view class="social-icon secondary">
+						<text class="fa fa-users"></text>
 					</view>
-					
-					<view class="menu-item last">
-						<view class="icon-container accent">
-							<text class="fa fa-microphone"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">发音评估</text>
-							<text class="menu-subtitle">实时发音纠正</text>
-						</view>
-						<ToggleSwitch :value="settings.pronunciationAssessment" @change="(val) => toggleSetting('pronunciationAssessment', val)" />
-					</view>
+					<text class="social-title">好友列表</text>
+					<text class="social-subtitle">12位实验伙伴</text>
 				</view>
 			</view>
+		</view>
 
-			<!-- 应用设置 -->
-			<view class="menu-group">
-				<text class="group-title">应用设置</text>
-				<view class="menu-card">
-					<view class="menu-item" @click="goToTheme">
-						<view class="icon-container purple">
-							<text class="fa fa-palette"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">主题设置</text>
-							<text class="menu-subtitle">浅色模式</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+		<!-- 功能菜单 -->
+		<view class="menu-container">
+			<view class="menu-card">
+				<view class="menu-item" @click="goToCheckin">
+					<view class="icon-container accent">
+						<text class="fa fa-calendar-check"></text>
 					</view>
-					
-					<view class="menu-item" @click="goToLanguage">
-						<view class="icon-container blue">
-							<text class="fa fa-language"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">界面语言</text>
-							<text class="menu-subtitle">简体中文</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+					<view class="menu-content">
+						<text class="menu-title">每日签到</text>
+						<text class="menu-subtitle">签到记录和奖励</text>
 					</view>
-					
-					<view class="menu-item last" @click="goToDownload">
-						<view class="icon-container green">
-							<text class="fa fa-download"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">离线下载</text>
-							<text class="menu-subtitle">管理离线内容</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
-					</view>
+					<text class="menu-arrow fa fa-chevron-right"></text>
 				</view>
-			</view>
-
-			<!-- 学习与成长 -->
-			<view class="menu-group">
-				<text class="group-title">学习与成长</text>
-				<view class="menu-card">
-					<view class="menu-item" @click="goToRanking">
-						<view class="icon-container orange">
-							<text class="fa fa-trophy"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">学习排行榜</text>
-							<text class="menu-subtitle">查看实验室排名</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+				
+				<view class="menu-item" @click="goToMembership">
+					<view class="icon-container yellow">
+						<text class="fa fa-star"></text>
 					</view>
-					
-					<view class="menu-item" @click="goToAchievements">
-						<view class="icon-container purple">
-							<text class="fa fa-trophy"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">发现瞬间</text>
-							<text class="menu-subtitle">成就系统和等级</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+					<view class="menu-content">
+						<text class="menu-title">会员中心</text>
+						<text class="menu-subtitle">管理订阅和权益</text>
 					</view>
-					
-					<view class="menu-item" @click="goToReport">
-						<view class="icon-container blue">
-							<text class="fa fa-file-text"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">实验报告</text>
-							<text class="menu-subtitle">学习数据分析</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
-					</view>
-					
-					<view class="menu-item last" @click="goToCheckin">
-						<view class="icon-container accent">
-							<text class="fa fa-calendar-check"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">每日签到</text>
-							<text class="menu-subtitle">签到记录和奖励</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
-					</view>
+					<text class="menu-arrow fa fa-chevron-right"></text>
 				</view>
-			</view>
-
-			<!-- 账户与隐私 -->
-			<view class="menu-group">
-				<text class="group-title">账户与隐私</text>
-				<view class="menu-card">
-					<view class="menu-item" @click="goToMembership">
-						<view class="icon-container yellow">
-							<text class="fa fa-star"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">会员中心</text>
-							<text class="menu-subtitle">管理订阅和权益</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+				
+				<view class="menu-item" @click="goToReport">
+					<view class="icon-container accent">
+						<text class="fa fa-line-chart"></text>
 					</view>
-					
-					<view class="menu-item" @click="goToPrivacy">
-						<view class="icon-container red">
-							<text class="fa fa-shield"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">隐私设置</text>
-							<text class="menu-subtitle">数据使用与隐私</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+					<view class="menu-content">
+						<text class="menu-title">学习报告</text>
+						<text class="menu-subtitle">查看详细实验数据</text>
 					</view>
-					
-					<view class="menu-item last logout" @click="logout">
-						<view class="icon-container gray">
-							<text class="fa fa-sign-out"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">退出登录</text>
-							<text class="menu-subtitle">安全退出当前账户</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
-					</view>
+					<text class="menu-arrow fa fa-chevron-right"></text>
 				</view>
-			</view>
-
-			<!-- 帮助与反馈 -->
-			<view class="menu-group">
-				<text class="group-title">帮助与反馈</text>
-				<view class="menu-card">
-					<view class="menu-item" @click="goToHelp">
-						<view class="icon-container blue">
-							<text class="fa fa-question-circle"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">帮助中心</text>
-							<text class="menu-subtitle">使用指南和FAQ</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+				
+				<view class="menu-item" @click="goToRanking">
+					<view class="icon-container orange">
+						<text class="fa fa-trophy"></text>
 					</view>
-					
-					<view class="menu-item" @click="goToFeedback">
-						<view class="icon-container orange">
-							<text class="fa fa-comment"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">意见反馈</text>
-							<text class="menu-subtitle">告诉我们您的建议</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+					<view class="menu-content">
+						<text class="menu-title">学习排行榜</text>
+						<text class="menu-subtitle">查看实验室排名</text>
 					</view>
-					
-					<view class="menu-item last">
-						<view class="icon-container green">
-							<text class="fa fa-info-circle"></text>
-						</view>
-						<view class="menu-content">
-							<text class="menu-title">关于会話Lab</text>
-							<text class="menu-subtitle">版本 2.1.0</text>
-						</view>
-						<text class="menu-arrow fa fa-chevron-right"></text>
+					<text class="menu-arrow fa fa-chevron-right"></text>
+				</view>
+				
+				<view class="menu-item" @click="goToAchievements">
+					<view class="icon-container purple">
+						<text class="fa fa-star"></text>
 					</view>
+					<view class="menu-content">
+						<text class="menu-title">发现瞬间</text>
+						<text class="menu-subtitle">成就系统和等级</text>
+					</view>
+					<text class="menu-arrow fa fa-chevron-right"></text>
+				</view>
+				
+				<view class="menu-item last" @click="goToSettings">
+					<view class="icon-container secondary">
+						<text class="fa fa-cog"></text>
+					</view>
+					<view class="menu-content">
+						<text class="menu-title">设置</text>
+						<text class="menu-subtitle">个性化实验环境</text>
+					</view>
+					<text class="menu-arrow fa fa-chevron-right"></text>
 				</view>
 			</view>
 		</view>
@@ -262,12 +144,6 @@ export default {
 			monthlyProgress: 68,
 			completedThisMonth: 17,
 			monthlyTarget: 25
-		},
-		// 设置状态
-		settings: {
-			learningReminder: true,
-			voicePlay: true,
-			pronunciationAssessment: false
 		}
 		}
 	},
@@ -279,52 +155,19 @@ export default {
 			})
 			// TODO: 导航到编辑个人资料页面
 		},
-		// 切换设置
-		toggleSetting(key, value) {
-			this.settings[key] = value
-			uni.showToast({
-				title: value ? '已开启' : '已关闭',
-				icon: 'none'
-			})
-		},
-		navigateTo(url) {
+		goToSettings() {
 			uni.navigateTo({
-				url: url
-			})
-		},
-		feedback() {
-			uni.showToast({
-				title: '意见反馈功能开发中',
-				icon: 'none'
-			})
-		},
-		logout() {
-			uni.showModal({
-				title: '确认退出',
-				content: '确定要退出登录吗？',
-				success: (res) => {
-					if (res.confirm) {
-						uni.showToast({
-							title: '已退出登录',
-							icon: 'success'
-						})
-					}
-				}
-			})
-		},
-		goToCheckin() {
-			uni.navigateTo({
-				url: '/pages/checkin/checkin'
-			})
-		},
-		goToReport() {
-			uni.navigateTo({
-				url: '/pages/lab/report'
+				url: '/pages/settings/settings'
 			})
 		},
 		goToMembership() {
 			uni.navigateTo({
 				url: '/pages/profile/membership'
+			})
+		},
+		goToReport() {
+			uni.navigateTo({
+				url: '/pages/lab/report'
 			})
 		},
 		goToRanking() {
@@ -334,10 +177,27 @@ export default {
 		},
 		goToAchievements() {
 			uni.showToast({
-				title: '成就系统开发中',
+				title: '发现瞬间功能开发中',
 				icon: 'none'
 			})
 		},
+		goToCheckin() {
+			uni.navigateTo({
+				url: '/pages/checkin/checkin'
+			})
+		},
+		addFriend() {
+			uni.navigateTo({
+				url: '/pages/friends/add-friend'
+			})
+		},
+		friendList() {
+			uni.navigateTo({
+				url: '/pages/friends/friend-list'
+			})
+		},
+
+
 		// 处理底部导航栏切换
 		switchTab(index) {
 			const tabPages = [
@@ -359,19 +219,18 @@ export default {
 <style lang="scss">
 .profile-container {
 	background: #ffffff;
-	height: 100%;
+	height: 100vh;
 	position: relative;
-	padding-top: 32rpx;
+	padding: 32rpx;
+	padding-bottom: calc(32rpx + 120rpx + env(safe-area-inset-bottom));
 }
-
-
 
 /* 用户信息卡片 */
 .user-card {
 	background: linear-gradient(135deg, #2563EB 0%, rgba(37, 99, 235, 0.8) 100%);
 	border-radius: 32rpx;
 	padding: 40rpx;
-	margin:0 32rpx 32rpx 32rpx;
+	margin-bottom: 48rpx;
 	position: relative;
 	overflow: hidden;
 }
@@ -419,9 +278,86 @@ export default {
 	margin-right: 32rpx;
 }
 
-.avatar-container .iconfont {
+.avatar-container .fa {
 	font-size: 64rpx;
 	color: white;
+}
+
+/* 社交实验室 */
+.social-section {
+	margin-bottom: 48rpx;
+}
+
+.section-title {
+	font-size: 28rpx;
+	font-weight: 600;
+	color: #6B7280;
+	margin-bottom: 24rpx;
+	display: block;
+}
+
+.social-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24rpx;
+}
+
+.social-item {
+	background: #EFF6FF;
+	border-radius: 24rpx;
+	padding: 32rpx;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	transition: all 0.2s ease;
+}
+
+.social-item:active {
+	transform: scale(0.98);
+	background: #DBEAFE;
+}
+
+.social-icon {
+	width: 96rpx;
+	height: 96rpx;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 16rpx;
+}
+
+.social-icon.accent {
+	background: rgba(16, 185, 129, 0.1);
+}
+
+.social-icon.accent .fa {
+	color: #10B981;	
+	font-size: 32rpx;
+}
+
+.social-icon.secondary {
+	background: rgba(249, 115, 22, 0.1);
+}
+
+.social-icon.secondary .fa {
+	color: #F97316;
+	font-size: 32rpx;
+}
+
+.social-title {
+	font-size: 28rpx;
+	font-weight: 500;
+	color: #1F2937;
+	margin-bottom: 8rpx;
+	display: block;
+}
+
+.social-subtitle {
+	font-size: 24rpx;
+	color: #6B7280;
+	display: block;
 }
 
 .user-info {
@@ -459,21 +395,9 @@ export default {
 	color: rgba(255, 255, 255, 0.8);
 }
 
-/* 设置容器 */
-.settings-container {
-	padding: 0 32rpx calc(48rpx + 120rpx + env(safe-area-inset-bottom));
-}
-
-.menu-group {
+/* 菜单容器 */
+.menu-container {
 	margin-bottom: 48rpx;
-}
-
-.group-title {
-	font-size: 28rpx;
-	font-weight: 600;
-	color: #8E8E93;
-	margin-bottom: 24rpx;
-	display: block;
 }
 
 .menu-card {
@@ -481,6 +405,7 @@ export default {
 	border: 2rpx solid #DBEAFE;
 	border-radius: 24rpx;
 	overflow: hidden;
+	box-shadow: 0 2rpx 8rpx rgba(37, 99, 235, 0.05);
 }
 
 .menu-item {
@@ -488,6 +413,11 @@ export default {
 	align-items: center;
 	padding: 32rpx;
 	border-bottom: 2rpx solid #DBEAFE;
+	transition: background-color 0.2s ease;
+}
+
+.menu-item:active {
+	background-color: rgba(243, 244, 246, 0.5);
 }
 
 .menu-item.last {
@@ -504,88 +434,49 @@ export default {
 	margin-right: 24rpx;
 }
 
-/* 学习设置图标颜色 */
-.icon-container.primary {
-	background: rgba(37, 99, 235, 0.1);
+.icon-container .fa {
+	font-size: 40rpx;
 }
 
-.icon-container.primary text {
-	color: #2563EB;
+/* 图标颜色样式 */
+.icon-container.accent {
+	background: rgba(16, 185, 129, 0.1);
+}
+
+.icon-container.accent .fa {
+	color: #10B981;
 }
 
 .icon-container.secondary {
 	background: rgba(249, 115, 22, 0.1);
 }
 
-.icon-container.secondary text {
+.icon-container.secondary .fa {
 	color: #F97316;
 }
 
-.icon-container.accent {
-	background: rgba(16, 185, 129, 0.1);
-}
-
-.icon-container.accent text {
-	color: #10B981;
-}
-
-/* 应用设置图标颜色 */
-.icon-container.purple {
-	background: rgba(168, 85, 247, 0.1);
-}
-
-.icon-container.purple text {
-	color: #A855F7;
-}
-
-.icon-container.blue {
-	background: rgba(59, 130, 246, 0.1);
-}
-
-.icon-container.blue text {
-	color: #3B82F6;
-}
-
-.icon-container.green {
-	background: rgba(34, 197, 94, 0.1);
-}
-
-.icon-container.green text {
-	color: #22C55E;
-}
-
-/* 学习与成长图标颜色 */
 .icon-container.orange {
 	background: rgba(234, 88, 12, 0.1);
 }
 
-.icon-container.orange text {
+.icon-container.orange .fa {
 	color: #EA580C;
 }
 
-/* 账户与隐私图标颜色 */
+.icon-container.purple {
+	background: rgba(168, 85, 247, 0.1);
+}
+
+.icon-container.purple .fa {
+	color: #A855F7;
+}
+
 .icon-container.yellow {
-	background: rgba(234, 179, 8, 0.1);
+	background: rgba(251, 191, 36, 0.1);
 }
 
-.icon-container.yellow text {
-	color: #EAB308;
-}
-
-.icon-container.red {
-	background: rgba(239, 68, 68, 0.1);
-}
-
-.icon-container.red text {
-	color: #EF4444;
-}
-
-.icon-container.gray {
-	background: rgba(107, 114, 128, 0.1);
-}
-
-.icon-container.gray text {
-	color: #6B7280;
+.icon-container.yellow .fa {
+	color: #FBBF24;
 }
 
 .menu-content {
@@ -607,8 +498,12 @@ export default {
 }
 
 .menu-arrow {
-	font-size: 28rpx;
-	color: #8E8E93;
+	font-size: 32rpx;
+	color: #9CA3AF;
+}
+
+.menu-arrow .fa {
+	color: #9CA3AF;
 }
 
 
