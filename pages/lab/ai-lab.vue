@@ -1,5 +1,44 @@
 <template>
 	<view class="lab-container">
+		<!-- 实验室装饰背景 -->
+		<view class="lab-decoration">
+			<!-- 试管装饰 -->
+			<view class="test-tube test-tube-1">
+				<view class="test-tube-fill" style="height: 65%; background: linear-gradient(to top, #2563EB, #3B82F6);"></view>
+				<view class="test-tube-bubble bubble-1"></view>
+				<view class="test-tube-bubble bubble-2"></view>
+			</view>
+			<view class="test-tube test-tube-2">
+				<view class="test-tube-fill" style="height: 45%; background: linear-gradient(to top, #10B981, #34D399);"></view>
+				<view class="test-tube-bubble bubble-1"></view>
+			</view>
+			<view class="test-tube test-tube-3">
+				<view class="test-tube-fill" style="height: 80%; background: linear-gradient(to top, #F59E0B, #FBBF24);"></view>
+				<view class="test-tube-bubble bubble-1"></view>
+				<view class="test-tube-bubble bubble-2"></view>
+				<view class="test-tube-bubble bubble-3"></view>
+			</view>
+			
+			<!-- 烧瓶装饰 -->
+			<view class="flask flask-1">
+				<view class="flask-neck"></view>
+				<view class="flask-body">
+					<view class="flask-liquid" style="height: 40%; background: linear-gradient(to top, #8B5CF6, #A78BFA);"></view>
+					<view class="flask-bubble bubble-1"></view>
+					<view class="flask-bubble bubble-2"></view>
+				</view>
+			</view>
+			
+			<!-- 分子结构装饰 -->
+			<view class="molecule molecule-1">
+				<view class="atom atom-1"></view>
+				<view class="atom atom-2"></view>
+				<view class="atom atom-3"></view>
+				<view class="bond bond-1"></view>
+				<view class="bond bond-2"></view>
+			</view>
+		</view>
+		
 		<!-- 状态栏占位 -->
 		<view class="status-bar" :style="{ height: statusBarHeight + 'px' }"></view>
 		
@@ -489,6 +528,7 @@ export default {
 	display: flex;
 	flex-direction: column;
 	position: relative;
+	z-index: 2;
 }
 
 /* 状态栏占位 */
@@ -829,9 +869,243 @@ export default {
 	&:active {
 		transform: scale(0.95);
 	}
+}
 
-	text {
-		font-size: 28rpx;
+/* 实验室装饰样式 */
+.lab-decoration {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 1;
+	opacity: 0.15;
+}
+
+/* 试管样式 */
+.test-tube {
+	position: absolute;
+	width: 20rpx;
+	height: 120rpx;
+	border: 2rpx solid #E5E7EB;
+	border-radius: 0 0 10rpx 10rpx;
+	background: rgba(255, 255, 255, 0.8);
+	overflow: hidden;
+}
+
+.test-tube-1 {
+	top: 100rpx;
+	right: 50rpx;
+	animation: float 3s ease-in-out infinite;
+}
+
+.test-tube-2 {
+	top: 300rpx;
+	left: 30rpx;
+	animation: float 4s ease-in-out infinite 1s;
+}
+
+.test-tube-3 {
+	bottom: 200rpx;
+	right: 80rpx;
+	animation: float 3.5s ease-in-out infinite 0.5s;
+}
+
+.test-tube-fill {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	border-radius: 0 0 8rpx 8rpx;
+	transition: height 0.3s ease;
+}
+
+.test-tube-bubble {
+	position: absolute;
+	width: 4rpx;
+	height: 4rpx;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.6);
+	animation: bubble 2s ease-in-out infinite;
+}
+
+.test-tube-bubble.bubble-1 {
+	left: 6rpx;
+	bottom: 20rpx;
+	animation-delay: 0s;
+}
+
+.test-tube-bubble.bubble-2 {
+	left: 10rpx;
+	bottom: 40rpx;
+	animation-delay: 0.5s;
+}
+
+.test-tube-bubble.bubble-3 {
+	left: 8rpx;
+	bottom: 60rpx;
+	animation-delay: 1s;
+}
+
+/* 烧瓶样式 */
+.flask {
+	position: absolute;
+	width: 60rpx;
+	height: 80rpx;
+}
+
+.flask-1 {
+	top: 200rpx;
+	left: 100rpx;
+	animation: float 4s ease-in-out infinite 2s;
+}
+
+.flask-neck {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 12rpx;
+	height: 20rpx;
+	border: 2rpx solid #E5E7EB;
+	border-bottom: none;
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.flask-body {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 60rpx;
+	height: 60rpx;
+	border: 2rpx solid #E5E7EB;
+	border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+	background: rgba(255, 255, 255, 0.8);
+	overflow: hidden;
+}
+
+.flask-liquid {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+	transition: height 0.3s ease;
+}
+
+.flask-bubble {
+	position: absolute;
+	width: 6rpx;
+	height: 6rpx;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.6);
+	animation: bubble 2.5s ease-in-out infinite;
+}
+
+.flask-bubble.bubble-1 {
+	left: 20rpx;
+	bottom: 15rpx;
+	animation-delay: 0.3s;
+}
+
+.flask-bubble.bubble-2 {
+	left: 35rpx;
+	bottom: 25rpx;
+	animation-delay: 1.2s;
+}
+
+/* 分子结构样式 */
+.molecule {
+	position: absolute;
+	width: 80rpx;
+	height: 80rpx;
+}
+
+.molecule-1 {
+	bottom: 300rpx;
+	left: 50rpx;
+	animation: rotate 10s linear infinite;
+}
+
+.atom {
+	position: absolute;
+	width: 16rpx;
+	height: 16rpx;
+	border-radius: 50%;
+	border: 2rpx solid #E5E7EB;
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.atom-1 {
+	top: 10rpx;
+	left: 32rpx;
+	background: #EF4444;
+}
+
+.atom-2 {
+	bottom: 10rpx;
+	left: 10rpx;
+	background: #3B82F6;
+}
+
+.atom-3 {
+	bottom: 10rpx;
+	right: 10rpx;
+	background: #10B981;
+}
+
+.bond {
+	position: absolute;
+	width: 2rpx;
+	height: 30rpx;
+	background: #E5E7EB;
+	transform-origin: center;
+}
+
+.bond-1 {
+	top: 25rpx;
+	left: 39rpx;
+	transform: rotate(45deg);
+}
+
+.bond-2 {
+	top: 25rpx;
+	right: 39rpx;
+	transform: rotate(-45deg);
+}
+
+/* 动画效果 */
+@keyframes float {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10rpx);
+	}
+}
+
+@keyframes bubble {
+	0% {
+		opacity: 0;
+		transform: translateY(0) scale(0.5);
+	}
+	50% {
+		opacity: 1;
+		transform: translateY(-20rpx) scale(1);
+	}
+	100% {
+		opacity: 0;
+		transform: translateY(-40rpx) scale(0.5);
+	}
+}
+
+@keyframes rotate {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
 	}
 }
 
