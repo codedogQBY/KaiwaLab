@@ -302,6 +302,11 @@ export default {
 				}
 			})
 		},
+		goToCheckin() {
+			uni.navigateTo({
+				url: '/pages/checkin/checkin'
+			})
+		},
 		// 处理底部导航栏切换
 		switchTab(index) {
 			const tabPages = [
@@ -321,8 +326,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('/static/fontawesome.css');
-
 .profile-container {
 	background: #ffffff;
 	height: 100%;

@@ -261,14 +261,18 @@ export default {
 
 /* 标题栏 */
 .header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
 	padding: 32rpx;
 	border-bottom: 1px solid #DBEAFE;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	sticky: top 0;
-	background: white;
-	z-index: 10;
+	background: rgba(255, 255, 255, 0.95);
+	backdrop-filter: blur(10px);
+	z-index: 100;
 }
 
 .header-left {
@@ -299,6 +303,7 @@ export default {
 /* 内容包装器 */
 .content-wrapper {
 	padding: 32rpx;
+	margin-top: 120rpx;
 }
 
 /* 分类标签 */
@@ -323,6 +328,7 @@ export default {
 	font-weight: 500;
 	transition: all 0.2s ease;
 	border: none;
+	margin:0rpx 0 24rpx 0rpx;
 }
 
 .category-tab.active {

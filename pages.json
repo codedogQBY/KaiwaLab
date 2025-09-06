@@ -29,6 +29,13 @@
 			}
 		},
 		{
+			"path": "pages/checkin/checkin",
+			"style": {
+				"navigationBarTitleText": "每日签到",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/lab/ai-lab",
 
 			"style": {

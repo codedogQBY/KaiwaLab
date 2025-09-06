@@ -225,7 +225,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/static/fontawesome.css';
 
 .library-container {
 	min-height: 100vh;
@@ -396,7 +395,7 @@ export default {
 		cursor: pointer;
 		transition: all 0.2s;
 		flex-shrink: 0;
-		margin: 16px 0;
+		margin: 24rpx 0;
 		
 		&.active {
 			background: #007AFF;

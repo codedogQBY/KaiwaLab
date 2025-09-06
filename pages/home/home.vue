@@ -42,7 +42,7 @@
 				</view>
 				
 				<!-- 每日签到提示 -->
-				<view class="checkin-card">
+				<view class="checkin-card" @click="goToCheckin">
 					<view class="checkin-content">
 						<view class="checkin-left">
 							<view class="checkin-icon">
@@ -54,7 +54,7 @@
 							</view>
 						</view>
 						<view class="checkin-status">
-							<text class="fas fa-check"></text>
+							<text class="fas fa-chevron-right"></text>
 						</view>
 					</view>
 				</view>
@@ -197,6 +197,11 @@ export default {
 			// 跳转到具体的实验页面
 			uni.navigateTo({
 				url: `/pages/experiment/experiment?type=${type}`
+			})
+		},
+		goToCheckin() {
+			uni.navigateTo({
+				url: '/pages/checkin/checkin'
 			})
 		},
 		// 处理底部导航栏切换

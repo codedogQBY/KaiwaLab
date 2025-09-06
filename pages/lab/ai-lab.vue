@@ -296,8 +296,8 @@ export default {
 .chat-area {
 	flex: 1;
 	padding: 16rpx;
-	padding-top: 140rpx;
-	padding-bottom: 140rpx;
+	padding-top: 120rpx;
+	padding-bottom: 160rpx;
 	overflow-y: auto;
 }
 
