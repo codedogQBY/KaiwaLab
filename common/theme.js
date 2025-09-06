@@ -6,7 +6,7 @@
 export const theme = {
   // 主色调
   colors: {
-    primary: '#6366F1',
+    primary: '#2563EB',
     primaryLight: '#818CF8',
     primaryDark: '#4F46E5',
     secondary: '#8B5CF6',
@@ -100,7 +100,7 @@ export const theme = {
   
   // 导航栏配置
   navigation: {
-    backgroundColor: '#6366F1',
+    backgroundColor: '#2563EB',
     textColor: '#FFFFFF',
     titleSize: '18px'
   },
@@ -109,7 +109,7 @@ export const theme = {
   tabBar: {
     backgroundColor: '#FFFFFF',
     color: '#64748B',
-    selectedColor: '#6366F1',
+    selectedColor: '#2563EB',
     borderStyle: 'white'
   },
   

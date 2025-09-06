@@ -38,9 +38,7 @@
 							<text class="menu-title">学习提醒</text>
 							<text class="menu-subtitle">每日 20:00 提醒</text>
 						</view>
-						<view class="toggle-switch active">
-							<view class="toggle-thumb"></view>
-						</view>
+						<ToggleSwitch :value="settings.learningReminder" @change="(val) => toggleSetting('learningReminder', val)" />
 					</view>
 					
 					<view class="menu-item">
@@ -51,9 +49,7 @@
 							<text class="menu-title">语音播放</text>
 							<text class="menu-subtitle">自动播放日语发音</text>
 						</view>
-						<view class="toggle-switch active">
-							<view class="toggle-thumb"></view>
-						</view>
+						<ToggleSwitch :value="settings.voicePlay" @change="(val) => toggleSetting('voicePlay', val)" />
 					</view>
 					
 					<view class="menu-item last">
@@ -64,9 +60,7 @@
 							<text class="menu-title">发音评估</text>
 							<text class="menu-subtitle">实时发音纠正</text>
 						</view>
-						<view class="toggle-switch">
-							<view class="toggle-thumb"></view>
-						</view>
+						<ToggleSwitch :value="settings.pronunciationAssessment" @change="(val) => toggleSetting('pronunciationAssessment', val)" />
 					</view>
 				</view>
 			</view>
@@ -246,10 +240,12 @@
 
 <script>
 import BottomTabBar from '@/components/BottomTabBar/BottomTabBar.vue'
+import ToggleSwitch from '@/components/ToggleSwitch.vue'
 
 export default {
 	components: {
-		BottomTabBar
+		BottomTabBar,
+		ToggleSwitch
 	},
 	data() {
 		return {
@@ -260,13 +256,19 @@ export default {
 				membershipExpiry: '2024-06-15'
 			},
 			learningProgress: {
-				totalDays: 45,
-				totalHours: '128h',
-				completedLessons: 32,
-				monthlyProgress: 68,
-				completedThisMonth: 17,
-				monthlyTarget: 25
-			}
+			totalDays: 45,
+			totalHours: '128h',
+			completedLessons: 32,
+			monthlyProgress: 68,
+			completedThisMonth: 17,
+			monthlyTarget: 25
+		},
+		// 设置状态
+		settings: {
+			learningReminder: true,
+			voicePlay: true,
+			pronunciationAssessment: false
+		}
 		}
 	},
 	methods: {
@@ -276,6 +278,14 @@ export default {
 				icon: 'none'
 			})
 			// TODO: 导航到编辑个人资料页面
+		},
+		// 切换设置
+		toggleSetting(key, value) {
+			this.settings[key] = value
+			uni.showToast({
+				title: value ? '已开启' : '已关闭',
+				icon: 'none'
+			})
 		},
 		navigateTo(url) {
 			uni.navigateTo({
@@ -601,32 +611,5 @@ export default {
 	color: #8E8E93;
 }
 
-.toggle-switch {
-	width: 88rpx;
-	height: 48rpx;
-	background: #C6C6C8;
-	border-radius: 24rpx;
-	position: relative;
-	transition: background-color 0.3s ease;
-}
 
-.toggle-switch.active {
-	background: #007AFF;
-}
-
-.toggle-thumb {
-	width: 40rpx;
-	height: 40rpx;
-	background: white;
-	border-radius: 50%;
-	position: absolute;
-	top: 4rpx;
-	left: 4rpx;
-	transition: transform 0.3s ease;
-	box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
-}
-
-.toggle-switch.active .toggle-thumb {
-	transform: translateX(40rpx);
-}
 </style>
