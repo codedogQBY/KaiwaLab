@@ -15,10 +15,20 @@
 /* 颜色变量 */
 
 /* 行为相关颜色 */
-$uni-color-primary: #007aff;
-$uni-color-success: #4cd964;
-$uni-color-warning: #f0ad4e;
-$uni-color-error: #dd524d;
+$uni-color-primary: #6366F1;
+$uni-color-success: #10B981;
+$uni-color-warning: #F59E0B;
+$uni-color-error: #EF4444;
+
+/* KaiwaLab 主题色 */
+$kaiwa-primary: #6366F1;
+$kaiwa-primary-light: #818CF8;
+$kaiwa-primary-dark: #4F46E5;
+$kaiwa-secondary: #8B5CF6;
+$kaiwa-accent: #06B6D4;
+$kaiwa-neutral: #64748B;
+$kaiwa-neutral-light: #94A3B8;
+$kaiwa-neutral-dark: #475569;
 
 /* 文字基本颜色 */
 $uni-text-color:#333;//基本色
@@ -29,9 +39,16 @@ $uni-text-color-disable:#c0c0c0;
 
 /* 背景颜色 */
 $uni-bg-color:#ffffff;
-$uni-bg-color-grey:#f8f8f8;
-$uni-bg-color-hover:#f1f1f1;//点击状态颜色
+$uni-bg-color-grey:#F8FAFC;
+$uni-bg-color-hover:#F1F5F9;//点击状态颜色
 $uni-bg-color-mask:rgba(0, 0, 0, 0.4);//遮罩颜色
+
+/* KaiwaLab 背景色 */
+$kaiwa-bg-primary: #FFFFFF;
+$kaiwa-bg-secondary: #F8FAFC;
+$kaiwa-bg-tertiary: #F1F5F9;
+$kaiwa-bg-card: #FFFFFF;
+$kaiwa-bg-overlay: rgba(15, 23, 42, 0.5);
 
 /* 边框颜色 */
 $uni-border-color:#e5e5e5;
