@@ -337,5 +337,86 @@ export default {
 	color: #ffffff;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .container {
+	background-color: #121212;
+}
+
+.dark-theme .nav-bar {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .nav-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .nav-left {
+	color: #A0A0A0;
+}
+
+.dark-theme .nav-left:active {
+	color: #6366F1;
+}
+
+.dark-theme .content {
+	background-color: #121212;
+}
+
+.dark-theme .search-box {
+	background-color: #1F1F1F;
+	border: 1px solid #3D3D3D;
+}
+
+.dark-theme .search-input {
+	background-color: #1F1F1F;
+	color: #E0E0E0;
+}
+
+.dark-theme .search-input::placeholder {
+	color: #666666;
+}
+
+.dark-theme .search-icon {
+	color: #808080;
+}
+
+.dark-theme .search-btn-text {
+	color: #6366F1;
+}
+
+.dark-theme .section-title {
+	color: #A0A0A0;
+}
+
+.dark-theme .quick-add-item {
+	background-color: #1E1E1E;
+}
+
+.dark-theme .quick-add-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .qr-card {
+	background-color: #1F1F1F;
+	border: 1px solid #3D3D3D;
+}
+
+.dark-theme .qr-code {
+	background-color: #2D2D2D;
+}
+
+.dark-theme .qr-placeholder {
+	color: #808080;
+}
+
+.dark-theme .user-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .user-id {
+	color: #A0A0A0;
+}
+
 
 </style>

@@ -88,10 +88,16 @@
 				
 				// #ifdef APP-PLUS
 				// App端主题切换逻辑
-				if (theme === 'dark') {
-					plus.navigator.setStatusBarStyle('dark');
-				} else {
-					plus.navigator.setStatusBarStyle('light');
+				if (typeof plus !== 'undefined') {
+					try {
+						if (theme === 'dark') {
+							plus.navigator.setStatusBarStyle('light');
+						} else {
+							plus.navigator.setStatusBarStyle('dark');
+						}
+					} catch (error) {
+						console.error("设置状态栏样式失败:", error);
+					}
 				}
 				// #endif
 			}
@@ -172,6 +178,29 @@
 		padding: 50rpx;
 		margin-top: 20rpx;
 		font-size: 38rpx;
+		color: #808080;
+	}
+	
+	/* 暗黑模式样式 */
+	.dark-theme {
+		background-color: #121212 !important;
+		color: #E0E0E0;
+	}
+	
+	.dark-theme page {
+		background-color: #121212;
+	}
+
+	.dark-theme .uni-top-window uni-tabbar .uni-tabbar {
+		background-color: #1F1F1F !important;
+	}
+	
+	.dark-theme .uni-hello-text {
+		color: #A0A0A0;
+	}
+	
+	.dark-theme .uni-hello-addfile {
+		background: #1F1F1F;
 		color: #808080;
 	}
 </style>

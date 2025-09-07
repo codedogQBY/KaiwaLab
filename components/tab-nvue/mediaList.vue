@@ -63,13 +63,23 @@
 		background-color: #eeeeee;
 	}
 
-	.media-list {
+	/* 暗黑模式样式 */
+	.dark-theme .uni-list-cell-hover {
+		background-color: #3D3D3D;
+	}
+
+		.media-list {
 		flex: 1;
 		flex-direction: column;
 		border-bottom-width: 1rpx;
 		border-bottom-style: solid;
 		border-bottom-color: #c8c7cc;
 		padding: 20rpx 0;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .media-list {
+		border-bottom-color: #3D3D3D;
 	}
 
 	.media-image-right {
@@ -89,6 +99,11 @@
 		text-overflow: ellipsis;
 		font-size: 32rpx;
 		color: #555555;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .media-title {
+		color: #E0E0E0;
 	}
 
 	.media-title2 {
@@ -142,6 +157,11 @@
 		font-size: 24rpx;
 	}
 
+	/* 暗黑模式样式 */
+	.dark-theme .info-text {
+		color: #808080;
+	}
+
 	.media-foot {
 		margin-top: 20rpx;
 		flex-direction: row;
@@ -167,9 +187,19 @@
 		line-height: 30rpx;
 	}
 
-	.close {
+	/* 暗黑模式样式 */
+	.dark-theme .close-view {
+		border-color: #808080;
+	}
+
+		.close {
 		text-align: center;
 		color: #999999;
 		font-size: 28rpx;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .close {
+		color: #E0E0E0;
 	}
 </style>

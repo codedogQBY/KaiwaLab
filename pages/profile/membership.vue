@@ -595,4 +595,143 @@ export default {
 .terms-link {
 	color: #2563EB;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .membership-container {
+	background: #121212;
+}
+
+.dark-theme .header {
+	background: #1F1F1F;
+	border-bottom: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .header-left .fa {
+	color: #A0A0A0;
+}
+
+.dark-theme .intro-section {
+	background: #1F1F1F;
+}
+
+.dark-theme .intro-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .intro-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .plan-card {
+	background: #1F1F1F;
+	border: 4rpx solid #3D3D3D;
+}
+
+.dark-theme .plan-card.recommended {
+	border-color: #6366F1;
+}
+
+.dark-theme .plan-badge {
+	background: #6366F1;
+}
+
+.dark-theme .plan-badge.best-value {
+	background: #10B981;
+}
+
+.dark-theme .plan-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .price {
+	color: #E0E0E0;
+}
+
+.dark-theme .period {
+	color: #A0A0A0;
+}
+
+.dark-theme .savings-text {
+	background: #064E3B;
+	color: #34D399;
+}
+
+.dark-theme .plan-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .feature-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .check-icon {
+	color: #10B981;
+}
+
+.dark-theme .plan-button.primary {
+	background: #6366F1;
+	color: white;
+}
+
+.dark-theme .plan-button.secondary {
+	background: #1F1F1F;
+	border: 2rpx solid #6366F1;
+	color: #818CF8;
+}
+
+.dark-theme .redeem-card {
+	background: #1E1E1E;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .redeem-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .redeem-input {
+	background: #2D2D2D;
+	border: 2rpx solid #3D3D3D;
+	color: #E0E0E0;
+}
+
+.dark-theme .redeem-input::placeholder {
+	color: #666666;
+}
+
+.dark-theme .redeem-button {
+	background: #6366F1;
+	color: white;
+}
+
+.dark-theme .benefits-section {
+	background: #1F1F1F;
+}
+
+.dark-theme .benefits-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .benefit-item {
+	background: #1E1E1E;
+}
+
+.dark-theme .benefit-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .terms-section {
+	background: #1F1F1F;
+}
+
+.dark-theme .terms-text {
+	color: #808080;
+}
+
+.dark-theme .terms-link {
+	color: #818CF8;
+}
 </style>

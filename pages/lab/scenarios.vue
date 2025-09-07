@@ -549,4 +549,101 @@ export default {
 .fa {
 	font-family: FontAwesome;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .scenarios-container {
+	background: #121212;
+}
+
+.dark-theme .header {
+	background: rgba(18, 18, 18, 0.95);
+	border-bottom: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .header-left {
+	color: #A0A0A0;
+}
+
+.dark-theme .header-left:active {
+	color: #6366F1;
+}
+
+.dark-theme .category-tab {
+	background: #1E1E1E;
+	color: #A0A0A0;
+}
+
+.dark-theme .category-tab.active {
+	background: #6366F1;
+	color: white;
+}
+
+.dark-theme .category-tab:active {
+	background: rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .member-tip {
+	background: rgba(99, 102, 241, 0.1);
+	border: 2rpx solid rgba(99, 102, 241, 0.3);
+}
+
+.dark-theme .tip-icon {
+	background: rgba(99, 102, 241, 0.1);
+	color: #818CF8;
+}
+
+.dark-theme .tip-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .tip-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .tip-button {
+	background: #6366F1;
+	color: #FFFFFF;
+}
+
+.dark-theme .scenario-card {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+	box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .scenario-card:active {
+	box-shadow: 0 8rpx 40rpx rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .scenario-image {
+	background: #2D2D2D;
+}
+
+.dark-theme .scenario-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .scenario-description {
+	color: #A0A0A0;
+}
+
+.dark-theme .meta-item {
+	color: #A0A0A0;
+}
+
+.dark-theme .meta-separator {
+	color: #A0A0A0;
+}
+
+.dark-theme .action-text {
+	color: #818CF8;
+}
+
+.dark-theme .action-text.locked {
+	color: #444444;
+}
 </style>

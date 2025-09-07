@@ -594,4 +594,81 @@ export default {
 	font-weight: 500;
 	text-align: center;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .lab-container {
+	background-color: #121212;
+}
+
+.dark-theme .welcome-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .welcome-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .experiment-card {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+	box-shadow: 0 8rpx 40rpx rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .experiment-card:active {
+	box-shadow: 0 4rpx 20rpx rgba(99, 102, 241, 0.15);
+}
+
+.dark-theme .card-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .card-description {
+	color: #A0A0A0;
+}
+
+.dark-theme .feature-item {
+	color: #A0A0A0;
+}
+
+.dark-theme .feature-item text:first-child {
+	color: #818CF8;
+}
+
+.dark-theme .stat-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .progress-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .section-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .quick-btn {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .quick-btn:active {
+	background: #2D2D2D;
+	border-color: #6366F1;
+}
+
+.dark-theme .quick-btn text:first-child {
+	color: #A0A0A0;
+}
+
+.dark-theme .quick-btn text:last-child {
+	color: #E0E0E0;
+}
+
+.dark-theme .action-text {
+	color: #818CF8;
+}
+
+.dark-theme .card-action text:last-child {
+	color: #818CF8;
+}
 </style>

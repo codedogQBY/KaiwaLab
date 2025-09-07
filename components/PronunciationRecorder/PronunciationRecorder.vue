@@ -288,6 +288,16 @@ export default {
 	}
 }
 
+/* 暗黑模式样式 */
+.dark-theme .back-btn {
+	background-color: #2D2D2D;
+	color: #A0A0A0;
+	
+	&:active {
+		background-color: #3D3D3D;
+	}
+}
+
 .recorder-container {
 	display: flex;
 	flex-direction: column;
@@ -365,6 +375,11 @@ export default {
 	}
 }
 
+/* 暗黑模式样式 */
+.dark-theme .status-text {
+	color: #A0A0A0;
+}
+
 .volume-indicator {
 	margin-top: 16rpx;
 }
@@ -400,10 +415,20 @@ export default {
 	}
 }
 
+/* 暗黑模式样式 */
+.dark-theme .volume-bar {
+	background-color: #2D2D2D;
+}
+
 .record-duration {
 	padding: 12rpx 24rpx;
 	background-color: #F3F4F6;
 	border-radius: 20rpx;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .record-duration {
+	background-color: #2D2D2D;
 }
 
 .duration-text {
@@ -411,6 +436,11 @@ export default {
 	color: #374151;
 	font-weight: 500;
 	font-family: 'Courier New', monospace;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .duration-text {
+	color: #E0E0E0;
 }
 
 .waveform-container {
@@ -423,6 +453,11 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .waveform-container {
+	background-color: #1F1F1F;
 }
 
 .waveform-canvas {

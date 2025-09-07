@@ -452,5 +452,95 @@ export default {
 	overflow-y: auto;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .report-container {
+	background-color: #121212;
+}
 
+.dark-theme .header {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .header-left {
+	color: #A0A0A0;
+}
+
+.dark-theme .header-left:active {
+	color: #6366F1;
+}
+
+.dark-theme .view-full-btn {
+	color: #818CF8;
+}
+
+.dark-theme .view-full-btn:active {
+	color: #6366F1;
+}
+
+.dark-theme .stats-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .stat-card {
+	background: #1E1E1E;
+}
+
+.dark-theme .stat-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .stat-value {
+	color: #E0E0E0;
+}
+
+.dark-theme .stat-change.positive {
+	color: #10B981;
+}
+
+.dark-theme .stat-change.negative {
+	color: #EF4444;
+}
+
+.dark-theme .chart-section {
+	background: #1F1F1F;
+}
+
+.dark-theme .chart-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .bar {
+	background: #3D3D3D;
+}
+
+.dark-theme .bar.active {
+	background: linear-gradient(135deg, #60A5FA, #3B82F6);
+}
+
+.dark-theme .bar-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .achievements-section {
+	background: #1F1F1F;
+}
+
+.dark-theme .achievements-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .achievement-card {
+	background: #1F1F1F;
+	border: 1rpx solid #3D3D3D;
+	box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .achievement-text {
+	color: #E0E0E0;
+}
 </style>

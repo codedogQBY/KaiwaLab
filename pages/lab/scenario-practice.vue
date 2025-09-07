@@ -996,4 +996,154 @@ export default {
 	color: #64748B;
 	font-weight: 500;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .scenario-container {
+	background-color: #121212;
+}
+
+.dark-theme .scenario-header {
+	background: linear-gradient(135deg, #EA580C, #B91C1C);
+}
+
+.dark-theme .scenario-title {
+	color: #FFFFFF;
+}
+
+.dark-theme .scenario-progress {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .progress-bar {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-theme .progress-fill {
+	background: #6366F1;
+}
+
+.dark-theme .nav-btn text {
+	color: #FFFFFF;
+}
+
+.dark-theme .choices-section {
+	background: #1F1F1F;
+	border: 1rpx solid #3D3D3D;
+	box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .choices-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .choice-item {
+	background: #2D2D2D;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .choice-item:hover {
+	background: #3D3D3D;
+	border-color: #F97316;
+	box-shadow: 0 4rpx 12rpx rgba(249, 115, 22, 0.2);
+}
+
+.dark-theme .choice-japanese {
+	color: #E0E0E0;
+}
+
+.dark-theme .choice-chinese {
+	color: #A0A0A0;
+}
+
+.dark-theme .choice-indicator {
+	color: #808080;
+}
+
+.dark-theme .choice-item:hover .choice-indicator {
+	color: #F97316;
+}
+
+.dark-theme .bottom-toolbar {
+	background: #1F1F1F;
+	border-top: 1rpx solid #3D3D3D;
+	box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .input-container {
+	background: #2D2D2D;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .input-container:focus-within {
+	border-color: #6366F1;
+	box-shadow: 0 0 0 3rpx rgba(99, 102, 241, 0.2);
+}
+
+.dark-theme .free-input {
+	color: #E0E0E0;
+	background: #2D2D2D;
+}
+
+.dark-theme .input-actions {
+	border-top: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .action-btn {
+	background: #3D3D3D;
+}
+
+.dark-theme .action-btn:hover {
+	background: #4D4D4D;
+}
+
+.dark-theme .action-btn text {
+	color: #A0A0A0;
+}
+
+.dark-theme .send-btn {
+	background: #3D3D3D;
+}
+
+.dark-theme .send-btn.active {
+	background: #6366F1;
+	box-shadow: 0 3rpx 8rpx rgba(99, 102, 241, 0.3);
+}
+
+.dark-theme .send-btn text {
+	color: #808080;
+}
+
+.dark-theme .send-btn.active text {
+	color: white;
+}
+
+.dark-theme .tool-btn:hover {
+	background: #2D2D2D;
+}
+
+.dark-theme .tool-btn text:first-child {
+	color: #818CF8;
+}
+
+.dark-theme .tool-text {
+	color: #A0A0A0;
+}
+
+.dark-theme .mode-switch {
+	background: #2D2D2D;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .mode-switch:hover {
+	background: #3D3D3D;
+	border-color: #4D4D4D;
+}
+
+.dark-theme .mode-switch text:first-child {
+	color: #818CF8;
+}
+
+.dark-theme .switch-text {
+	color: #A0A0A0;
+}
 </style>

@@ -511,5 +511,140 @@ export default {
 	color: #9CA3AF;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .profile-container {
+	background: #121212;
+}
+
+.dark-theme .user-card {
+	background: linear-gradient(135deg, #6366F1 0%, rgba(99, 102, 241, 0.8) 100%);
+}
+
+.dark-theme .test-tube {
+	border: 4rpx solid rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .test-tube-fill {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .username {
+	color: #FFFFFF;
+}
+
+.dark-theme .user-level {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .member-status {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .edit-btn .iconfont {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .section-title {
+	color: #A0A0A0;
+}
+
+.dark-theme .social-item {
+	background: #1E1E1E;
+}
+
+.dark-theme .social-item:active {
+	background: #2D2D2D;
+}
+
+.dark-theme .social-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .social-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .social-icon.accent {
+	background: rgba(16, 185, 129, 0.1);
+}
+
+.dark-theme .social-icon.accent .fa {
+	color: #10B981;
+}
+
+.dark-theme .social-icon.secondary {
+	background: rgba(249, 115, 22, 0.1);
+}
+
+.dark-theme .social-icon.secondary .fa {
+	color: #F97316;
+}
+
+.dark-theme .menu-card {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+	box-shadow: 0 2rpx 8rpx rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .menu-item {
+	border-bottom: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .menu-item:active {
+	background-color: rgba(45, 45, 45, 0.5);
+}
+
+.dark-theme .menu-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .menu-subtitle {
+	color: #808080;
+}
+
+.dark-theme .menu-arrow {
+	color: #808080;
+}
+
+.dark-theme .icon-container.accent {
+	background: rgba(16, 185, 129, 0.1);
+}
+
+.dark-theme .icon-container.accent .fa {
+	color: #10B981;
+}
+
+.dark-theme .icon-container.secondary {
+	background: rgba(249, 115, 22, 0.1);
+}
+
+.dark-theme .icon-container.secondary .fa {
+	color: #F97316;
+}
+
+.dark-theme .icon-container.orange {
+	background: rgba(234, 88, 12, 0.1);
+}
+
+.dark-theme .icon-container.orange .fa {
+	color: #EA580C;
+}
+
+.dark-theme .icon-container.purple {
+	background: rgba(168, 85, 247, 0.1);
+}
+
+.dark-theme .icon-container.purple .fa {
+	color: #A855F7;
+}
+
+.dark-theme .icon-container.yellow {
+	background: rgba(251, 191, 36, 0.1);
+}
+
+.dark-theme .icon-container.yellow .fa {
+	color: #FBBF24;
+}
+
 
 </style>

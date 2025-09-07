@@ -1,5 +1,5 @@
 <template>
-	<text style="text-decoration:underline" :href="href" @click="openURL" :inWhiteList="inWhiteList">{{text}}</text>
+	<text class="u-link" :href="href" @click="openURL" :inWhiteList="inWhiteList">{{text}}</text>
 </template>
 
 <script>
@@ -55,5 +55,14 @@
 </script>
 
 <style>
+	.u-link {
+		text-decoration: underline;
+		color: #2563EB;
+	}
 
+	/* 暗黑模式样式 */
+	.dark-theme .u-link {
+		color: #6366F1;
+	}
 </style>
+

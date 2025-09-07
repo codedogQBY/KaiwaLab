@@ -239,4 +239,52 @@ export default {
 	font-weight: 500;
 	transition: all 0.2s;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .redeem-success-container {
+	background: #121212;
+}
+
+.dark-theme .success-icon {
+	background: rgba(16, 185, 129, 0.1);
+}
+
+.dark-theme .success-icon .fas {
+	color: #10B981;
+}
+
+.dark-theme .success-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .success-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .member-info-card {
+	background: #1E1E1E;
+}
+
+.dark-theme .info-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .info-value {
+	color: #E0E0E0;
+}
+
+.dark-theme .success-message {
+	color: #A0A0A0;
+}
+
+.dark-theme .explore-button {
+	background: #6366F1;
+	color: white;
+}
+
+.dark-theme .benefits-button {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+	color: #A0A0A0;
+}
 </style>

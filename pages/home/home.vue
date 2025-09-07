@@ -679,5 +679,127 @@ export default {
 	color: #64748B;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .home-container {
+	background-color: #121212;
+}
+
+.dark-theme .username {
+	color: #E0E0E0;
+}
+
+.dark-theme .greeting {
+	color: #A0A0A0;
+}
+
+.dark-theme .user-avatar {
+	background-color: rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .user-avatar text {
+	color: #818CF8;
+}
+
+.dark-theme .checkin-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .checkin-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .section-title {
+	color: #A0A0A0;
+}
+
+.dark-theme .function-item {
+	background-color: #1E1E1E;
+	box-shadow: 0 4rpx 20rpx rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .function-item:active {
+	box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.15);
+}
+
+.dark-theme .function-item:hover {
+	box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.15);
+}
+
+.dark-theme .function-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .function-icon.primary {
+	background-color: rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .function-icon.primary text {
+	color: #818CF8;
+}
+
+.dark-theme .function-icon.secondary {
+	background-color: rgba(249, 115, 22, 0.1);
+}
+
+.dark-theme .function-icon.secondary text {
+	color: #F97316;
+}
+
+.dark-theme .function-icon.accent {
+	background-color: rgba(16, 185, 129, 0.1);
+}
+
+.dark-theme .function-icon.accent text {
+	color: #10B981;
+}
+
+.dark-theme .function-icon.orange {
+	background-color: rgba(249, 115, 22, 0.1);
+}
+
+.dark-theme .function-icon.orange text {
+	color: #F97316;
+}
+
+.dark-theme .member-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .member-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .experiment-item {
+	background-color: #1F1F1F;
+	border: 1rpx solid #3D3D3D;
+	box-shadow: 0 2rpx 10rpx rgba(249, 115, 22, 0.1);
+}
+
+.dark-theme .experiment-item:active {
+	box-shadow: 0 4rpx 16rpx rgba(249, 115, 22, 0.15);
+}
+
+.dark-theme .experiment-item:hover {
+	box-shadow: 0 4rpx 16rpx rgba(249, 115, 22, 0.15);
+}
+
+.dark-theme .experiment-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .experiment-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .experiment-tag.blue {
+	background-color: rgba(59, 130, 246, 0.1);
+	color: #93C5FD;
+}
+
+.dark-theme .experiment-tag.purple {
+	background-color: rgba(99, 102, 241, 0.1);
+	color: #818CF8;
+}
+
 
 </style>

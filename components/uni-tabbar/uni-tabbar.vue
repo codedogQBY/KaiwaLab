@@ -72,4 +72,5 @@ export default {
 
 <style scoped>
 /* 自定义tabbar样式 */
+/* 暗黑模式样式由BottomTabBar组件提供 */
 </style>

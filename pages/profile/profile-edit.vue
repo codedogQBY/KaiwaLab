@@ -787,4 +787,146 @@ export default {
 	font-size: 32rpx;
 	font-weight: 500;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .profile-edit-container {
+	background: #121212;
+}
+
+.dark-theme .nav-bar {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .nav-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .nav-left {
+	color: #A0A0A0;
+}
+
+.dark-theme .nav-left:active {
+	color: #6366F1;
+}
+
+.dark-theme .save-btn {
+	color: #6366F1;
+}
+
+.dark-theme .save-btn:active {
+	color: #4F46E5;
+}
+
+.dark-theme .content {
+	background-color: #121212;
+}
+
+.dark-theme .edit-field {
+	background: #1E1E1E;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .edit-field:focus-within {
+	box-shadow: 0 8rpx 24rpx rgba(99, 102, 241, 0.15);
+	border-color: #6366F1;
+}
+
+.dark-theme .label-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .field-icon {
+	color: #6366F1;
+}
+
+.dark-theme .field-input {
+	color: #E0E0E0;
+}
+
+.dark-theme .field-input::placeholder {
+	color: #666666;
+}
+
+.dark-theme .field-textarea {
+	color: #E0E0E0;
+}
+
+.dark-theme .field-textarea::placeholder {
+	color: #666666;
+}
+
+.dark-theme .picker-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .picker-arrow {
+	color: #808080;
+}
+
+.dark-theme .radio-circle {
+	border: 4rpx solid #4D4D4D;
+}
+
+.dark-theme .radio-circle.active {
+	border-color: #6366F1;
+}
+
+.dark-theme .radio-dot {
+	background: #6366F1;
+}
+
+.dark-theme .radio-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .status-indicator {
+	background-color: #2D2D2D;
+	color: #808080;
+}
+
+.dark-theme .status-indicator.bound {
+	background-color: #07c160;
+	color: #ffffff;
+}
+
+.dark-theme .status-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .bind-action {
+	background-color: #2D2D2D;
+}
+
+.dark-theme .bind-action:active {
+	background-color: #3D3D3D;
+}
+
+.dark-theme .action-text {
+	color: #818CF8;
+}
+
+.dark-theme .action-arrow {
+	color: #808080;
+}
+
+.dark-theme .avatar-container {
+	background: rgba(99, 102, 241, 0.1);
+}
+
+.dark-theme .avatar-container .fa {
+	color: #818CF8;
+}
+
+.dark-theme .avatar-tip {
+	color: #A0A0A0;
+}
+
+.dark-theme .save-button {
+	background: linear-gradient(135deg, #6366F1 0%, rgba(99, 102, 241, 0.8) 100%);
+}
+
+.dark-theme .save-button:active {
+	background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(99, 102, 241, 0.7) 100%);
+}
 </style>

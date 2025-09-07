@@ -695,4 +695,120 @@ export default {
 .fa {
 	font-family: 'FontAwesome';
 }
+
+/* 暗黑模式样式 */
+.dark-theme .ranking-container {
+	background: #121212;
+}
+
+.dark-theme .header {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .back-btn {
+	color: #A0A0A0;
+}
+
+.dark-theme .back-btn:active {
+	color: #6366F1;
+}
+
+.dark-theme .action-btn {
+	color: #A0A0A0;
+}
+
+.dark-theme .action-btn:active {
+	color: #6366F1;
+}
+
+.dark-theme .time-filter {
+	background: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .filter-tab {
+	background: #2D2D2D;
+	color: #A0A0A0;
+}
+
+.dark-theme .filter-tab.active {
+	background: #6366F1;
+	color: #fff;
+}
+
+.dark-theme .rank-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .rank-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .section-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .podium-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .podium-score {
+	color: #A0A0A0;
+}
+
+.dark-theme .user-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .user-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .motivation-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .motivation-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .my-rank-card {
+	background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+}
+
+.dark-theme .rank-number {
+	color: #818CF8;
+}
+
+.dark-theme .score-number {
+	color: #818CF8;
+}
+
+.dark-theme .score-number.primary {
+	color: #818CF8;
+}
+
+.dark-theme .score-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .ranking-item {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .ranking-item.is-me {
+	background: rgba(99, 102, 241, 0.1);
+	border: 4rpx solid rgba(99, 102, 241, 0.2);
+}
+
+.dark-theme .motivation {
+	background: rgba(245, 158, 11, 0.1);
+	border: 2rpx solid rgba(245, 158, 11, 0.3);
+}
 </style>

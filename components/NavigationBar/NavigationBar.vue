@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { theme } from '@/common/theme.js';
+import { theme, darkThemeColors, lightThemeColors } from '@/common/theme.js';
 
 export default {
   name: 'NavigationBar',
@@ -41,12 +41,22 @@ export default {
     // 背景色
     backgroundColor: {
       type: String,
-      default: theme.navigation.backgroundColor
+      default: lightThemeColors.bgPrimary
     },
     // 文字颜色
     textColor: {
       type: String,
-      default: theme.navigation.textColor
+      default: lightThemeColors.textPrimary
+    },
+    // 暗黑模式背景色
+    darkBackgroundColor: {
+      type: String,
+      default: '#1F1F1F'
+    },
+    // 暗黑模式文字颜色
+    darkTextColor: {
+      type: String,
+      default: '#E0E0E0'
     },
     // 是否显示返回按钮
     showBack: {
@@ -147,9 +157,19 @@ export default {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* 暗黑模式样式 */
+.dark-theme .nav-back {
+  background-color: rgba(224, 224, 224, 0.1);
+}
+
 .nav-icon {
   font-size: 36rpx;
   color: #FFFFFF;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .nav-icon {
+  color: #E0E0E0;
 }
 
 .nav-title {
@@ -172,6 +192,11 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   /* #endif */
+}
+
+/* 暗黑模式样式 */
+.dark-theme .title-text {
+  color: #E0E0E0;
 }
 
 .nav-right {

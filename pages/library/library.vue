@@ -50,9 +50,9 @@
 						class="category-tag"
 						:class="{ active: activeCategory === category.id }"
 						@click="selectCategory(category.id)"
-					>
-						<text>{{ category.name }}</text>
-					</view>
+						>
+							<text>{{ category.name }}</text>
+						</view>
 					</view>
 				</scroll-view>
 			</view>
@@ -97,9 +97,9 @@
 			</view>
 		</view>
 		
-		<!-- 自定义底部导航栏 -->
-		<BottomTabBar :current="2" @change="switchTab" />
-	</view>
+	<!-- 自定义底部导航栏 -->
+	<BottomTabBar :current="2" @change="switchTab" />
+</view>
 </template>
 
 <script>
@@ -554,6 +554,161 @@ export default {
 			}
 		}
 	}
+}
+
+/* 暗黑模式样式 */
+.dark-theme .library-container {
+	background-color: #121212;
+}
+
+.dark-theme .fixed-header {
+	background: #1F1F1F;
+	border-bottom: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .header {
+	background: #1F1F1F;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .back-btn,
+.dark-theme .search-btn {
+	color: #A0A0A0;
+}
+
+.dark-theme .back-btn:hover,
+.dark-theme .search-btn:hover {
+	color: #6366F1;
+}
+
+.dark-theme .stats-section {
+	background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+}
+
+.dark-theme .stats-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .stats-count {
+	color: #A0A0A0;
+}
+
+.dark-theme .review-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .review-count {
+	color: #818CF8;
+}
+
+.dark-theme .progress-bar {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .progress-fill {
+	background: #6366F1;
+}
+
+.dark-theme .progress-text {
+	color: #A0A0A0;
+}
+
+.dark-theme .categories {
+	background: #1F1F1F;
+	border-bottom: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .category-tag {
+	background: #2D2D2D;
+	color: #A0A0A0;
+}
+
+.dark-theme .category-tag.active {
+	background: #6366F1;
+	color: white;
+}
+
+.dark-theme .category-tag:hover {
+	background: #3D3D3D;
+}
+
+.dark-theme .category-tag:hover.active {
+	background: #6366F1;
+}
+
+.dark-theme .word-card {
+	background: #1F1F1F;
+	border: 2rpx solid #3D3D3D;
+	box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .word-card.review-needed {
+	background: #3D3D3D;
+	border-color: #4D4D4D;
+}
+
+.dark-theme .word-card:hover {
+	box-shadow: 0 8rpx 12rpx rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .word-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .word-pronunciation {
+	color: #A0A0A0;
+}
+
+.dark-theme .word-meaning {
+	color: #C0C0C0;
+}
+
+.dark-theme .word-date {
+	color: #A0A0A0;
+}
+
+.dark-theme .word-tag.restaurant {
+	background: #3D3D3D;
+	color: #F97316;
+}
+
+.dark-theme .word-tag.shopping {
+	background: #3D3D3D;
+	color: #60A5FA;
+}
+
+.dark-theme .word-tag.travel {
+	background: #3D3D3D;
+	color: #34D399;
+}
+
+.dark-theme .word-tag.review {
+	background: #3D3D3D;
+	color: #FBBF24;
+}
+
+.dark-theme .play-btn {
+	background: rgba(99, 102, 241, 0.1);
+	color: #818CF8;
+}
+
+.dark-theme .play-btn:hover {
+	background: rgba(99, 102, 241, 0.2);
+}
+
+.dark-theme .dot {
+	background: #3D3D3D;
+}
+
+.dark-theme .dot.active {
+	background: #10B981;
+}
+
+.dark-theme .proficiency-label {
+	color: #A0A0A0;
 }
 
 

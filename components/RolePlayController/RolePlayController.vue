@@ -287,6 +287,11 @@ export default {
 	border-radius: 24rpx;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .roleplay-controller {
+	background-color: #1F1F1F;
+}
+
 /* 通用样式 */
 .section-header {
 	display: flex;
@@ -301,11 +306,22 @@ export default {
 	color: #1F2937;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .section-title {
+	color: #E0E0E0;
+}
+
 .current-scenario {
 	padding: 8rpx 16rpx;
 	background-color: #EFF6FF;
 	border-radius: 12rpx;
 	border: 1rpx solid #DBEAFE;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .current-scenario {
+	background-color: #2D2D2D;
+	border-color: #3D3D3D;
 }
 
 .current-scenario-text {
@@ -314,12 +330,23 @@ export default {
 	color: #1D4ED8;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .current-scenario-text {
+	color: #6366F1;
+}
+
 /* 角色部分 */
 .role-section {
 	background-color: #FFFFFF;
 	border-radius: 20rpx;
 	padding: 32rpx;
 	border: 1rpx solid #E5E7EB;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .role-section {
+	background-color: #1F1F1F;
+	border-color: #3D3D3D;
 }
 
 .role-switch {
@@ -334,6 +361,16 @@ export default {
 	
 	&:active {
 		background-color: #DBEAFE;
+	}
+}
+
+/* 暗黑模式样式 */
+.dark-theme .role-switch {
+	background-color: #2D2D2D;
+	color: #6366F1;
+	
+	&:active {
+		background-color: #3D3D3D;
 	}
 }
 
@@ -361,6 +398,16 @@ export default {
 	&.active {
 		background-color: #EFF6FF;
 		border-color: #2563EB;
+	}
+}
+
+/* 暗黑模式样式 */
+.dark-theme .role-card {
+	background-color: #2D2D2D;
+	
+	&.active {
+		background-color: #2D2D2D;
+		border-color: #6366F1;
 	}
 }
 
@@ -397,10 +444,20 @@ export default {
 	color: #1F2937;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .role-name {
+	color: #E0E0E0;
+}
+
 .role-description {
 	font-size: 26rpx;
 	color: #6B7280;
 	line-height: 1.4;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .role-description {
+	color: #A0A0A0;
 }
 
 .role-status {
@@ -408,6 +465,12 @@ export default {
 	background-color: #10B981;
 	color: white;
 	border-radius: 12rpx;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .role-status {
+	background-color: #10B981;
+	color: #FFFFFF;
 }
 
 .status-text {
@@ -421,6 +484,12 @@ export default {
 	border-radius: 20rpx;
 	padding: 32rpx;
 	border: 1rpx solid #E5E7EB;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .scenario-section {
+	background-color: #1F1F1F;
+	border-color: #3D3D3D;
 }
 
 /* 场景卡片选择 */
@@ -469,6 +538,26 @@ export default {
 	}
 }
 
+/* 暗黑模式样式 */
+.dark-theme .scenario-card {
+	background-color: #2D2D2D;
+	border-color: #3D3D3D;
+	
+	&.active {
+		background-color: #2D2D2D;
+		border-color: #6366F1;
+		
+		.card-icon {
+			background-color: #6366F1;
+			color: #FFFFFF;
+		}
+		
+		.card-name {
+			color: #6366F1;
+		}
+	}
+}
+
 .card-icon {
 	width: 64rpx;
 	height: 64rpx;
@@ -482,12 +571,23 @@ export default {
 	transition: all 0.2s ease;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .card-icon {
+	background-color: #3D3D3D;
+	color: #A0A0A0;
+}
+
 .card-name {
 	font-size: 26rpx;
 	font-weight: 500;
 	color: #1F2937;
 	text-align: center;
 	transition: all 0.2s ease;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .card-name {
+	color: #E0E0E0;
 }
 
 .card-desc {
@@ -501,12 +601,23 @@ export default {
 	white-space: nowrap;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .card-desc {
+	color: #A0A0A0;
+}
+
 /* 语音设置 */
 .voice-settings {
 	background-color: #FFFFFF;
 	border-radius: 20rpx;
 	padding: 32rpx;
 	border: 1rpx solid #E5E7EB;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .voice-settings {
+	background-color: #1F1F1F;
+	border-color: #3D3D3D;
 }
 
 .settings-grid {
@@ -535,10 +646,20 @@ export default {
 	color: #1F2937;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .setting-name {
+	color: #E0E0E0;
+}
+
 .setting-desc {
 	font-size: 24rpx;
 	color: #6B7280;
 	line-height: 1.4;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .setting-desc {
+	color: #A0A0A0;
 }
 
 
@@ -551,12 +672,23 @@ export default {
 	border: 1rpx solid #E5E7EB;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .mode-section {
+	background-color: #1F1F1F;
+	border-color: #3D3D3D;
+}
+
 .mode-tabs {
 	display: flex;
 	background-color: #F3F4F6;
 	border-radius: 16rpx;
 	padding: 8rpx;
 	margin-bottom: 20rpx;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .mode-tabs {
+	background-color: #2D2D2D;
 }
 
 .mode-tab {
@@ -574,6 +706,14 @@ export default {
 	}
 }
 
+/* 暗黑模式样式 */
+.dark-theme .mode-tab {
+	&.active {
+		background-color: #6366F1;
+		color: #FFFFFF;
+	}
+}
+
 .tab-text {
 	font-size: 26rpx;
 	font-weight: 500;
@@ -585,10 +725,20 @@ export default {
 	border-radius: 12rpx;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .mode-description {
+	background-color: #2D2D2D;
+}
+
 .description-text {
 	font-size: 26rpx;
 	color: #6B7280;
 	line-height: 1.5;
+}
+
+/* 暗黑模式样式 */
+.dark-theme .description-text {
+	color: #A0A0A0;
 }
 
 

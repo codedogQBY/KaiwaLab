@@ -1141,4 +1141,135 @@ export default {
 	font-size: 24rpx;
 	color: #9CA3AF;
 }
+
+/* 暗黑模式样式 */
+.dark-theme .lab-container {
+	background-color: #121212;
+}
+
+.dark-theme .status-bar {
+	background-color: #121212;
+}
+
+.dark-theme .header {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .back-btn,
+.dark-theme .settings-btn,
+.dark-theme .history-btn {
+	color: #A0A0A0;
+}
+
+.dark-theme .back-btn:active,
+.dark-theme .settings-btn:active,
+.dark-theme .history-btn:active {
+	color: #6366F1;
+}
+
+.dark-theme .drawer-content {
+	background-color: #1F1F1F;
+}
+
+.dark-theme .drawer-header {
+	background-color: #2D2D2D;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .drawer-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .drawer-close {
+	background-color: #3D3D3D;
+	color: #A0A0A0;
+}
+
+.dark-theme .drawer-close:active {
+	background-color: #4D4D4D;
+}
+
+.dark-theme .system-prompt {
+	background: linear-gradient(135deg, #6366F1 0%, #818CF8 100%);
+}
+
+.dark-theme .prompt-text {
+	color: #FFFFFF;
+}
+
+.dark-theme .input-area {
+	background-color: #1F1F1F;
+	border-top: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .input-container {
+	background-color: #2D2D2D;
+	border: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .input-field {
+	color: #E0E0E0;
+	background-color: #2D2D2D;
+}
+
+.dark-theme .input-field::placeholder {
+	color: #666666;
+}
+
+.dark-theme .send-btn {
+	background-color: #3D3D3D;
+	color: #808080;
+}
+
+.dark-theme .send-btn.active {
+	background-color: #6366F1;
+	color: white;
+}
+
+.dark-theme .voice-btn {
+	background-color: #F97316;
+}
+
+.dark-theme .voice-btn:active {
+	background-color: #EA580C;
+}
+
+.dark-theme .quick-actions {
+	border-top: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .action-btn:active {
+	background-color: #2D2D2D;
+}
+
+.dark-theme .action-text {
+	color: #808080;
+}
+
+.dark-theme .panel-content {
+	background-color: #1F1F1F;
+}
+
+.dark-theme .panel-header {
+	background-color: #2D2D2D;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .panel-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .close-btn {
+	background-color: #3D3D3D;
+	color: #A0A0A0;
+}
+
+.dark-theme .close-btn:active {
+	background-color: #4D4D4D;
+}
 </style>

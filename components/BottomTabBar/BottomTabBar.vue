@@ -81,6 +81,13 @@ export default {
       type: String,
       default: '#FFFFFF'
     },
+    
+    // 暗黑模式背景色
+    darkBackgroundColor: {
+      type: String,
+      default: '#1F1F1F'
+    },
+    
     // 图标大小
     iconSize: {
       type: String,
@@ -182,6 +189,13 @@ export default {
   padding-bottom: constant(safe-area-inset-bottom);
   padding-bottom: env(safe-area-inset-bottom);
   /* #endif */
+}
+
+/* 暗黑模式样式 */
+.dark-theme .bottom-tab-bar {
+  background: rgba(31, 31, 31, 0.95);
+  border-top-color: #3D3D3D;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3);
 }
 
 .tab-item {
@@ -299,5 +313,34 @@ export default {
     background: rgba(17, 24, 39, 0.95);
     border-top-color: #374151;
   }
+}
+
+/* 暗黑模式样式 */
+.dark-theme .tab-text {
+  color: #E0E0E0;
+}
+
+.dark-theme .tab-item-active .tab-text {
+  color: #6366F1;
+}
+
+.dark-theme .tab-icon {
+  color: #E0E0E0;
+}
+
+.dark-theme .tab-item-active .tab-icon {
+  color: #6366F1;
+}
+
+.dark-theme .tab-badge-dot {
+  border-color: #1F1F1F;
+}
+
+.dark-theme .tab-badge {
+  border-color: #1F1F1F;
+}
+
+.dark-theme .badge-text {
+  color: #FFFFFF;
 }
 </style>

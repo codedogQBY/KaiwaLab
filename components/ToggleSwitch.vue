@@ -68,4 +68,18 @@ export default {
     transform: translateX(20px) scale(1.1);
   }
 }
+
+/* 暗黑模式样式 */
+.dark-theme .toggle-switch {
+  background-color: #3D3D3D;
+  
+  &.active {
+    background-color: #6366F1;
+  }
+  
+  .toggle-thumb {
+    background-color: #E0E0E0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+}
 </style>

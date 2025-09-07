@@ -24,12 +24,17 @@
 		flex-direction: column;
 	}
 
+	/* 暗黑模式样式 */
+	.dark-theme .product {
+		background-color: #1F1F1F;
+	}
+
 	.product-image {
 		height: 330rpx;
 		width: 330rpx;
 	}
 
-	.product-title {
+		.product-title {
 		width: 300rpx;
 		font-size: 32rpx;
 		word-break: break-all;
@@ -38,6 +43,11 @@
 		text-overflow: ellipsis;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 2;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .product-title {
+		color: #E0E0E0;
 	}
 
 	.product-price {
@@ -49,10 +59,20 @@
 		color: #E80080;
 	}
 
+	/* 暗黑模式样式 */
+	.dark-theme .product-price-original {
+		color: #F472B6;
+	}
+
 	.product-price-favour {
 		color: #888888;
 		text-decoration: line-through;
 		margin-left: 10rpx;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .product-price-favour {
+		color: #A0A0A0;
 	}
 
 	.product-tip {
@@ -62,5 +82,11 @@
 		color: #FFFFFF;
 		padding: 0 10rpx;
 		border-radius: 5rpx;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .product-tip {
+		background-color: #EF4444;
+		color: #FFFFFF;
 	}
 </style>

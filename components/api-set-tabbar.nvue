@@ -152,7 +152,18 @@
         margin-right: 0;
 	}
 
+	/* 暗黑模式样式 */
+	.dark-theme .button {
+		background-color: #2D2D2D;
+		color: #E0E0E0;
+	}
+
 	.btn-area {
 		padding-top: 30rpx;
+	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .btn-area {
+		background-color: #1F1F1F;
 	}
 </style>

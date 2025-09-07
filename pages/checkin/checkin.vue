@@ -709,4 +709,108 @@ export default {
 .start-btn:hover {
 	background: rgba(37, 99, 235, 0.9);
 }
+
+/* 暗黑模式样式 */
+.dark-theme .checkin-container {
+	background: linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 0%, #121212 20%, rgba(37, 99, 235, 0.05) 100%);
+}
+
+.dark-theme .header-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .back-btn {
+	color: #A0A0A0;
+}
+
+.dark-theme .back-btn:hover {
+	color: #6366F1;
+}
+
+.dark-theme .success-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .success-subtitle {
+	color: #A0A0A0;
+}
+
+.dark-theme .record-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .legend-text {
+	color: #A0A0A0;
+}
+
+.dark-theme .legend-dot.pending {
+	border: 2rpx solid #3D3D3D;
+}
+
+.dark-theme .day-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .day-circle:not(.completed) {
+	border: 4rpx solid #3D3D3D;
+	background: #1F1F1F;
+}
+
+.dark-theme .day-circle:not(.completed) .fas {
+	color: #808080;
+}
+
+.dark-theme .day-reward:not(.earned) {
+	color: #808080;
+}
+
+.dark-theme .section-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .reward-card {
+	background: #1F1F1F;
+	border: 2rpx solid #1E1E1E;
+}
+
+.dark-theme .reward-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .reward-desc {
+	color: #A0A0A0;
+}
+
+.dark-theme .progress-current {
+	color: #E0E0E0;
+}
+
+.dark-theme .progress-next {
+	color: #A0A0A0;
+}
+
+.dark-theme .progress-bar {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .progress-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .progress-target {
+	color: #818CF8;
+}
+
+.dark-theme .preview-section {
+	background: rgba(37, 99, 235, 0.1);
+	border: 2rpx solid rgba(37, 99, 235, 0.3);
+}
+
+.dark-theme .preview-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .preview-text {
+	color: #A0A0A0;
+}
 </style>

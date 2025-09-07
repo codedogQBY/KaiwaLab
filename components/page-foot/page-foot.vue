@@ -35,4 +35,13 @@
 	.submit {
 		border-bottom: 1rpx solid #BEBEBE;
 	}
+
+	/* 暗黑模式样式 */
+	.dark-theme .page-share-title {
+		color: #808080;
+	}
+
+	.dark-theme .submit {
+		border-bottom-color: #808080;
+	}
 </style>

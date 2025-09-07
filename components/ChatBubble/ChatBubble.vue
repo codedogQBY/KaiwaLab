@@ -195,6 +195,17 @@ export default {
 	color: white;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .ai-bubble {
+	background-color: #2D2D2D;
+	color: #E0E0E0;
+}
+
+.dark-theme .user-bubble {
+	background-color: #3B82F6;
+	color: #FFFFFF;
+}
+
 .message-text {
 	font-size: 30rpx;
 	line-height: 1.5;
@@ -209,6 +220,10 @@ export default {
 	font-style: italic;
 	display: block;
 	margin-bottom: 0;
+}
+
+.dark-theme .translation-text {
+	color: #A0A0A0;
 }
 
 .message-content {
@@ -255,6 +270,15 @@ export default {
 	}
 }
 
+.dark-theme .action-btn-small {
+	background-color: rgba(45, 45, 45, 0.7);
+	color: #A0A0A0;
+
+	&:active {
+		background-color: #2D2D2D;
+	}
+}
+
 .user-action {
 	background-color: rgba(255, 255, 255, 0.8);
 	color: #2563EB;
@@ -263,6 +287,17 @@ export default {
 	&:active {
 		background-color: white;
 		color: #1D4ED8;
+	}
+}
+
+.dark-theme .user-action {
+	background-color: rgba(45, 45, 45, 0.8);
+	color: #6366F1;
+	border: 1rpx solid rgba(45, 45, 45, 0.9);
+
+	&:active {
+		background-color: #2D2D2D;
+		color: #818CF8;
 	}
 }
 
@@ -283,6 +318,10 @@ export default {
 	font-size: 22rpx;
 	color: #9CA3AF;
 	opacity: 0.8;
+}
+
+.dark-theme .timestamp {
+	color: #808080;
 }
 
 .audio-indicator {
@@ -315,6 +354,14 @@ export default {
 	}
 }
 
+.dark-theme .pronunciation-score {
+	background-color: rgba(45, 45, 45, 0.1);
+
+	&:active {
+		background-color: rgba(45, 45, 45, 0.2);
+	}
+}
+
 .score-icon {
 	width: 48rpx;
 	height: 48rpx;
@@ -325,6 +372,11 @@ export default {
 	align-items: center;
 	justify-content: center;
 	font-size: 20rpx;
+}
+
+.dark-theme .score-icon {
+	background-color: rgba(224, 224, 224, 0.2);
+	color: #E0E0E0;
 }
 
 .score-info {
@@ -343,6 +395,14 @@ export default {
 .score-label {
 	font-size: 20rpx;
 	color: rgba(255, 255, 255, 0.8);
+}
+
+.dark-theme .score-text {
+	color: #E0E0E0;
+}
+
+.dark-theme .score-label {
+	color: rgba(224, 224, 224, 0.8);
 }
 
 .score-badge {

@@ -383,5 +383,64 @@ export default {
 	color: #6B7280;
 }
 
+/* 暗黑模式样式 */
+.dark-theme .container {
+	background-color: #121212;
+}
+
+.dark-theme .nav-bar {
+	background-color: #1F1F1F;
+	border-bottom: 1rpx solid #3D3D3D;
+}
+
+.dark-theme .nav-title {
+	color: #E0E0E0;
+}
+
+.dark-theme .nav-left, .dark-theme .nav-right {
+	color: #A0A0A0;
+}
+
+.dark-theme .nav-left:active, .dark-theme .nav-right:active {
+	color: #6366F1;
+}
+
+.dark-theme .fa-user-plus {
+	color: #6366F1;
+}
+
+.dark-theme .content {
+	background-color: #121212;
+}
+
+.dark-theme .stats-section {
+	background-color: #1E1E1E;
+}
+
+.dark-theme .stats-label {
+	color: #A0A0A0;
+}
+
+.dark-theme .friend-item {
+	background-color: #1F1F1F;
+	border: 1px solid #3D3D3D;
+}
+
+.dark-theme .friend-name {
+	color: #E0E0E0;
+}
+
+.dark-theme .friend-status {
+	color: #A0A0A0;
+}
+
+.dark-theme .level-title {
+	color: #A0A0A0;
+}
+
+.dark-theme .group-title {
+	color: #A0A0A0;
+}
+
 
 </style>
