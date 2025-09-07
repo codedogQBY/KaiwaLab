@@ -11,6 +11,9 @@
 
 	export default {
 		onLaunch: function() {
+			// 初始化主题
+			this.initTheme();
+			
 			// #ifdef H5
 			console.log(
 				`%c hello uniapp %c v${version} `,
@@ -54,7 +57,44 @@
 			test: ''
 		},
 		methods: {
-			...mapMutations(['setUniverifyErrorMsg', 'setUniverifyLogin'])
+			...mapMutations(['setUniverifyErrorMsg', 'setUniverifyLogin']),
+			
+			// 初始化主题
+			initTheme() {
+				const savedTheme = uni.getStorageSync('theme') || 'light';
+				this.applyTheme(savedTheme);
+			},
+			
+			// 应用主题
+			applyTheme(theme) {
+				// #ifdef H5
+				if (theme === 'dark') {
+					document.body.classList.add('dark-theme');
+					document.body.classList.remove('light-theme');
+				} else if (theme === 'light') {
+					document.body.classList.add('light-theme');
+					document.body.classList.remove('dark-theme');
+				} else if (theme === 'system') {
+					const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					if (isDark) {
+						document.body.classList.add('dark-theme');
+						document.body.classList.remove('light-theme');
+					} else {
+						document.body.classList.add('light-theme');
+						document.body.classList.remove('dark-theme');
+					}
+				}
+				// #endif
+				
+				// #ifdef APP-PLUS
+				// App端主题切换逻辑
+				if (theme === 'dark') {
+					plus.navigator.setStatusBarStyle('dark');
+				} else {
+					plus.navigator.setStatusBarStyle('light');
+				}
+				// #endif
+			}
 		}
 	}
 </script>
@@ -136,4 +176,78 @@
 	}
 
 	/* #endif*/
+	
+	/* 全局深色主题样式 */
+	/* #ifdef H5 */
+	:global(.dark-theme) {
+		background-color: #111827 !important;
+	}
+	
+	:global(.dark-theme) page {
+		background-color: #111827 !important;
+	}
+	
+	:global(.dark-theme) uni-page-body {
+		background-color: #111827 !important;
+	}
+	
+	/* 深色主题下的通用样式 */
+	:global(.dark-theme) .uni-tabbar {
+		background-color: #1f2937 !important;
+		border-top-color: #374151 !important;
+	}
+	
+	:global(.dark-theme) .uni-tabbar-item {
+		color: #9ca3af !important;
+	}
+	
+	:global(.dark-theme) .uni-tabbar-item.uni-tabbar-item-active {
+		color: #667eea !important;
+	}
+	
+	/* 深色主题下的导航栏样式 */
+	:global(.dark-theme) .uni-navbar {
+		background-color: #1f2937 !important;
+		border-bottom-color: #374151 !important;
+	}
+	
+	:global(.dark-theme) .uni-navbar-title {
+		color: #f9fafb !important;
+	}
+	
+	/* 深色主题下的卡片样式 */
+	:global(.dark-theme) .uni-card {
+		background-color: #1f2937 !important;
+		border-color: #374151 !important;
+	}
+	
+	:global(.dark-theme) .uni-list-item {
+		background-color: #1f2937 !important;
+		border-bottom-color: #374151 !important;
+	}
+	
+	:global(.dark-theme) .uni-list-item-content {
+		color: #f9fafb !important;
+	}
+	
+	/* 深色主题下的输入框样式 */
+	:global(.dark-theme) .uni-input {
+		background-color: #374151 !important;
+		color: #f9fafb !important;
+		border-color: #4b5563 !important;
+	}
+	
+	:global(.dark-theme) .uni-textarea {
+		background-color: #374151 !important;
+		color: #f9fafb !important;
+		border-color: #4b5563 !important;
+	}
+	
+	/* 深色主题下的按钮样式 */
+	:global(.dark-theme) .uni-btn-default {
+		background-color: #374151 !important;
+		color: #f9fafb !important;
+		border-color: #4b5563 !important;
+	}
+	/* #endif */
 </style>
