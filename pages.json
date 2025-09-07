@@ -112,6 +112,69 @@
 				"navigationBarTitleText": "好友列表",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/library/listening-practice",
+			"style": {
+				"navigationBarTitleText": "听力练习",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/spelling-practice",
+			"style": {
+				"navigationBarTitleText": "拼写练习",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/scenario-practice",
+			"style": {
+				"navigationBarTitleText": "情景模拟",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/learning-report",
+			"style": {
+				"navigationBarTitleText": "学习报告",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/personal-library",
+			"style": {
+				"navigationBarTitleText": "个人词库",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/review-plan",
+			"style": {
+				"navigationBarTitleText": "复习计划",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/recommended-words",
+			"style": {
+				"navigationBarTitleText": "推荐词汇",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/flashcard-practice",
+			"style": {
+				"navigationBarTitleText": "闪卡练习",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/library/learning-plan",
+			"style": {
+				"navigationBarTitleText": "学习计划",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

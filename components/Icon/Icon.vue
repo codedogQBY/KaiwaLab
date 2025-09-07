@@ -30,11 +30,6 @@ export default {
       type: String,
       default: '#333333'
     },
-    // 暗黑模式下的图标颜色
-    darkColor: {
-      type: String,
-      default: '#E0E0E0'
-    },
     // 是否可点击
     clickable: {
       type: Boolean,
@@ -78,10 +73,5 @@ export default {
 /* 悬停效果 */
 .fas:hover, .far:hover, .fab:hover, .fal:hover, .fad:hover {
   opacity: 0.8;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .fas, .dark-theme .far, .dark-theme .fab, .dark-theme .fal, .dark-theme .fad {
-  color: #E0E0E0;
 }
 </style>

@@ -108,6 +108,10 @@
 				<text class="fas fa-microphone"></text>
 				<text class="btn-text">播放录音</text>
 			</view>
+			<view class="action-btn tertiary" @click="retryRecording">
+				<text class="fas fa-redo"></text>
+				<text class="btn-text">重新录音</text>
+			</view>
 		</view>
 	</view>
 </template>
@@ -228,6 +232,10 @@ export default {
 			}
 		},
 		
+		// 重新录音
+		retryRecording() {
+			this.$emit('retry-recording')
+		}
 	},
 	emits: ['play-original', 'play-recording', 'retry-recording']
 }
@@ -247,11 +255,6 @@ export default {
 	border-radius: 24rpx;
 	padding: 32rpx;
 	color: white;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .score-card {
-	background: linear-gradient(135deg, #3B82F6 0%, #6366F1 100%);
 }
 
 .score-header {
@@ -343,12 +346,6 @@ export default {
 	border: 1rpx solid #E5E7EB;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .analysis-section {
-	background-color: #1F1F1F;
-	border-color: #3D3D3D;
-}
-
 .section-header {
 	display: flex;
 	justify-content: space-between;
@@ -360,11 +357,6 @@ export default {
 	font-size: 32rpx;
 	font-weight: 600;
 	color: #1F2937;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .section-title {
-	color: #E0E0E0;
 }
 
 .metrics-grid {
@@ -390,11 +382,6 @@ export default {
 	color: #6B7280;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .metric-name {
-	color: #A0A0A0;
-}
-
 .metric-score {
 	font-size: 28rpx;
 	font-weight: 600;
@@ -405,11 +392,6 @@ export default {
 	background-color: #F3F4F6;
 	border-radius: 4rpx;
 	overflow: hidden;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .metric-bar {
-	background-color: #2D2D2D;
 }
 
 .metric-fill {
@@ -424,12 +406,6 @@ export default {
 	border-radius: 20rpx;
 	padding: 32rpx;
 	border: 1rpx solid #FED7AA;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .errors-section {
-	background-color: #2D2D2D;
-	border-color: #3D3D3D;
 }
 
 .error-count {
@@ -457,12 +433,6 @@ export default {
 	background-color: #FFFFFF;
 	border-radius: 16rpx;
 	border: 1rpx solid #FED7AA;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .error-item {
-	background-color: #1F1F1F;
-	border-color: #3D3D3D;
 }
 
 .error-icon {
@@ -494,11 +464,6 @@ export default {
 	color: #F97316;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .error-phoneme {
-	color: #F97316;
-}
-
 .error-type {
 	font-size: 24rpx;
 	color: #6B7280;
@@ -507,21 +472,10 @@ export default {
 	border-radius: 8rpx;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .error-type {
-	color: #A0A0A0;
-	background-color: #2D2D2D;
-}
-
 .error-description {
 	font-size: 26rpx;
 	color: #374151;
 	line-height: 1.4;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .error-description {
-	color: #E0E0E0;
 }
 
 .error-suggestion {
@@ -530,23 +484,12 @@ export default {
 	line-height: 1.4;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .error-suggestion {
-	color: #10B981;
-}
-
 /* 建议部分 */
 .suggestions-section {
 	background-color: #ECFDF5;
 	border-radius: 20rpx;
 	padding: 32rpx;
 	border: 1rpx solid #A7F3D0;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .suggestions-section {
-	background-color: #2D2D2D;
-	border-color: #3D3D3D;
 }
 
 .suggestions-list {
@@ -562,12 +505,6 @@ export default {
 	background-color: #FFFFFF;
 	border-radius: 16rpx;
 	border: 1rpx solid #A7F3D0;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .suggestion-item {
-	background-color: #1F1F1F;
-	border-color: #3D3D3D;
 }
 
 .suggestion-icon {
@@ -593,20 +530,10 @@ export default {
 	color: #10B981;
 }
 
-/* 暗黑模式样式 */
-.dark-theme .suggestion-title {
-	color: #10B981;
-}
-
 .suggestion-description {
 	font-size: 26rpx;
 	color: #374151;
 	line-height: 1.4;
-}
-
-/* 暗黑模式样式 */
-.dark-theme .suggestion-description {
-	color: #E0E0E0;
 }
 
 /* 操作按钮 */
@@ -645,15 +572,14 @@ export default {
 			background-color: #E5E7EB;
 		}
 	}
-
-	/* 暗黑模式样式 */
-	.dark-theme &.secondary {
-		background-color: #2D2D2D;
-		color: #E0E0E0;
-		border-color: #3D3D3D;
+	
+	&.tertiary {
+		background-color: #FFFFFF;
+		color: #6B7280;
+		border: 1rpx solid #D1D5DB;
 		
 		&:active {
-			background-color: #3D3D3D;
+			background-color: #F9FAFB;
 		}
 	}
 }
