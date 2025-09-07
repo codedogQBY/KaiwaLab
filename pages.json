@@ -79,6 +79,13 @@
 			}
 		},
 		{
+			"path": "pages/profile/profile-edit",
+			"style": {
+				"navigationBarTitleText": "编辑资料",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/ranking/ranking",
 			"style": {
 				"navigationBarTitleText": "实验室排行榜",

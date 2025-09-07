@@ -196,6 +196,11 @@ export default {
 				url: '/pages/friends/friend-list'
 			})
 		},
+		editProfile() {
+			uni.navigateTo({
+				url: '/pages/profile/profile-edit'
+			})
+		},
 
 
 		// 处理底部导航栏切换

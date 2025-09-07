@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息编辑 - 会話Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        secondary: '#F97316',
+                        accent: '#10B981',
+                        neutral: '#1F2937',
+                        'lab-gray': '#F3F4F6',
+                        'lab-light': '#EFF6FF',
+                        'lab-border': '#DBEAFE',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        jp: ['"Noto Sans JP"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'lab': '0 4px 20px rgba(37, 99, 235, 0.1)',
+                        'flask': '0 2px 10px rgba(249, 115, 22, 0.15)',
+                    }
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .app-container {
+                width: 280px;
+                height: 600px;
+                border-radius: 36px;
+                overflow: hidden;
+                position: relative;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            }
+            .app-status-bar {
+                height: 30px;
+                background-color: white;
+                padding: 0 16px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 12px;
+            }
+            .test-tube {
+                width: 16px;
+                height: 40px;
+                border: 2px solid #2563EB;
+                border-radius: 2px 2px 8px 8px;
+                position: relative;
+                overflow: hidden;
+            }
+            .test-tube-fill {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                transition: height 0.5s ease;
+            }
+            .edit-field {
+                transition: all 0.2s ease;
+            }
+            .edit-field:focus-within {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            }
+            .avatar-upload {
+                position: relative;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .avatar-upload:hover {
+                transform: scale(1.05);
+            }
+            .avatar-overlay {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .avatar-upload:hover .avatar-overlay {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8 font-sans">
+    <header class="text-center mb-8">
+        <div class="flex items-center justify-center mb-4">
+            <img src="kaiwalablogo.png" alt="会話Lab Logo" class="w-12 h-12 rounded-full object-cover mr-3">
+            <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-neutral">个人信息编辑</h1>
+        </div>
+        <p class="text-gray-600 max-w-2xl mx-auto mb-2">完善你的实验室档案</p>
+        <p class="text-gray-500 italic">Customize your lab profile</p>
+    </header>
+
+    <!-- 基本信息编辑页面 -->
+    <div class="max-w-md mx-auto">
+        <div class="app-container bg-white mx-auto transform transition-transform hover:scale-105 duration-300">
+            <div class="app-status-bar">
+                <span>9:41</span>
+                <div class="flex space-x-2">
+                    <i class="fa fa-signal"></i>
+                    <i class="fa fa-wifi"></i>
+                    <i class="fa fa-battery-three-quarters"></i>
+                </div>
+            </div>
+            <div class="h-[calc(100%-30px)] overflow-y-auto">
+                <!-- 标题栏 -->
+                <div class="p-4 border-b border-lab-border flex justify-between items-center bg-white sticky top-0 z-10">
+                    <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:bg-gray-100 rounded-full transition-colors">
+                        <i class="fa fa-arrow-left"></i>
+                    </button>
+                    <h2 class="font-bold text-neutral">基本信息</h2>
+                    <button class="text-primary font-medium text-sm hover:bg-primary/10 px-3 py-1 rounded-full transition-colors">保存</button>
+                </div>
+
+                <div class="p-4 space-y-6">
+                    <!-- 实验室装饰 -->
+                    <div class="absolute top-20 right-4 w-6 h-6 opacity-20">
+                        <div class="test-tube">
+                            <div class="test-tube-fill bg-accent" style="height: 60%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 头像上传 -->
+                    <div class="text-center">
+                        <div class="avatar-upload inline-block">
+                            <div class="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center relative overflow-hidden">
+                                <i class="fa fa-user text-primary text-2xl"></i>
+                                <div class="avatar-overlay">
+                                    <i class="fa fa-camera text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">点击更换头像</p>
+                    </div>
+
+                    <!-- 昵称 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-user mr-2 text-primary"></i>昵称
+                        </label>
+                        <input type="text" value="田中さん" class="w-full bg-transparent border-none outline-none text-neutral font-medium placeholder-gray-400" placeholder="请输入昵称">
+                    </div>
+
+                    <!-- 性别 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            <i class="fa fa-venus-mars mr-2 text-primary"></i>性别
+                        </label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="gender" value="male" class="mr-2 text-primary">
+                                <span class="text-sm">男</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="gender" value="female" checked class="mr-2 text-primary">
+                                <span class="text-sm">女</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="gender" value="other" class="mr-2 text-primary">
+                                <span class="text-sm">其他</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 生日 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-birthday-cake mr-2 text-primary"></i>生日
+                        </label>
+                        <input type="date" value="1995-06-15" class="w-full bg-transparent border-none outline-none text-neutral">
+                    </div>
+
+                    <!-- 所在地 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-map-marker mr-2 text-primary"></i>所在地
+                        </label>
+                        <select class="w-full bg-transparent border-none outline-none text-neutral">
+                            <option>北京</option>
+                            <option>上海</option>
+                            <option>广州</option>
+                            <option>深圳</option>
+                            <option>杭州</option>
+                            <option>成都</option>
+                            <option>其他</option>
+                        </select>
+                    </div>
+
+                    <!-- 手机号 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-phone mr-2 text-primary"></i>手机号
+                        </label>
+                        <input type="tel" value="138****8888" class="w-full bg-transparent border-none outline-none text-neutral" placeholder="请输入手机号">
+                    </div>
+
+                    <!-- 邮箱 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-envelope mr-2 text-primary"></i>邮箱
+                        </label>
+                        <input type="email" value="user@example.com" class="w-full bg-transparent border-none outline-none text-neutral" placeholder="请输入邮箱地址">
+                    </div>
+
+                    <!-- 个人简介 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fa fa-edit mr-2 text-primary"></i>个人简介
+                        </label>
+                        <textarea rows="3" placeholder="介绍一下自己吧..." class="w-full bg-transparent border-none outline-none text-neutral resize-none placeholder-gray-400">日语学习爱好者，喜欢动漫和日本文化</textarea>
+                    </div>
+
+                    <!-- 日语水平 -->
+                    <div class="edit-field bg-lab-light rounded-xl p-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            <i class="fa fa-graduation-cap mr-2 text-primary"></i>日语水平
+                        </label>
+                        <div class="space-y-2">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="level" value="beginner" class="mr-2 text-primary">
+                                <span class="text-sm">初学者 (N5-N4)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="level" value="intermediate" checked class="mr-2 text-primary">
+                                <span class="text-sm">中级 (N3-N2)</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" name="level" value="advanced" class="mr-2 text-primary">
+                                <span class="text-sm">高级 (N1)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 保存按钮 -->
+                    <div class="pt-4 pb-6">
+                        <button class="w-full bg-primary text-white py-3 rounded-xl font-medium hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2">
+                            <i class="fa fa-save"></i>
+                            <span>保存信息</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 头像上传点击效果
+            const avatarUpload = document.querySelector('.avatar-upload');
+            avatarUpload.addEventListener('click', function() {
+                alert('选择头像功能');
+            });
+
+            // 保存按钮点击效果
+            document.querySelectorAll('button').forEach(btn => {
+                if (btn.textContent.includes('保存')) {
+                    btn.addEventListener('click', function() {
+                        // 简单的表单验证
+                        const nickname = document.querySelector('input[type="text"]').value;
+                        if (!nickname.trim()) {
+                            alert('请输入昵称');
+                            return;
+                        }
+                        alert('个人信息已保存！');
+                    });
+                }
+            });
+
+            // 返回按钮点击效果
+            document.querySelector('.fa-arrow-left').closest('button').addEventListener('click', function() {
+                console.log('返回上一页');
+            });
+
+            // 试管动画效果
+            const testTube = document.querySelector('.test-tube-fill');
+            setInterval(() => {
+                const currentHeight = parseInt(testTube.style.height);
+                const newHeight = Math.max(30, Math.min(90, currentHeight + (Math.random() - 0.5) * 10));
+                testTube.style.height = newHeight + '%';
+            }, 3000);
+
+            // 输入框焦点效果
+            const inputs = document.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.closest('.edit-field').style.borderColor = '#2563EB';
+                });
+                input.addEventListener('blur', function() {
+                    this.closest('.edit-field').style.borderColor = 'transparent';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
