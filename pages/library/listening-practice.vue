@@ -116,15 +116,17 @@
 				<view class="modal-body">
 					<view class="setting-item">
 						<text class="setting-label">播放速度</text>
-						<slider 
-							min="0.5" 
-							max="2" 
-							step="0.1" 
-							:value="playbackRate" 
-							@change="changePlaybackRate"
-							activeColor="#6366F1"
-						/>
-						<text class="setting-value">{{ playbackRate }}x</text>
+						<view class="speed-control">
+							<slider 
+								:value="playbackSpeed" 
+								:min="0.5" 
+								:max="2" 
+								:step="0.1" 
+								@change="onSpeedChange"
+								active-color="#2563EB"
+							/>
+							<text class="speed-value">{{ playbackSpeed }}x</text>
+						</view>
 					</view>
 					<view class="setting-item">
 						<text class="setting-label">重复播放</text>
@@ -152,13 +154,17 @@ export default {
 			selectedOption: null,
 			showResult: false,
 			showSettingsModal: false,
+			showRangeDropdown: false,
 			isPlaying: false,
 			currentTime: 0,
 			duration: 100,
 			audioProgress: 0,
 			playbackRate: 1.0,
+			playbackSpeed: 1.0,
 			repeatPlay: false,
 			autoNext: true,
+			selectedRange: '今日复习',
+			wordRanges: ['今日复习', '个人词库', '推荐词汇', '全部词汇'],
 			stats: {
 				correct: 0,
 				incorrect: 0
@@ -300,13 +306,22 @@ export default {
 		},
 		closeSettings() {
 			this.showSettingsModal = false
+			this.showRangeDropdown = false
 		},
-		changePlaybackRate(e) {
-			this.playbackRate = e.detail.value
+		toggleRangeDropdown() {
+			this.showRangeDropdown = !this.showRangeDropdown
+		},
+		selectRange(range) {
+			this.selectedRange = range
+			this.showRangeDropdown = false
 			uni.showToast({
-				title: `播放速度: ${this.playbackRate}x`,
+				title: `切换到: ${range}`,
 				icon: 'none'
 			})
+		},
+		onSpeedChange(e) {
+			this.playbackSpeed = e.detail.value
+			this.playbackRate = e.detail.value
 		},
 		toggleRepeatPlay(e) {
 			this.repeatPlay = e.target.value
@@ -679,100 +694,36 @@ export default {
 	}
 }
 
-/* 设置模态框 */
-.modal {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 1000;
 
-	.modal-content {
-		width: 90%;
-		max-width: 600rpx;
-		background: white;
-		border-radius: 24rpx;
-		overflow: hidden;
 
-		.modal-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 32rpx;
-			border-bottom: 2rpx solid #E5E7EB;
+@keyframes modalFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
 
-			.modal-title {
-				font-size: 36rpx;
-				font-weight: 600;
-				color: #1F2937;
-			}
+@keyframes modalSlideIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(40rpx);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
 
-			.close-btn {
-				color: #9CA3AF;
-				font-size: 36rpx;
-				cursor: pointer;
-				transition: color 0.2s;
-
-				&:hover {
-					color: #6B7280;
-				}
-			}
-		}
-
-		.modal-body {
-			padding: 32rpx;
-
-			.setting-item {
-				margin-bottom: 32rpx;
-
-				&:last-child {
-					margin-bottom: 0;
-				}
-
-				.setting-label {
-					font-size: 28rpx;
-					color: #1F2937;
-					font-weight: 500;
-					margin-bottom: 16rpx;
-					display: block;
-				}
-
-				.setting-value {
-					font-size: 28rpx;
-					color: #6B7280;
-					margin-top: 16rpx;
-					display: block;
-					text-align: center;
-				}
-			}
-		}
-
-		.modal-footer {
-			padding: 32rpx;
-			border-top: 2rpx solid #E5E7EB;
-			text-align: right;
-
-			.confirm-btn {
-				padding: 24rpx 32rpx;
-				background: #007AFF;
-				color: white;
-				border: none;
-				border-radius: 16rpx;
-				font-size: 28rpx;
-				font-weight: 500;
-				cursor: pointer;
-				transition: all 0.2s;
-
-				&:hover {
-					background: #1D4ED8;
-				}
-			}
-		}
+@keyframes dropdownSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(10rpx);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
 
@@ -871,6 +822,360 @@ export default {
 	}
 }
 
+/* 设置模态框样式 */
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+	animation: modalFadeIn 0.3s ease;
+
+	.modal-content {
+		width: 90%;
+		max-width: 600rpx;
+		background: white;
+		border-radius: 24rpx;
+		overflow: hidden;
+		box-shadow: 0 32rpx 80rpx rgba(0, 0, 0, 0.15);
+		animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+		.modal-header {
+			padding: 32rpx 36rpx 24rpx;
+			border-bottom: 1rpx solid #E5E7EB;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.modal-title {
+				font-size: 32rpx;
+				font-weight: 600;
+				color: #1F2937;
+			}
+
+			.close-btn {
+				width: 48rpx;
+				height: 48rpx;
+				border-radius: 12rpx;
+				background: #F3F4F6;
+				color: #6B7280;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 24rpx;
+				cursor: pointer;
+				transition: all 0.2s ease;
+
+				&:hover {
+					background: #FEE2E2;
+					color: #DC2626;
+				}
+			}
+		}
+
+		.modal-body {
+			padding: 24rpx 36rpx;
+			max-height: 60vh;
+			overflow-y: auto;
+
+			.setting-item {
+				padding: 24rpx;
+				margin-bottom: 16rpx;
+				background: #F9FAFB;
+				border-radius: 16rpx;
+				border: 1rpx solid #E5E7EB;
+				transition: all 0.3s ease;
+				position: relative;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				&:hover {
+					background: #F3F4F6;
+					box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.08);
+					border-color: #D1D5DB;
+				}
+
+				.setting-label {
+					font-size: 28rpx;
+					font-weight: 500;
+					color: #374151;
+					margin-bottom: 16rpx;
+					display: block;
+				}
+
+				.custom-select {
+					padding: 16rpx 20rpx;
+					background: white;
+					border: 2rpx solid #E5E7EB;
+					border-radius: 12rpx;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					cursor: pointer;
+					transition: all 0.2s ease;
+					position: relative;
+
+					&:hover {
+						border-color: #2563EB;
+						background: #F8FAFF;
+					}
+
+					.select-text {
+						font-size: 26rpx;
+						color: #1F2937;
+					}
+
+					.select-arrow {
+						font-size: 20rpx;
+						color: #9CA3AF;
+						transition: transform 0.2s ease;
+
+						&.rotate {
+							transform: rotate(180deg);
+						}
+					}
+				}
+
+				.dropdown-options {
+					position: absolute;
+					top: 100%;
+					left: 0;
+					right: 0;
+					margin-top: 8rpx;
+					background: white;
+					border: 2rpx solid #E5E7EB;
+					border-radius: 12rpx;
+					box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.1);
+					backdrop-filter: blur(20rpx);
+					overflow: hidden;
+					animation: dropdownSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					z-index: 10;
+
+					.option-item {
+						padding: 20rpx 24rpx;
+						font-size: 26rpx;
+						color: #64748b;
+						cursor: pointer;
+						transition: all 0.2s ease;
+						border-bottom: 1rpx solid rgba(37, 99, 235, 0.05);
+
+						&:last-child {
+							border-bottom: none;
+						}
+
+						&:hover {
+							background: rgba(37, 99, 235, 0.06);
+							color: #2563eb;
+						}
+
+						&.active {
+							background: rgba(37, 99, 235, 0.1);
+							color: #2563eb;
+							font-weight: 600;
+						}
+					}
+				}
+
+				.speed-control {
+					display: flex;
+					align-items: center;
+					gap: 16rpx;
+
+					slider {
+						flex: 1;
+					}
+
+					.speed-value {
+						font-size: 24rpx;
+						color: #2563EB;
+						font-weight: 600;
+						min-width: 60rpx;
+						text-align: center;
+					}
+				}
+			}
+		}
+
+		.modal-footer {
+			padding: 28rpx 36rpx 36rpx;
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(255, 255, 255, 0.9) 100%);
+			border-top: 1rpx solid rgba(37, 99, 235, 0.08);
+			text-align: center;
+
+			.confirm-btn {
+				width: 100%;
+				padding: 20rpx 36rpx;
+				background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+				color: white;
+				border: none;
+				border-radius: 16rpx;
+				font-size: 30rpx;
+				font-weight: 600;
+				cursor: pointer;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.25);
+				letter-spacing: -0.5rpx;
+
+				&:hover {
+					background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+					transform: translateY(-3rpx);
+					box-shadow: 0 12rpx 32rpx rgba(37, 99, 235, 0.35);
+				}
+
+				&:active {
+					transform: translateY(-1rpx);
+				}
+			}
+		}
+	}
+}
+
+@keyframes modalFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes modalSlideIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(20rpx);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+@keyframes dropdownSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10rpx) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* 暗黑模式下的模态框样式 */
+.dark-theme .modal {
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(12rpx);
+
+	.modal-content {
+		background: rgba(15, 23, 42, 0.95);
+		backdrop-filter: blur(24rpx);
+		box-shadow: 0 32rpx 80rpx rgba(0, 0, 0, 0.4), 0 0 0 1rpx rgba(148, 163, 184, 0.1);
+
+		.modal-header {
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%);
+			border-bottom: 1rpx solid rgba(148, 163, 184, 0.1);
+
+			.modal-title {
+				color: #f1f5f9;
+			}
+
+			.close-btn {
+				background: rgba(148, 163, 184, 0.1);
+				color: #94a3b8;
+				border-color: rgba(148, 163, 184, 0.15);
+
+				&:hover {
+					background: rgba(239, 68, 68, 0.15);
+					color: #f87171;
+					border-color: rgba(239, 68, 68, 0.3);
+				}
+			}
+		}
+
+		.modal-body {
+			background: rgba(15, 23, 42, 0.6);
+
+			.setting-item {
+				background: rgba(30, 41, 59, 0.8);
+				border-color: rgba(148, 163, 184, 0.08);
+
+				&:hover {
+					background: rgba(30, 41, 59, 0.95);
+					box-shadow: 0 16rpx 40rpx rgba(37, 99, 235, 0.15);
+					border-color: rgba(37, 99, 235, 0.2);
+				}
+
+				.setting-label {
+					color: #e2e8f0;
+				}
+
+				.custom-select {
+					background: rgba(30, 41, 59, 0.9);
+					color: #cbd5e1;
+					border-color: rgba(148, 163, 184, 0.15);
+
+					&:hover {
+						background: rgba(37, 99, 235, 0.1);
+						border-color: rgba(37, 99, 235, 0.3);
+						color: #60a5fa;
+					}
+
+					.select-arrow {
+						color: #94a3b8;
+					}
+				}
+
+				.dropdown-options {
+					background: rgba(15, 23, 42, 0.98);
+					border-color: rgba(148, 163, 184, 0.15);
+					box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.3);
+
+					.option-item {
+						color: #cbd5e1;
+						border-bottom-color: rgba(148, 163, 184, 0.08);
+
+						&:hover {
+							background: rgba(37, 99, 235, 0.15);
+							color: #60a5fa;
+						}
+
+						&.active {
+							background: rgba(37, 99, 235, 0.2);
+							color: #60a5fa;
+						}
+					}
+				}
+
+				.speed-value {
+					color: #60a5fa;
+				}
+			}
+		}
+
+		.modal-footer {
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(15, 23, 42, 0.95) 100%);
+			border-top: 1rpx solid rgba(148, 163, 184, 0.1);
+
+			.confirm-btn {
+				background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+				box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.4);
+
+				&:hover {
+					background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+					box-shadow: 0 12rpx 32rpx rgba(37, 99, 235, 0.5);
+				}
+			}
+		}
+	}
+}
+
 .dark-theme .timeline-bar {
 	background: #3D3D3D;
 }
@@ -919,35 +1224,5 @@ export default {
 	color: #A0A0A0;
 }
 
-.dark-theme .modal-content {
-	background: #1F1F1F;
 
-	.modal-header {
-		border-bottom: 2rpx solid #3D3D3D;
-
-		.modal-title {
-			color: #E0E0E0;
-		}
-
-		.close-btn {
-			color: #808080;
-
-			&:hover {
-				color: #A0A0A0;
-			}
-		}
-	}
-
-	.setting-label {
-		color: #E0E0E0;
-	}
-
-	.setting-value {
-		color: #A0A0A0;
-	}
-
-	.modal-footer {
-		border-top: 2rpx solid #3D3D3D;
-	}
-}
 </style>

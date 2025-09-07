@@ -612,7 +612,7 @@ export default {
 }
 
 .dark-theme .bar-value {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 
 .dark-theme .trend-container {
@@ -637,7 +637,7 @@ export default {
 
 .dark-theme .word-pronunciation,
 .dark-theme .stats-text {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 
 .dark-theme .achievement-item {
@@ -645,10 +645,10 @@ export default {
 }
 
 .dark-theme .achievement-name:not(.unlocked) {
-	color: #808080;
+	color: #CCCCCC;
 }
 
 .dark-theme .achievement-desc {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 </style>

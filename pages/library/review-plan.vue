@@ -294,7 +294,6 @@ export default {
 				display: block;
 				font-size: 40rpx;
 				font-weight: 600;
-				color: #1F2937;
 				margin-bottom: 8rpx;
 			}
 
@@ -345,7 +344,6 @@ export default {
 
 		.progress-title {
 			font-size: 28rpx;
-			color: #1F2937;
 			font-weight: 500;
 		}
 
@@ -398,7 +396,6 @@ export default {
 				display: block;
 				font-size: 32rpx;
 				font-weight: 600;
-				color: #1F2937;
 				margin-bottom: 4rpx;
 			}
 

@@ -318,7 +318,6 @@ export default {
 				display: block;
 				font-size: 40rpx;
 				font-weight: 600;
-				color: #1F2937;
 				margin-bottom: 8rpx;
 			}
 
@@ -338,7 +337,6 @@ export default {
 
 			.progress-title {
 				font-size: 28rpx;
-				color: #1F2937;
 				font-weight: 500;
 			}
 
@@ -451,7 +449,6 @@ export default {
 				display: block;
 				font-size: 32rpx;
 				font-weight: 500;
-				color: #1F2937;
 				margin-bottom: 8rpx;
 			}
 
@@ -539,16 +536,16 @@ export default {
 }
 
 /* 暗黑模式样式 */
-.dark-theme .library-container {
+body.dark-theme .library-container {
 	background-color: #121212;
 }
 
-.dark-theme .fixed-header {
+body.dark-theme .fixed-header {
 	background: #1F1F1F;
 	border-bottom: 2rpx solid #3D3D3D;
 }
 
-.dark-theme .header {
+body.dark-theme .header {
 	background: #1F1F1F;
 
 	.back-btn,
@@ -556,7 +553,7 @@ export default {
 		color: #A0A0A0;
 
 		&:hover {
-			color: #2563EB;
+			color: #6366F1;
 		}
 	}
 
@@ -565,63 +562,73 @@ export default {
 	}
 }
 
-.dark-theme .stats-section {
-	background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+body.dark-theme .stats-section {
+	background: #121212 !important;
 }
 
-.dark-theme .stat-value {
+body.dark-theme .modules-section {
+	background: #121212;
+}
+
+body.dark-theme .practice-section {
+	background: #121212;
+}
+
+body .dark-theme .stat-value {
+	color: #FFFFFF;
+}
+
+body.dark-theme .stat-label {
+	color: #CCCCCC;
+}
+
+body.dark-theme .progress-title {
 	color: #E0E0E0;
 }
 
-.dark-theme .stat-label {
-	color: #A0A0A0;
+body.dark-theme .progress-percent {
+	color: #CCCCCC;
 }
 
-.dark-theme .progress-title {
-	color: #E0E0E0;
-}
-
-.dark-theme .progress-percent {
-	color: #A0A0A0;
-}
-
-.dark-theme .progress-bar {
+body.dark-theme .progress-bar {
 	background: rgba(255, 255, 255, 0.1);
 }
 
-.dark-theme .progress-fill {
+body.dark-theme .progress-fill {
 	background: #6366F1;
 }
 
-.dark-theme .module-card {
+body.dark-theme .module-card {
 	background: #1F1F1F;
 	border: 2rpx solid #3D3D3D;
-	box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.3);
 
 	&:hover {
-		box-shadow: 0 8rpx 12rpx rgba(0, 0, 0, 0.3);
-	}
-
-	.module-title {
-		color: #E0E0E0;
-	}
-
-	.module-desc {
-		color: #A0A0A0;
-	}
-
-	.module-arrow {
-		color: #808080;
+		box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.4);
+		border-color: #6366F1;
 	}
 }
 
-.dark-theme .practice-card {
+body.dark-theme .module-title {
+	color: #FFFFFF;
+}
+
+body.dark-theme .module-desc {
+	color: #CCCCCC;
+}
+
+body.dark-theme .module-arrow {
+	color: #808080;
+}
+
+body.dark-theme .practice-card {
 	background: #1F1F1F;
 	border: 2rpx solid #3D3D3D;
-	box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
+	box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.3);
 
 	&:hover {
-		box-shadow: 0 8rpx 12rpx rgba(0, 0, 0, 0.3);
+		box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.4);
+		border-color: #6366F1;
 	}
 
 	.practice-label {
@@ -629,17 +636,17 @@ export default {
 	}
 
 	.practice-icon {
-		background: rgba(37, 99, 235, 0.1);
-		color: #2563EB;
+		background: #6366F1;
+		color: #FFFFFF;
 	}
 }
 
-.dark-theme .section-title {
+body.dark-theme .section-title {
 	color: #E0E0E0;
 }
 
-.dark-theme .report-link .report-text,
-.dark-theme .report-link .report-arrow {
+body.dark-theme .report-link .report-text,
+body.dark-theme .report-link .report-arrow {
 	color: #2563EB;
 }
 </style>

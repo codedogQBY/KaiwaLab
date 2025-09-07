@@ -387,7 +387,7 @@ export default {
 }
 
 .dark-theme .section-subtitle {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 
 .dark-theme .goal-card {
@@ -395,7 +395,7 @@ export default {
 }
 
 .dark-theme .goal-label {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 
 .dark-theme .goal-value {
@@ -439,6 +439,6 @@ export default {
 }
 
 .dark-theme .reminder-desc {
-	color: #A0A0A0;
+	color: #CCCCCC;
 }
 </style>

@@ -140,11 +140,21 @@
 					</view>
 					<view class="setting-item">
 						<text class="setting-label">难度等级</text>
-						<picker mode="selector" :range="difficultyLevels" @change="onDifficultyChange">
-							<view class="picker">
-								<text>{{ selectedDifficulty }}</text>
+						<view class="custom-select" @click="toggleDifficultyDropdown">
+							<text class="select-text">{{ selectedDifficulty }}</text>
+							<text class="fa fa-chevron-down select-arrow" :class="{ 'rotate': showDifficultyDropdown }"></text>
+						</view>
+						<view class="dropdown-options" v-if="showDifficultyDropdown">
+							<view 
+								class="option-item" 
+								v-for="(level, index) in difficultyLevels" 
+								:key="index"
+								:class="{ 'active': level === selectedDifficulty }"
+								@click="selectDifficulty(level)"
+							>
+								<text>{{ level }}</text>
 							</view>
-						</picker>
+						</view>
 					</view>
 				</view>
 				<view class="modal-footer">
@@ -175,6 +185,7 @@ export default {
 			autoPlay: true,
 			selectedDifficulty: '中级',
 			difficultyLevels: ['初级', '中级', '高级'],
+			showDifficultyDropdown: false,
 			stats: {
 				correct: 0,
 				incorrect: 0
@@ -366,6 +377,7 @@ export default {
 		},
 		closeSettings() {
 			this.showSettingsModal = false
+			this.showDifficultyDropdown = false
 		},
 		toggleTranslation(e) {
 			this.showTranslation = e.target.value
@@ -373,11 +385,14 @@ export default {
 		toggleAutoPlay(e) {
 			this.autoPlay = e.target.value
 		},
-		onDifficultyChange(e) {
-			const selectedIndex = e.detail.value
-			this.selectedDifficulty = this.difficultyLevels[selectedIndex]
+		toggleDifficultyDropdown() {
+			this.showDifficultyDropdown = !this.showDifficultyDropdown
+		},
+		selectDifficulty(level) {
+			this.selectedDifficulty = level
+			this.showDifficultyDropdown = false
 			uni.showToast({
-				title: `难度设置为: ${this.selectedDifficulty}`,
+				title: `难度设置为: ${level}`,
 				icon: 'none'
 			})
 		},
@@ -919,92 +934,348 @@ export default {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0, 0, 0, 0.5);
+	background: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(8rpx);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	z-index: 1000;
+	animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
 	.modal-content {
 		width: 90%;
-		max-width: 600rpx;
-		background: white;
-		border-radius: 24rpx;
-		overflow: hidden;
+		max-width: 520rpx;
+		background: rgba(255, 255, 255, 0.95);
+		backdrop-filter: blur(20rpx);
+		border-radius: 28rpx;
+		overflow: visible;
+		box-shadow: 0 32rpx 80rpx rgba(0, 0, 0, 0.12), 0 0 0 1rpx rgba(255, 255, 255, 0.1);
+		animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
 		.modal-header {
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			padding: 32rpx;
-			border-bottom: 2rpx solid #E5E7EB;
+			padding: 36rpx 36rpx 28rpx;
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(255, 255, 255, 0.8) 100%);
+			border-bottom: 1rpx solid rgba(37, 99, 235, 0.08);
 
 			.modal-title {
-				font-size: 36rpx;
-				font-weight: 600;
-				color: #1F2937;
+				font-size: 34rpx;
+				font-weight: 700;
+				color: #1e293b;
+				letter-spacing: -0.8rpx;
 			}
 
 			.close-btn {
-				color: #9CA3AF;
-				font-size: 36rpx;
+				width: 44rpx;
+				height: 44rpx;
+				border-radius: 50%;
+				background: rgba(148, 163, 184, 0.08);
+				color: #64748b;
+				font-size: 26rpx;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				cursor: pointer;
-				transition: color 0.2s;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				border: 1rpx solid rgba(148, 163, 184, 0.1);
 
 				&:hover {
-					color: #6B7280;
+					background: rgba(239, 68, 68, 0.08);
+					color: #ef4444;
+					transform: scale(1.05);
+					border-color: rgba(239, 68, 68, 0.2);
 				}
 			}
 		}
 
 		.modal-body {
-			padding: 32rpx;
+			padding: 36rpx;
+			background: rgba(255, 255, 255, 0.6);
+			overflow: visible;
 
 			.setting-item {
+				position: relative;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				margin-bottom: 32rpx;
+				padding: 28rpx;
+				background: rgba(255, 255, 255, 0.7);
+				border-radius: 20rpx;
+				border: 1rpx solid rgba(37, 99, 235, 0.06);
+				transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+				backdrop-filter: blur(10rpx);
+				min-height: auto;
+				overflow: visible;
 
 				&:last-child {
 					margin-bottom: 0;
 				}
 
-				.setting-label {
-					font-size: 28rpx;
-					color: #1F2937;
-					font-weight: 500;
+				&:hover {
+					transform: translateY(-4rpx);
+					box-shadow: 0 16rpx 40rpx rgba(37, 99, 235, 0.08);
+					border-color: rgba(37, 99, 235, 0.12);
+					background: rgba(255, 255, 255, 0.85);
 				}
 
-				.picker {
-					padding: 16rpx 24rpx;
-					border: 2rpx solid #E5E7EB;
+				.setting-label {
+					font-size: 30rpx;
+					font-weight: 600;
+					color: #1e293b;
+					letter-spacing: -0.5rpx;
+				}
+
+				.custom-select {
+					position: relative;
+					padding: 16rpx 20rpx;
+					border: 2rpx solid rgba(37, 99, 235, 0.1);
 					border-radius: 16rpx;
-					font-size: 28rpx;
-					color: #1F2937;
-					background: #F9FAFB;
+					font-size: 26rpx;
+					font-weight: 500;
+					color: #64748b;
+					background: rgba(255, 255, 255, 0.8);
+					min-width: 140rpx;
+					cursor: pointer;
+					transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+					backdrop-filter: blur(10rpx);
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					&:hover {
+						background: rgba(37, 99, 235, 0.04);
+						border-color: rgba(37, 99, 235, 0.2);
+						color: #2563eb;
+						transform: translateY(-2rpx);
+					}
+
+					.select-text {
+						flex: 1;
+						text-align: center;
+					}
+
+					.select-arrow {
+						font-size: 20rpx;
+						transition: transform 0.3s ease;
+						margin-left: 12rpx;
+
+						&.rotate {
+							transform: rotate(180deg);
+						}
+					}
+				}
+
+				.dropdown-options {
+					position: absolute;
+					bottom: 100%;
+					left: 0;
+					right: 0;
+					z-index: 9999;
+					margin-bottom: 8rpx;
+					background: rgba(255, 255, 255, 0.95);
+					border: 2rpx solid rgba(37, 99, 235, 0.1);
+					border-radius: 16rpx;
+					box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.1);
+					backdrop-filter: blur(20rpx);
+					overflow: hidden;
+					animation: dropdownSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+					.option-item {
+						padding: 20rpx 24rpx;
+						font-size: 26rpx;
+						color: #64748b;
+						cursor: pointer;
+						transition: all 0.2s ease;
+						border-bottom: 1rpx solid rgba(37, 99, 235, 0.05);
+
+						&:last-child {
+							border-bottom: none;
+						}
+
+						&:hover {
+							background: rgba(37, 99, 235, 0.06);
+							color: #2563eb;
+						}
+
+						&.active {
+							background: rgba(37, 99, 235, 0.1);
+							color: #2563eb;
+							font-weight: 600;
+						}
+					}
 				}
 			}
 		}
 
 		.modal-footer {
-			padding: 32rpx;
-			border-top: 2rpx solid #E5E7EB;
-			text-align: right;
+			padding: 28rpx 36rpx 36rpx;
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.02) 0%, rgba(255, 255, 255, 0.9) 100%);
+			border-top: 1rpx solid rgba(37, 99, 235, 0.08);
+			text-align: center;
 
 			.confirm-btn {
-				padding: 24rpx 32rpx;
-				background: #007AFF;
+				width: 100%;
+				padding: 20rpx 36rpx;
+				background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
 				color: white;
 				border: none;
 				border-radius: 16rpx;
-				font-size: 28rpx;
-				font-weight: 500;
+				font-size: 30rpx;
+				font-weight: 600;
 				cursor: pointer;
-				transition: all 0.2s;
+				transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+				box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.25);
+				letter-spacing: -0.5rpx;
 
 				&:hover {
-					background: #1D4ED8;
+					background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+					transform: translateY(-3rpx);
+					box-shadow: 0 12rpx 32rpx rgba(37, 99, 235, 0.35);
+				}
+
+				&:active {
+					transform: translateY(-1rpx);
+				}
+			}
+		}
+	}
+}
+
+@keyframes modalFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes modalSlideIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(20rpx);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+@keyframes dropdownSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10rpx) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+/* 暗黑模式下的模态框样式 */
+.dark-theme .modal {
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(12rpx);
+
+	.modal-content {
+		background: rgba(15, 23, 42, 0.95);
+		backdrop-filter: blur(24rpx);
+		box-shadow: 0 32rpx 80rpx rgba(0, 0, 0, 0.4), 0 0 0 1rpx rgba(148, 163, 184, 0.1);
+
+		.modal-header {
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(15, 23, 42, 0.9) 100%);
+			border-bottom: 1rpx solid rgba(148, 163, 184, 0.1);
+
+			.modal-title {
+				color: #f1f5f9;
+			}
+
+			.close-btn {
+				background: rgba(148, 163, 184, 0.1);
+				color: #94a3b8;
+				border-color: rgba(148, 163, 184, 0.15);
+
+				&:hover {
+					background: rgba(239, 68, 68, 0.15);
+					color: #f87171;
+					border-color: rgba(239, 68, 68, 0.3);
+				}
+			}
+		}
+
+		.modal-body {
+			background: rgba(15, 23, 42, 0.6);
+
+			.setting-item {
+				background: rgba(30, 41, 59, 0.8);
+				border-color: rgba(148, 163, 184, 0.08);
+
+				&:hover {
+					background: rgba(30, 41, 59, 0.95);
+					box-shadow: 0 16rpx 40rpx rgba(37, 99, 235, 0.15);
+					border-color: rgba(37, 99, 235, 0.2);
+				}
+
+				.setting-label {
+					color: #e2e8f0;
+				}
+
+				.custom-select {
+					background: rgba(30, 41, 59, 0.9);
+					color: #cbd5e1;
+					border-color: rgba(148, 163, 184, 0.15);
+
+					&:hover {
+						background: rgba(37, 99, 235, 0.1);
+						border-color: rgba(37, 99, 235, 0.3);
+						color: #60a5fa;
+					}
+
+					.select-arrow {
+						color: #94a3b8;
+					}
+				}
+
+				.dropdown-options {
+					bottom: 100%;
+					margin-bottom: 8rpx;
+					z-index: 9999;
+					background: rgba(15, 23, 42, 0.98);
+					border-color: rgba(148, 163, 184, 0.15);
+					box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.3);
+
+					.option-item {
+						color: #cbd5e1;
+						border-bottom-color: rgba(148, 163, 184, 0.08);
+
+						&:hover {
+							background: rgba(37, 99, 235, 0.15);
+							color: #60a5fa;
+						}
+
+						&.active {
+							background: rgba(37, 99, 235, 0.2);
+							color: #60a5fa;
+						}
+					}
+				}
+			}
+		}
+
+		.modal-footer {
+			background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(15, 23, 42, 0.95) 100%);
+			border-top: 1rpx solid rgba(148, 163, 184, 0.1);
+
+			.confirm-btn {
+				background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+				box-shadow: 0 8rpx 24rpx rgba(37, 99, 235, 0.4);
+
+				&:hover {
+					background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+					box-shadow: 0 12rpx 32rpx rgba(37, 99, 235, 0.5);
 				}
 			}
 		}
@@ -1012,11 +1283,11 @@ export default {
 }
 
 /* 暗黑模式样式 */
-.dark-theme .library-scenario-container {
+body.dark-theme .library-scenario-container {
 	background-color: #121212;
 }
 
-.dark-theme .header {
+body.dark-theme .header {
 	background: #1F1F1F;
 	border-bottom: 2rpx solid #3D3D3D;
 
@@ -1025,7 +1296,7 @@ export default {
 		color: #A0A0A0;
 
 		&:hover {
-			color: #2563EB;
+			color: #6366F1;
 		}
 	}
 
@@ -1034,59 +1305,67 @@ export default {
 	}
 }
 
-.dark-theme .scenario-selection .section-title,
-.dark-theme .scenario-practice .scenario-details .scenario-name,
-.dark-theme .choices-area .choices-title,
-.dark-theme .result-section .result-text {
+body.dark-theme .scenario-selection .section-title,
+body.dark-theme .scenario-practice .scenario-details .scenario-name,
+body.dark-theme .choices-area .choices-title,
+body.dark-theme .result-section .result-text {
 	color: #E0E0E0;
 }
 
-.dark-theme .scenario-selection .scenario-card,
-.dark-theme .scenario-practice .scenario-info,
-.dark-theme .scenario-practice .dialogue-area,
-.dark-theme .scenario-practice .choices-area,
-.dark-theme .stats-section {
+body.dark-theme .scenario-selection .scenario-card,
+body.dark-theme .scenario-practice .scenario-info,
+body.dark-theme .scenario-practice .dialogue-area,
+body.dark-theme .scenario-practice .choices-area,
+body.dark-theme .stats-section {
 	background: #1F1F1F;
 	box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.2);
 }
 
-.dark-theme .scenario-selection .scenario-card .scenario-desc,
-.dark-theme .scenario-practice .scenario-details .scenario-progress,
-.dark-theme .choices-area .choice-item .choice-translation {
+body.dark-theme .scenario-selection .scenario-card .scenario-name {
+	color: #FFFFFF;
+}
+
+body.dark-theme .scenario-selection .scenario-card .scenario-desc,
+body.dark-theme .scenario-practice .scenario-details .scenario-progress,
+body.dark-theme .choices-area .choice-item .choice-text {
+	color: #FFFFFF;
+}
+
+body.dark-theme .choices-area .choice-item .choice-translation {
 	color: #A0A0A0;
 }
 
-.dark-theme .choices-area .choice-item {
+body.dark-theme .choices-area .choice-item {
 	border: 2rpx solid #3D3D3D;
 
 	&:hover {
-		border-color: #2563EB;
-		background: #3D3D3D;
+		background: #2D2D2D;
+		border-color: #6366F1;
 	}
 }
 
-.dark-theme .scenario-practice .dialogue-area .message.ai-message .message-bubble {
+body.dark-theme .scenario-practice .dialogue-area .message.ai-message .message-bubble {
 	background: #3D3D3D;
 	border: 2rpx solid #4D4D4D;
 }
 
-.dark-theme .scenario-practice .dialogue-area .message .message-bubble .message-text {
+body.dark-theme .scenario-practice .dialogue-area .message .message-bubble .message-text {
 	color: #E0E0E0;
 }
 
-.dark-theme .scenario-practice .dialogue-area .message .message-bubble .message-translation {
+body.dark-theme .scenario-practice .dialogue-area .message .message-bubble .message-translation {
 	color: #A0A0A0;
 }
 
-.dark-theme .stats-section .stat-value {
+body.dark-theme .stats-section .stat-value {
 	color: #E0E0E0;
 }
 
-.dark-theme .stats-section .stat-label {
+body.dark-theme .stats-section .stat-label {
 	color: #A0A0A0;
 }
 
-.dark-theme .modal-content {
+body.dark-theme .modal-content {
 	background: #1F1F1F;
 
 	.modal-header {
@@ -1120,12 +1399,12 @@ export default {
 	}
 }
 
-.dark-theme .result-section.correct {
+body.dark-theme .result-section.correct {
 	background: #064E3B;
 	border: 2rpx solid #10B981;
 }
 
-.dark-theme .result-section.incorrect {
+body.dark-theme .result-section.incorrect {
 	background: #7F1D1D;
 	border: 2rpx solid #EF4444;
 }

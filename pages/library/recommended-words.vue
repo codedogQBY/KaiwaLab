@@ -290,7 +290,6 @@ export default {
 			display: block;
 			font-size: 32rpx;
 			font-weight: 500;
-			color: #1F2937;
 			margin-bottom: 8rpx;
 		}
 
@@ -453,7 +452,6 @@ export default {
 				display: block;
 				font-size: 28rpx;
 				font-weight: 500;
-				color: #1F2937;
 				margin-bottom: 8rpx;
 			}
 
