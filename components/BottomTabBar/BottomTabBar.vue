@@ -192,10 +192,11 @@ export default {
 }
 
 /* 暗黑模式样式 */
+:deep(.dark-theme) .bottom-tab-bar,
 .dark-theme .bottom-tab-bar {
-  background: rgba(31, 31, 31, 0.95);
-  border-top-color: #3D3D3D;
-  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3);
+  background: rgba(31, 31, 31, 0.95) !important;
+  border-top-color: #3D3D3D !important;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
 }
 
 .tab-item {
@@ -316,31 +317,38 @@ export default {
 }
 
 /* 暗黑模式样式 */
+:deep(.dark-theme) .tab-text,
 .dark-theme .tab-text {
-  color: #E0E0E0;
+  color: #E0E0E0 !important;
 }
 
+:deep(.dark-theme) .tab-item-active .tab-text,
 .dark-theme .tab-item-active .tab-text {
-  color: #6366F1;
+  color: #6366F1 !important;
 }
 
+:deep(.dark-theme) .tab-icon,
 .dark-theme .tab-icon {
-  color: #E0E0E0;
+  color: #E0E0E0 !important;
 }
 
+:deep(.dark-theme) .tab-item-active .tab-icon,
 .dark-theme .tab-item-active .tab-icon {
-  color: #6366F1;
+  color: #6366F1 !important;
 }
 
+:deep(.dark-theme) .tab-badge-dot,
 .dark-theme .tab-badge-dot {
-  border-color: #1F1F1F;
+  border-color: #1F1F1F !important;
 }
 
+:deep(.dark-theme) .tab-badge,
 .dark-theme .tab-badge {
-  border-color: #1F1F1F;
+  border-color: #1F1F1F !important;
 }
 
+:deep(.dark-theme) .badge-text,
 .dark-theme .badge-text {
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 </style>

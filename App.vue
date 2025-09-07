@@ -203,4 +203,37 @@
 		background: #1F1F1F;
 		color: #808080;
 	}
+	
+	/* H5端全局深色主题样式 */
+	.dark-theme .uni-load-more {
+		background-color: #1F2937 !important;
+		color: #F9FAFB !important;
+	}
+	
+	.dark-theme .uni-load-more__text {
+		color: #F9FAFB !important;
+	}
+	
+	/* 底部导航栏暗黑主题 */
+	.dark-theme .bottom-tab-bar {
+		background: rgba(31, 31, 31, 0.95) !important;
+		border-top-color: #3D3D3D !important;
+		box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.3) !important;
+	}
+	
+	.dark-theme .tab-text {
+		color: #E0E0E0 !important;
+	}
+	
+	.dark-theme .tab-item-active .tab-text {
+		color: #6366F1 !important;
+	}
+	
+	.dark-theme .tab-icon {
+		color: #E0E0E0 !important;
+	}
+	
+	.dark-theme .tab-item-active .tab-icon {
+		color: #6366F1 !important;
+	}
 </style>
