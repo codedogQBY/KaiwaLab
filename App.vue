@@ -236,4 +236,72 @@
 	.dark-theme .tab-item-active .tab-icon {
 		color: #6366F1 !important;
 	}
+	
+	/* 实验报告页暗黑主题强化 */
+	.dark-theme .report-container {
+		background-color: #111827 !important;
+	}
+	
+	.dark-theme .report-content {
+		background: #111827 !important;
+	}
+	
+	/* 学习库页暗黑主题强化 */
+	.dark-theme .library-container {
+		background-color: #111827 !important;
+	}
+	
+	/* 每日签到页暗黑主题强化 */
+	.dark-theme .checkin-container {
+		background: linear-gradient(to bottom, rgba(16, 185, 129, 0.1) 0%, #111827 20%, rgba(37, 99, 235, 0.05) 100%) !important;
+	}
+	
+	/* 聊天气泡组件暗黑主题强化 */
+	.dark-theme .ai-bubble {
+		background-color: #1F2937 !important;
+		color: #F9FAFB !important;
+	}
+	
+	.dark-theme .user-bubble {
+		background-color: #3B82F6 !important;
+		color: #FFFFFF !important;
+	}
+	
+	/* 通用卡片暗黑主题 */
+	.dark-theme .card,
+	.dark-theme .stat-card,
+	.dark-theme .word-card,
+	.dark-theme .reward-card,
+	.dark-theme .progress-card,
+	.dark-theme .achievement-card {
+		background-color: #1F2937 !important;
+		border-color: #374151 !important;
+	}
+	
+	/* 通用文字颜色 */
+	.dark-theme .title,
+	.dark-theme .header-title,
+	.dark-theme .section-title,
+	.dark-theme .stats-title,
+	.dark-theme .chart-title,
+	.dark-theme .achievements-title,
+	.dark-theme .record-title,
+	.dark-theme .success-title,
+	.dark-theme .preview-title {
+		color: #F9FAFB !important;
+	}
+	
+	.dark-theme .subtitle,
+	.dark-theme .description,
+	.dark-theme .stats-count,
+	.dark-theme .word-title,
+	.dark-theme .word-pronunciation,
+	.dark-theme .word-meaning,
+	.dark-theme .success-subtitle,
+	.dark-theme .legend-text,
+	.dark-theme .progress-text,
+	.dark-theme .preview-text {
+		color: #D1D5DB !important;
+	}
+	/* #endif */
 </style>
